@@ -8,7 +8,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int)
 
 	GAME->Init();
 
-	// 메시지 루프
+	// 메시지 루프//test
 	MSG msg;
 	while (true)
 	{
