@@ -43,28 +43,3 @@ void GameManager::Render(HDC hdc)
 	RENDER->Render();
 }
 
-static LRESULT CALLBACK GameManager::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
-{
-	switch (msg)
-	{
-	case WM_PAINT:
-	{
-		PAINTSTRUCT ps;
-		HDC hdc = BeginPaint(hWnd, &ps);
-
-		GAME->Render(hdc);
-
-		EndPaint(hWnd, &ps);
-	}
-	break;
-
-	case WM_DESTROY:
-		PostQuitMessage(0);
-		break;
-
-	default:
-		return DefWindowProc(hWnd, msg, wParam, lParam);
-	}
-
-	return 0;
-}

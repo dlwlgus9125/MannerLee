@@ -28,6 +28,9 @@
     <Filter Include="소스 파일\Manager\Input">
       <UniqueIdentifier>{6fa98691-fd11-4971-8de3-65c45b79a510}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\Manager\Render">
+      <UniqueIdentifier>{79f738f2-0960-46bd-be10-215d1edd793c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -38,6 +41,12 @@
     </ClCompile>
     <ClCompile Include="WinManager.cpp">
       <Filter>소스 파일\Manager\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderManager.cpp">
+      <Filter>소스 파일\Manager\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="GameMain.cpp">
+      <Filter>소스 파일\Manager\Game</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -58,6 +67,12 @@
     </ClInclude>
     <ClInclude Include="InputManager.h">
       <Filter>소스 파일\Manager\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderManager.h">
+      <Filter>소스 파일\Manager\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="GameMain.h">
+      <Filter>소스 파일\Manager\Game</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
