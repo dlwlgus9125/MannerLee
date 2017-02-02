@@ -40,6 +40,6 @@ void GameManager::Update()
 void GameManager::Render(HDC hdc)
 {
 	MAIN->Render();
-	RENDER->Render();
+	RENDER->Render(hdc);
 }
 
