@@ -34,7 +34,7 @@ public:
 class GameMain : public Singleton<GameMain>
 {
 	Test test1;
-	//test123
+	//test
 public:
 	void Init();
 
