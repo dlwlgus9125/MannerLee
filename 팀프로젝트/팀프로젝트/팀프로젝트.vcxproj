@@ -154,6 +154,7 @@
   <ItemGroup>
     <ClInclude Include="Common.h" />
     <ClInclude Include="GameManager.h" />
+    <ClInclude Include="InputManager.h" />
     <ClInclude Include="Math.h" />
     <ClInclude Include="Singleton.h" />
     <ClInclude Include="WinManager.h" />
