@@ -16,15 +16,63 @@
     <Filter Include="소스 파일\Manager">
       <UniqueIdentifier>{05747cb1-e021-4f82-8055-5ccc57001b94}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\Util">
+      <UniqueIdentifier>{af52d229-7cbb-473e-9348-c9729a6c0a2e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Manager\Game">
+      <UniqueIdentifier>{8c232615-e298-4dd6-89e6-9fdfa6a7177d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Manager\Window">
+      <UniqueIdentifier>{0ff02d0b-e156-47eb-b47d-5860ed9780ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Manager\Input">
+      <UniqueIdentifier>{6fa98691-fd11-4971-8de3-65c45b79a510}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Manager\Render">
+      <UniqueIdentifier>{79f738f2-0960-46bd-be10-215d1edd793c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="GameManager.cpp">
+      <Filter>소스 파일\Manager\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="WinManager.cpp">
+      <Filter>소스 파일\Manager\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderManager.cpp">
+      <Filter>소스 파일\Manager\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="GameMain.cpp">
+      <Filter>소스 파일\Manager\Game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Common.h">
+      <Filter>소스 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Singleton.h">
+      <Filter>소스 파일\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="Math.h">
+      <Filter>소스 파일\Util</Filter>
+    </ClInclude>
     <ClInclude Include="GameManager.h">
-      <Filter>소스 파일\Manager</Filter>
+      <Filter>소스 파일\Manager\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="WinManager.h">
+      <Filter>소스 파일\Manager\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="InputManager.h">
+      <Filter>소스 파일\Manager\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderManager.h">
+      <Filter>소스 파일\Manager\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="GameMain.h">
+      <Filter>소스 파일\Manager\Game</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
