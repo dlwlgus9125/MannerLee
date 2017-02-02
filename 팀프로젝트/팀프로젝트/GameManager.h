@@ -1,9 +1,12 @@
 #pragma once
+#pragma comment(lib, "winmm.lib")
 #include "Common.h"
 #include "WinManager.h"
 #include "InputManager.h"
 #include "RenderManager.h"
 #include "GameMain.h"
+#include "SceneManager.h"
+#include "FieldScene.h"
 
 #define GAME GameManager::Instance()
 

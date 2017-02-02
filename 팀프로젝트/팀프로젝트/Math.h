@@ -49,6 +49,24 @@ struct Vector
 	static Vector Down() { return Vector(0.0f, 1.0f); }
 };
 
+struct Box
+{
+	Vector pos;
+	Vector size;
+	Vector anchor;
+
+	Box() {}
+	Box(Vector pos, Vector size, Vector anchor = Vector(0.5f, 0.5f))
+	{
+		this->pos = pos;
+		this->size = size;
+		this->anchor = anchor;
+	}
+
+	Vector LeftTop() { return pos - size * anchor; }
+	Vector RightBottom() { return LeftTop() + size; }
+};
+
 class Math : public Singleton<Math>
 {
 public:

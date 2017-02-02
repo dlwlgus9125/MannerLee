@@ -31,6 +31,18 @@
     <Filter Include="소스 파일\Manager\Render">
       <UniqueIdentifier>{79f738f2-0960-46bd-be10-215d1edd793c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\Manager\Scene">
+      <UniqueIdentifier>{96d70df5-477e-4264-8df4-426aec70c0f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Scene">
+      <UniqueIdentifier>{7ff94890-57d3-4115-b863-2700d268933d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Manager\Object">
+      <UniqueIdentifier>{11a83a4d-bdcf-4737-b26f-862c0b9fefda}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Manager\Object\character">
+      <UniqueIdentifier>{084084e3-81f2-4a78-830c-b488769b5fb1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -47,6 +59,12 @@
     </ClCompile>
     <ClCompile Include="GameMain.cpp">
       <Filter>소스 파일\Manager\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneManager.cpp">
+      <Filter>소스 파일\Manager\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectManager.cpp">
+      <Filter>소스 파일\Manager\Object</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -73,6 +91,21 @@
     </ClInclude>
     <ClInclude Include="GameMain.h">
       <Filter>소스 파일\Manager\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationController.h">
+      <Filter>소스 파일\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneManager.h">
+      <Filter>소스 파일\Manager\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="FieldScene.h">
+      <Filter>소스 파일\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectManager.h">
+      <Filter>소스 파일\Manager\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>소스 파일\Manager\Object\character</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

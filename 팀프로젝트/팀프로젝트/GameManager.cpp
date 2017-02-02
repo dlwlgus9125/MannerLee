@@ -12,6 +12,8 @@ void GameManager::Init()
 	INPUT->Init(WINDOW->GetHandle(WND_MAIN));
 	RENDER->Init(WINDOW->GetHandle(WND_MAIN));
 	MAIN->Init();
+	SCENE->Register(SCENE_FEILD, new FieldScene());
+	SCENE->ChangeScene(SCENE_FEILD);
 }
 
 void GameManager::Release()
@@ -31,6 +33,7 @@ void GameManager::Update()
 	{
 		m_prevTime = m_currentTime;
 		INPUT->Update();
+		SCENE->Update(deltaTime);
 		MAIN->Update(deltaTime);
 
 		InvalidateRect(WINDOW->GetHandle(WND_MAIN), NULL, false);
@@ -39,7 +42,9 @@ void GameManager::Update()
 
 void GameManager::Render(HDC hdc)
 {
-	MAIN->Render();
+	
 	RENDER->Render(hdc);
+	SCENE->Draw();
+	MAIN->Render();
 }
 
