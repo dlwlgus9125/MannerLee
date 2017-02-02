@@ -7,7 +7,7 @@
 class GameMain : public Singleton<GameMain>
 {
 	
-
+	//test
 public:
 	void Init();
 
