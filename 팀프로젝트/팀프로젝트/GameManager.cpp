@@ -33,8 +33,9 @@ void GameManager::Update()
 	{
 		m_prevTime = m_currentTime;
 		INPUT->Update();
-		SCENE->Update(deltaTime);
 		MAIN->Update(deltaTime);
+		SCENE->Update(deltaTime);
+		
 
 		InvalidateRect(WINDOW->GetHandle(WND_MAIN), NULL, false);
 	}
@@ -45,6 +46,6 @@ void GameManager::Render(HDC hdc)
 	
 	RENDER->Render(hdc);
 	SCENE->Draw();
-	MAIN->Render();
+	
 }
 

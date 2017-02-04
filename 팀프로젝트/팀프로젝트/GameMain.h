@@ -12,17 +12,17 @@ class Test
 public:
 	Test()
 	{
-		m_point = Vector(100, 100);
+		m_point = Vector(100, 600);
 	}
 
 	Vector getVector() { return m_point; }
 
 	void Update(float deltaTime)
 	{
-		if (INPUT->IsKeyPress(VK_LEFT))m_point.x -= 100*deltaTime;
-		if (INPUT->IsKeyPress(VK_RIGHT))m_point.x += 100*deltaTime;
-		if (INPUT->IsKeyPress(VK_UP))m_point.y -= 100*deltaTime;
-		if (INPUT->IsKeyPress(VK_DOWN))m_point.y += 100*deltaTime;
+		if (INPUT->IsKeyPress(VK_LEFT))m_point.x -= 50*deltaTime;
+		if (INPUT->IsKeyPress(VK_RIGHT))m_point.x += 50*deltaTime;
+		if (INPUT->IsKeyPress(VK_UP))m_point.y -= 50*deltaTime;
+		if (INPUT->IsKeyPress(VK_DOWN))m_point.y += 50*deltaTime;
 	}
 
 	void Render()
