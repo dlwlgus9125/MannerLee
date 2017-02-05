@@ -1,15 +1,21 @@
 #include "GameManager.h"
-
+#pragma comment(linker,"/entry:WinMainCRTStartup /subsystem:console")
 HINSTANCE g_hInst;
+
+
+
 
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int)
 {
+	
 	g_hInst = hInstance;
 
 	GAME->Init();
 
 	// 메시지 루프//test333
 	MSG msg;
+	
+	
 	while (true)
 	{
 		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
@@ -20,6 +26,8 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int)
 		}
 
 		GAME->Update();
+
+		
 	}
 
 	GAME->Release();

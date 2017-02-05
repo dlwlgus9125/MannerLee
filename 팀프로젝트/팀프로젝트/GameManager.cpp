@@ -11,14 +11,12 @@ void GameManager::Init()
 
 	INPUT->Init(WINDOW->GetHandle(WND_MAIN));
 	RENDER->Init(WINDOW->GetHandle(WND_MAIN));
-	MAIN->Init();
 	SCENE->Register(SCENE_FEILD, new FieldScene());
 	SCENE->ChangeScene(SCENE_FEILD);
 }
 
 void GameManager::Release()
 {
-	MAIN->Release();
 	RENDER->Release();
 	INPUT->Release();
 	WINDOW->Destroy(WND_MAIN);
@@ -33,7 +31,6 @@ void GameManager::Update()
 	{
 		m_prevTime = m_currentTime;
 		INPUT->Update();
-		MAIN->Update(deltaTime);
 		SCENE->Update(deltaTime);
 		
 

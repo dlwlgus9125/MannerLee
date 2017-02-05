@@ -1,36 +1,39 @@
 #include "ObjectManager.h"
 #include "Player.h"
-//#include "Monster.h"
+#include "Monster.h"
 
-//void ObjectManager::CreatePlayer(Vector pos, Vector colSize, Vector anchor)
-//{
-//	NEW_OBJECT(m_pPlayer, Player(OBJ_PLAYER));
-//	m_pPlayer->SetPosition(pos);
-//	m_pPlayer->SetCollider(colSize, anchor);
-//}
-//
-//void ObjectManager::DestroyPlayer()
-//{
-//	DELETE_OBJECT(m_pPlayer);
-//}
+void ObjectManager::CreatePlayer(Vector pos, Vector colSize, Vector anchor)
+{
+	NEW_OBJECT(m_pPlayer, Player(OBJ_PLAYER));
+	m_pPlayer->SetPosition(pos);
+	m_pPlayer->SetCollider(colSize, anchor);
+	
+}
 
-//void ObjectManager::CreateMonster(int id, Vector pos, Vector colSize, Vector anchor)
-//{
-//	NEW_OBJECT(Object* monster, Monster(id));
-//	monster->SetPosition(pos);
-//	monster->SetCollider(colSize, anchor);
-//
-//	m_monsterList.push_back(monster);
-//}
-//
-//void ObjectManager::DestroyAllMonster()
-//{
-//	FOR_LIST(Object*, m_monsterList)
-//	{
-//		DELETE_OBJECT((*it));
-//	}
-//	m_monsterList.clear();
-//}
+void ObjectManager::DestroyPlayer()
+{
+	DELETE_OBJECT(m_pPlayer);
+}
+
+void ObjectManager::CreateMonster(int id, Vector pos, Vector colSize, Vector anchor)
+{
+	NEW_OBJECT(Object* monster, Monster(id));
+	monster->SetPosition(pos);
+	monster->SetCollider(colSize, anchor);
+
+	
+
+	m_monsterList.push_back(monster);
+}
+
+void ObjectManager::DestroyAllMonster()
+{
+	FOR_LIST(Object*, m_monsterList)
+	{
+		DELETE_OBJECT((*it));
+	}
+	m_monsterList.clear();
+}
 
 void ObjectManager::CreateProps(int id, Vector pos, Vector colSize, Vector anchor)
 {

@@ -69,6 +69,10 @@ struct Box
 
 class Math : public Singleton<Math>
 {
+	const float PI = 3.141592f;
+	const float ANGLE_TO_RADIAN = 0.0174533f;
+	const float RADIAN_TO_ANGLE = 57.2958f;
+
 public:
 
 	template <typename T>
@@ -79,6 +83,54 @@ public:
 		return num;
 	}
 
+	float Cos(float angle) { return cosf(angle * ANGLE_TO_RADIAN); }
+	float Sin(float angle) { return sinf(angle * ANGLE_TO_RADIAN); }
+	float Tan(float angle) { return tanf(angle * ANGLE_TO_RADIAN); }
+	float Dot(Vector a, Vector b) { return (a.x * b.x) + (a.y * b.y); }
+	float CrossZ(Vector a, Vector b) { return (a.x * -b.y - -a.y * b.x); }
+
+	float SinAngle(Vector from, Vector to)
+	{
+		float value = CrossZ(from, to) / (from.Magnitude() * to.Magnitude());
+		return asinf(value) * RADIAN_TO_ANGLE;
+	}
+
+	float CosAngle(Vector from, Vector to)
+	{
+		float value = Dot(from, to) / (from.Magnitude() * to.Magnitude());
+		return acosf(value) * RADIAN_TO_ANGLE;
+	}
+
+	float Angle(Vector from, Vector to)
+	{
+		float angle = CosAngle(from, to);
+		if (SinAngle(from, to) < 0) angle = 360 - angle;
+		return angle;
+	}
+
 	float Distance(Vector from, Vector to) { return (to - from).Magnitude(); }
 	float SqrDistance(Vector from, Vector to) { return (to - from).SqrMagnitude(); }
+
+	bool IsCollided(Vector point, Box box)
+	{
+		Vector leftTop = box.LeftTop();
+		Vector rightBottom = box.RightBottom();
+
+		return (point.x >= leftTop.x && point.x <= rightBottom.x)
+			&& (point.y >= leftTop.y && point.y <= rightBottom.y);
+	}
+
+	bool IsCollided(Box a, Box b)
+	{
+		Vector leftTopA = a.LeftTop();
+		Vector leftTopB = b.LeftTop();
+		Vector rightBottomA = a.RightBottom();
+		Vector rightBottomB = b.RightBottom();
+
+		if (rightBottomA.x < leftTopB.x) return false;
+		if (rightBottomA.y < leftTopB.y) return false;
+		if (leftTopA.x > rightBottomB.x) return false;
+		if (leftTopA.y > rightBottomB.y) return false;
+		return true;
+	}
 };

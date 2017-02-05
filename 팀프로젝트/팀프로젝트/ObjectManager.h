@@ -46,7 +46,7 @@ public:
 	virtual void Update(float deltaTime) { }
 	virtual void Draw(Camera* pCamera)
 	{
-		pCamera->DrawRect(m_collider.LeftTop(), m_collider.size);
+		pCamera->DrawRect(m_collider.LeftTop(), m_collider.size, ColorF::Red, 3);
 	}
 	virtual void Hit(float damage) { }
 };
