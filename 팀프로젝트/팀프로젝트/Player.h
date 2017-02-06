@@ -42,12 +42,12 @@ public:
 
 	void IdleState()
 	{
-		if (INPUT->IsKeyPress(VK_LEFT)) { m_state = CHARACTER_RUN; }
+		/*if (INPUT->IsKeyPress(VK_LEFT)) { m_state = CHARACTER_RUN; }
 		if (INPUT->IsKeyPress(VK_RIGHT)) { m_state = CHARACTER_RUN; }
 		if (INPUT->IsKeyPress(VK_UP)) { m_state = CHARACTER_RUN; }
-		if (INPUT->IsKeyPress(VK_DOWN)) { m_state = CHARACTER_RUN; }
+		if (INPUT->IsKeyPress(VK_DOWN)) { m_state = CHARACTER_RUN; }*/
 
-		//if (INPUT->IsMouseDown(MOUSE_LEFT)) { m_state = CHARACTER_RUN; }
+		if (INPUT->IsMouseDown(MOUSE_LEFT)) { m_state = CHARACTER_RUN; }
 	}
 
 	void RunState(float deltaTime)
@@ -55,11 +55,11 @@ public:
 		Vector prevPos = this->Position();
 		Vector movedPos = this->Position();
 
-		//m_dir = Vector::Zero();
-		/*Vector targetPos = INPUT->GetMousePos();
+		m_dir = Vector::Zero();
+		Vector targetPos = RENDER->GetCamera(CAM_MAIN)->ScreenToWorldPos(INPUT->GetMousePos());
 
 
-		targetPos = INPUT->GetMousePos();
+		
 		if (MATH->SqrDistance(targetPos, movedPos) <= 30.0f)m_state = CHARACTER_IDLE;
 		m_dir = (targetPos - movedPos).Normalize();
 
@@ -68,16 +68,16 @@ public:
 		{
 			movedPos += m_dir * m_speed * deltaTime;
 			this->SetPosition(movedPos);
-		}*/
+		}
 
-		m_dir = Vector::Zero();
+		/*m_dir = Vector::Zero();
 		if (INPUT->IsKeyPress(VK_LEFT)) m_dir += Vector::Left();
 		if (INPUT->IsKeyPress(VK_RIGHT)) m_dir += Vector::Right();
 		if (INPUT->IsKeyPress(VK_UP)) m_dir += Vector::Up();
 		if (INPUT->IsKeyPress(VK_DOWN)) m_dir += Vector::Down();
 		m_dir = m_dir.Normalize();
 		movedPos += m_dir * m_speed * deltaTime;
-		this->SetPosition(movedPos);
+		this->SetPosition(movedPos);*/
 
 		float x1 = OBJECT->GetPlayer()->Position().x;
 		float y1 = OBJECT->GetPlayer()->Position().y;

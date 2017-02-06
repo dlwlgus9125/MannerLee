@@ -171,6 +171,9 @@ public:
 	}
 
 	Vector GetPos() { return m_center; }
+	Vector ScreenToWorldPos(Vector ScreenPos) { return ScreenPos + GetLeftTop(); }
+	Vector WorldToScreenPos(Vector WorldPos) { return WorldPos - GetLeftTop(); }
+
 	Vector GetLeftTop() { return m_center - m_size * 0.5f; }
 	Vector GetRightBottom() { return m_center + m_size * 0.5f; }
 	void SetOpacity(float opacity) { m_opacity = opacity; }
@@ -184,9 +187,9 @@ public:
 
 		AlignLeftTop();
 		AlignRightBottom();
-
-
 	}
+
+
 
 	void AlignLeftTop()
 	{
