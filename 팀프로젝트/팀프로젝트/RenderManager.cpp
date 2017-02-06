@@ -33,12 +33,12 @@ void RenderManager::Release()
 {
 }
 
-Camera* RenderManager::CreateCamera(int tag, float maxSizeX, float maxSizeY, float sizeX, float sizeY)
+Camera* RenderManager::CreateCamera(int tag,Vector x, float sizeX, float sizeY)
 {
 	if (m_cameras.find(tag) != m_cameras.end()) return NULL;
 
 	ID2D1BitmapRenderTarget* pCameraTarget = NULL;
-	m_pRenderTarget->CreateCompatibleRenderTarget(D2D1::SizeF(maxSizeX, maxSizeY), &pCameraTarget);
+	m_pRenderTarget->CreateCompatibleRenderTarget(D2D1::SizeF(x.x, x.y), &pCameraTarget);
 	m_cameras[tag] = new Camera(pCameraTarget, sizeX, sizeY);
 	return m_cameras[tag];
 }

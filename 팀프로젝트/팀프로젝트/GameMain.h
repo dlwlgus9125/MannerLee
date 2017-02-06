@@ -12,7 +12,7 @@ class Test
 public:
 	Test()
 	{
-		m_point = Vector(100, 100);
+		m_point = Vector(400, 400);
 	}
 
 	Vector getVector() { return m_point; }

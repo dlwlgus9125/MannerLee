@@ -274,7 +274,7 @@ public:
 
 	void Release();
 
-	Camera* CreateCamera(int tag, float maxSizeX, float maxSizeY, float sizeX, float sizeY);
+	Camera* CreateCamera(int tag,Vector x, float sizeX, float sizeY);
 
 	Camera* GetCamera(int tag);
 

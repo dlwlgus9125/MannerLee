@@ -12,8 +12,8 @@ class FieldScene : public IScene
 public:
 	FieldScene()
 	{
-		RENDER->CreateCamera(CAM_MAIN, 3000, 1000, VIEW_WIDTH, VIEW_HEIGHT);
-		RENDER->CreateCamera(CAM_MAP, 3000, 1000, 3000, 1000);
+		RENDER->CreateCamera(CAM_MAIN,Vector(3000, 1000), VIEW_WIDTH, VIEW_HEIGHT);
+		RENDER->CreateCamera(CAM_MAP,Vector(3000, 1000), 3000, 1000);
 
 		RENDER->LoadImageFile(TEXT("BossCastle"), TEXT("Image/Boss.png"));
 
