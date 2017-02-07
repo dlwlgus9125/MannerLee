@@ -19,6 +19,7 @@ public:
 		RENDER->LoadImageFile(TEXT("BossCastle"), TEXT("Image/Boss.png"));
 
 		OBJECT->CreatePlayer(Vector(600, 800), 30);
+		OBJECT->CreateMonster(OBJ_MONSTER, Vector(400, 600),30);
 	}
 
 	void OnEnter()

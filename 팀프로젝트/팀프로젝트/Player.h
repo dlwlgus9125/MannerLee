@@ -93,16 +93,5 @@ public:
 		if (!IsGroundCollided()) this->SetPosition(prevPos);
 	}
 
-	bool IsGroundCollided()
-	{
-		list<Object*> groundList = OBJECT->GetPropsList(OBJ_GROUND);
-		FOR_LIST(Object*, groundList)
-		{
-			if (MATH->IsCollided(this->Position(), (*it)->Collider()))
-			{
-				return true;
-			}
-		}
-		return false;
-	}
+	
 };

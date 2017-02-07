@@ -34,6 +34,7 @@ public:
 	virtual void SetPosition(Vector pos){}
 
 	virtual Box Collider() { Box null; return null; }
+	virtual Circle getCircle() { Circle null; return null; }
 	virtual void SetCharacterCollider(float radius){ }
 	virtual void SetCollider(Vector colSize, Vector anchor) {}
 	virtual void Update(float deltaTime) { }

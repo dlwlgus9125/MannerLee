@@ -5,6 +5,7 @@
 
 class Character : public Object
 {
+protected:
 	CHARACTER_STATE m_state;
 	Vector m_dir;
 	float m_speed;
@@ -14,7 +15,7 @@ public:
 	Character(int id) : Object(id)
 	{
 		m_state = CHARACTER_IDLE;
-		m_dir = Vector::Down();
+		m_dir = (Vector::Down()+Vector::Right()).Normalize();
 		m_speed = 300;
 
 	}
@@ -25,7 +26,7 @@ public:
 		m_circle.radius = radius;
 	}
 	Circle getCircle() { return m_circle; }
-	void SetPosition(Vector pos) 
+	virtual void SetPosition(Vector pos) 
 	{ 
 		this->m_pos = pos;
 		m_circle.center = pos;
@@ -36,4 +37,16 @@ public:
 	virtual void Draw(Camera* pCamera) {  }
 	virtual void Hit(float damage) { }
 
+	bool IsGroundCollided()
+	{
+		list<Object*> groundList = OBJECT->GetPropsList(OBJ_GROUND);
+		FOR_LIST(Object*, groundList)
+		{
+			if (MATH->IsCollided(this->Position(), (*it)->Collider()))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
 };
