@@ -17,7 +17,7 @@ public:
 	void Draw(Camera* pCamera)
 	{
 		pCamera->Draw(Animation()->Current()->GetSprite(), Position(), -1);
-		pCamera->DrawRect(Collider().LeftTop(), Collider().size);
+	//	pCamera->DrawRect(Collider().LeftTop(), Collider().leftTop);
 	}
 
 	void Hit(float damage)

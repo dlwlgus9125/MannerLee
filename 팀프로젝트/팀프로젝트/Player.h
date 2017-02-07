@@ -1,9 +1,7 @@
 #pragma once
-#include "RenderManager.h"
-#include "InputManager.h"
-#include "ObjectManager.h"
+#include "Character.h"
 
-class Player : public Object
+class Player : public Character
 {
 	CHARACTER_STATE m_state;
 	Vector m_dir;
@@ -11,7 +9,7 @@ class Player : public Object
 
 
 public:
-	Player(int id) : Object(id)
+	Player(int id) : Character(id)
 	{
 		m_state = CHARACTER_IDLE;
 		m_dir = Vector::Down();
@@ -33,7 +31,7 @@ public:
 		/*pCamera->Draw(Animation()->Current()->GetSprite(), Position(), -1);
 		pCamera->DrawRect(Collider().LeftTop(), Collider().size);
 		pCamera->DrawRect(m_punchCollider.LeftTop(), m_punchCollider.size);*/
-
+		pCamera->DrawCircle(getCircle().center, getCircle().radius, ColorF::Red, 2.0f);
 		pCamera->DrawFillCircle(Position(), 30, ColorF::Red);
 		pCamera->DrawLine(Position() + 15.0f, Position() + 15.0f + m_dir * 30, ColorF::Blue, 3);
 		//Camera* pMapCamera = RENDER->GetCamera(CAM_MAP);
@@ -79,14 +77,15 @@ public:
 		movedPos += m_dir * m_speed * deltaTime;
 		this->SetPosition(movedPos);*/
 
-		float x1 = OBJECT->GetPlayer()->Position().x;
+		/*float x1 = OBJECT->GetPlayer()->Position().x;
 		float y1 = OBJECT->GetPlayer()->Position().y;
 
 		cout << "플레이어 x : " << x1 << "   y : " << y1 << endl;
 		float x2 = RENDER->GetCamera(CAM_MAIN)->GetPos().x;
 		float y2 = RENDER->GetCamera(CAM_MAIN)->GetPos().y;
 		cout << "카메라 x : " << x2 << "   y : " << y2 << endl;
-
+		cout << "원 센터 x: " << getCircle().center.x << "원 센터 y: " << getCircle().center.y << endl;
+*/
 		if (MATH->SqrDistance(prevPos, movedPos) == 0)
 		{
 			m_state = CHARACTER_IDLE;

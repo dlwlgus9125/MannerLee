@@ -5,7 +5,6 @@
 enum SKILL_ATTRIBUTE
 {
 	ATTRIBUTE_FIRE, ATTRIBUTE_WATER, ATTRIBUTE_ELECTRICITY,
-
 };
 
 class Skill : public Object
@@ -18,6 +17,7 @@ class Skill : public Object
 public:
 	Skill(int id, Vector dir) : Object(id)
 	{
+
 	}
 
 	void Update(float deltaTime)

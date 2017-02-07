@@ -2,11 +2,11 @@
 #include "Player.h"
 #include "Monster.h"
 
-void ObjectManager::CreatePlayer(Vector pos, Vector colSize, Vector anchor)
+void ObjectManager::CreatePlayer(Vector pos, float colRadius)
 {
 	NEW_OBJECT(m_pPlayer, Player(OBJ_PLAYER));
 	m_pPlayer->SetPosition(pos);
-	m_pPlayer->SetCollider(colSize, anchor);
+	m_pPlayer->SetCharacterCollider(colRadius);
 	
 }
 
@@ -15,11 +15,11 @@ void ObjectManager::DestroyPlayer()
 	DELETE_OBJECT(m_pPlayer);
 }
 
-void ObjectManager::CreateMonster(int id, Vector pos, Vector colSize, Vector anchor)
+void ObjectManager::CreateMonster(int id, Vector pos, float colRadius)
 {
 	NEW_OBJECT(Object* monster, Monster(id));
 	monster->SetPosition(pos);
-	monster->SetCollider(colSize, anchor);
+	monster->SetCharacterCollider(colRadius);
 
 	
 
@@ -35,11 +35,11 @@ void ObjectManager::DestroyAllMonster()
 	m_monsterList.clear();
 }
 
-void ObjectManager::CreateProps(int id, Vector pos, Vector colSize, Vector anchor)
+void ObjectManager::CreateProps(int id, Vector pos, Vector width, Vector height)
 {
-	NEW_OBJECT(Object* props, Object(id));
+	NEW_OBJECT(Object* props, Prop(id));
 	props->SetPosition(pos);
-	props->SetCollider(colSize, anchor);
+	props->SetCollider(width, height);
 	m_propsList.push_back(props);
 }
 

@@ -10,10 +10,11 @@ using namespace std;
 
 class Object
 {
+protected:
 	AnimationController* m_pAnim;
 	int m_id;
 	Vector m_pos;
-	Box m_collider;
+
 
 public:
 	Object(int id)
@@ -30,25 +31,45 @@ public:
 	AnimationController* Animation() { return m_pAnim; }
 	int ID() { return m_id; }
 	Vector Position() { return m_pos; }
+	virtual void SetPosition(Vector pos){}
+
+	virtual Box Collider() { Box null; return null; }
+	virtual void SetCharacterCollider(float radius){ }
+	virtual void SetCollider(Vector colSize, Vector anchor) {}
+	virtual void Update(float deltaTime) { }
+	virtual void Draw(Camera* pCamera){ }
+	virtual void Hit(float damage) { }
+};
+
+class Prop : public Object
+{
+	Box m_collider;
+
+public:
+	Prop(int id) : Object(id)
+	{
+	}
+
 	Box Collider() { return m_collider; }
 
 	void SetPosition(Vector pos)
 	{
 		m_pos = pos;
-		m_collider.pos = pos;
+		m_collider.leftTop = pos;
 	}
-	void SetCollider(Vector size, Vector anchor)
+	
+	void SetCollider(Vector width, Vector height) 
 	{
-		m_collider.size = size;
-		m_collider.anchor = anchor;
+		m_collider.width = width;
+		m_collider.height = height;
 	}
 
-	virtual void Update(float deltaTime) { }
-	virtual void Draw(Camera* pCamera)
+	void Draw(Camera* pCamera) 
 	{
-		pCamera->DrawRect(m_collider.LeftTop(), m_collider.size, ColorF::Red, 3);
+		pCamera->DrawRect(m_pos, Vector(m_collider.width.Magnitude(), m_collider.height.Magnitude()), ColorF::Red, 2);
+
 	}
-	virtual void Hit(float damage) { }
+
 };
 
 class ObjectManager : public Singleton<ObjectManager>
@@ -58,13 +79,13 @@ class ObjectManager : public Singleton<ObjectManager>
 	list<Object*> m_monsterList;
 
 public:
-	void CreatePlayer(Vector pos, Vector colSize, Vector anchor);
+	void CreatePlayer(Vector pos, float colRadius);
 	void DestroyPlayer();
 
-	void CreateMonster(int id, Vector pos, Vector colSize, Vector anchor);
+	void CreateMonster(int id, Vector pos, float colRadius);
 	void DestroyAllMonster();
 
-	void CreateProps(int id, Vector pos, Vector colSize, Vector anchor);
+	void CreateProps(int id, Vector pos, Vector width, Vector height);
 	void DestroyProps(Object* pProps);
 	void DestroyAllProps();
 

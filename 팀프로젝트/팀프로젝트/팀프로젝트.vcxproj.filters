@@ -40,11 +40,11 @@
     <Filter Include="소스 파일\Manager\Object">
       <UniqueIdentifier>{11a83a4d-bdcf-4737-b26f-862c0b9fefda}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\Manager\Object\character">
-      <UniqueIdentifier>{084084e3-81f2-4a78-830c-b488769b5fb1}</UniqueIdentifier>
-    </Filter>
     <Filter Include="소스 파일\Manager\Object\Skill">
       <UniqueIdentifier>{8ef466cb-1a87-440f-9ac3-ad024b47f95a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Manager\Object\Character">
+      <UniqueIdentifier>{084084e3-81f2-4a78-830c-b488769b5fb1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -108,16 +108,19 @@
       <Filter>소스 파일\Manager\Object</Filter>
     </ClInclude>
     <ClInclude Include="Player.h">
-      <Filter>소스 파일\Manager\Object\character</Filter>
+      <Filter>소스 파일\Manager\Object\Character</Filter>
     </ClInclude>
     <ClInclude Include="Monster.h">
-      <Filter>소스 파일\Manager\Object\character</Filter>
+      <Filter>소스 파일\Manager\Object\Character</Filter>
     </ClInclude>
     <ClInclude Include="debug.h">
       <Filter>소스 파일\Util</Filter>
     </ClInclude>
     <ClInclude Include="Skill.h">
       <Filter>소스 파일\Manager\Object\Skill</Filter>
+    </ClInclude>
+    <ClInclude Include="Character.h">
+      <Filter>소스 파일\Manager\Object\Character</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
