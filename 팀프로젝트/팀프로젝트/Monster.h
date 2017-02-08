@@ -11,14 +11,14 @@ public:
 	{
 		sightRange.radius = 100;
 		m_speed = 200;
-		
+
 	}
 
 	void Update(float deltaTime)
 	{
-		
-		if(MATH->IsCollided(OBJECT->GetPlayer()->getCircle(), sightRange))
-		{ 
+
+		if (MATH->IsCollided(OBJECT->GetPlayer()->getCircle(), sightRange))
+		{
 			Vector prevPos = this->Position();
 			Vector movedPos = this->Position();
 
@@ -29,13 +29,13 @@ public:
 			m_dir = (targetPos - movedPos).Normalize();
 
 
-			
-				movedPos += m_dir * m_speed * deltaTime;
-				this->SetPosition(movedPos);
-		
-				if (!IsGroundCollided()) this->SetPosition(prevPos);
+
+			movedPos += m_dir * m_speed * deltaTime;
+			if (IsGroundCollided())movedPos = GroundPush(movedPos);
+			this->SetPosition(movedPos);
+
 		}
-		
+
 
 
 	}
@@ -43,7 +43,7 @@ public:
 	void Draw(Camera* pCamera)
 	{
 		pCamera->DrawFillCircle(Position(), 30, ColorF::Red);
-		pCamera->DrawCircle(sightRange.center, sightRange.radius, ColorF::Red,2.0f);
+		pCamera->DrawCircle(sightRange.center, sightRange.radius, ColorF::Red, 2.0f);
 		pCamera->DrawLine(Position() + 15.0f, Position() + 15.0f + m_dir * 30, ColorF::Blue, 3);
 		/*pCamera->Draw(Animation()->Current()->GetSprite(), Position(), -1);*/
 	//	pCamera->DrawRect(Collider().LeftTop(), Collider().leftTop);

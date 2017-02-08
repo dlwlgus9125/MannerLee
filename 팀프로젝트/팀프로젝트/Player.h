@@ -33,7 +33,7 @@ public:
 		pCamera->DrawRect(m_punchCollider.LeftTop(), m_punchCollider.size);*/
 		pCamera->DrawCircle(getCircle().center, getCircle().radius, ColorF::Red, 2.0f);
 		pCamera->DrawFillCircle(Position(), 30, ColorF::Red);
-		pCamera->DrawLine(Position()+15.0f , Position()+15.0f + m_dir * 30, ColorF::Blue, 3);
+		pCamera->DrawLine(Position() + 15.0f, Position() + 15.0f + m_dir * 30, ColorF::Blue, 3);
 		//Camera* pMapCamera = RENDER->GetCamera(CAM_MAP);
 		//pMapCamera->DrawFilledRect(Collider().LeftTop(), Collider().size);
 	}
@@ -57,7 +57,7 @@ public:
 		Vector targetPos = RENDER->GetCamera(CAM_MAIN)->ScreenToWorldPos(INPUT->GetMousePos());
 
 
-		
+
 		if (MATH->SqrDistance(targetPos, movedPos) <= 30.0f)m_state = CHARACTER_IDLE;
 		m_dir = (targetPos - movedPos).Normalize();
 
@@ -65,6 +65,7 @@ public:
 		if (!INPUT->IsMouseUp(MOUSE_LEFT))
 		{
 			movedPos += m_dir * m_speed * deltaTime;
+			if(IsGroundCollided())movedPos = GroundPush(movedPos);
 			this->SetPosition(movedPos);
 		}
 
@@ -90,8 +91,8 @@ public:
 		{
 			m_state = CHARACTER_IDLE;
 		}
-		if (IsGroundCollided()) this->SetPosition(prevPos);
+
 	}
 
-	
+
 };
