@@ -36,7 +36,8 @@ public:
 	virtual Box Collider() { Box null; return null; }
 	virtual Circle getCircle() { Circle null; return null; }
 	virtual void SetCharacterCollider(float radius){ }
-	virtual void SetCollider(Vector colSize, Vector anchor) {}
+	virtual void SetCollider(Vector size, float angle) {}
+	virtual void SetStandPosition(Vector pos) {}
 	virtual void Update(float deltaTime) { }
 	virtual void Draw(Camera* pCamera){ }
 	virtual void Hit(float damage) { }
@@ -56,18 +57,18 @@ public:
 	void SetPosition(Vector pos)
 	{
 		m_pos = pos;
-		m_collider.leftTop = pos;
+		m_collider.center = pos;
 	}
 	
-	void SetCollider(Vector width, Vector height) 
+	void SetCollider(Vector size, float angle=0) 
 	{
-		m_collider.width = width;
-		m_collider.height = height;
+		m_collider.size = size;
+		m_collider.SetAngle(angle);
 	}
 
 	void Draw(Camera* pCamera) 
 	{
-		pCamera->DrawRect(m_pos, Vector(m_collider.width.Magnitude(), m_collider.height.Magnitude()), ColorF::Red, 2);
+		pCamera->DrawRect(m_collider.LeftTop(), Vector(m_collider.size.x, m_collider.size.y), ColorF::Red, 2);
 
 	}
 
@@ -86,7 +87,7 @@ public:
 	void CreateMonster(int id, Vector pos, float colRadius);
 	void DestroyAllMonster();
 
-	void CreateProps(int id, Vector pos, Vector width, Vector height);
+	void CreateProps(int id, Vector pos, Vector size, float angle=0);
 	void DestroyProps(Object* pProps);
 	void DestroyAllProps();
 

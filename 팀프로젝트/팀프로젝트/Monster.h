@@ -1,6 +1,5 @@
 #pragma once
-#include "ObjectManager.h"
-#include "RenderManager.h"
+#include "Character.h"
 
 class Monster : public Character
 {

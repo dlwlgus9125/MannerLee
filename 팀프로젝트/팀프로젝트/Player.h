@@ -33,7 +33,7 @@ public:
 		pCamera->DrawRect(m_punchCollider.LeftTop(), m_punchCollider.size);*/
 		pCamera->DrawCircle(getCircle().center, getCircle().radius, ColorF::Red, 2.0f);
 		pCamera->DrawFillCircle(Position(), 30, ColorF::Red);
-		pCamera->DrawLine(Position() + 15.0f, Position() + 15.0f + m_dir * 30, ColorF::Blue, 3);
+		pCamera->DrawLine(Position()+15.0f , Position()+15.0f + m_dir * 30, ColorF::Blue, 3);
 		//Camera* pMapCamera = RENDER->GetCamera(CAM_MAP);
 		//pMapCamera->DrawFilledRect(Collider().LeftTop(), Collider().size);
 	}
@@ -90,7 +90,7 @@ public:
 		{
 			m_state = CHARACTER_IDLE;
 		}
-		if (!IsGroundCollided()) this->SetPosition(prevPos);
+		if (IsGroundCollided()) this->SetPosition(prevPos);
 	}
 
 	

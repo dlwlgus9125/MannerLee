@@ -20,7 +20,7 @@ void ObjectManager::CreateMonster(int id, Vector pos, float colRadius)
 	NEW_OBJECT(Object* monster, Monster(id));
 	monster->SetPosition(pos);
 	monster->SetCharacterCollider(colRadius);
-
+	monster->SetStandPosition(pos);
 	
 
 	m_monsterList.push_back(monster);
@@ -35,11 +35,11 @@ void ObjectManager::DestroyAllMonster()
 	m_monsterList.clear();
 }
 
-void ObjectManager::CreateProps(int id, Vector pos, Vector width, Vector height)
+void ObjectManager::CreateProps(int id, Vector pos, Vector size, float angle)
 {
 	NEW_OBJECT(Object* props, Prop(id));
 	props->SetPosition(pos);
-	props->SetCollider(width, height);
+	props->SetCollider(size, angle);
 	m_propsList.push_back(props);
 }
 

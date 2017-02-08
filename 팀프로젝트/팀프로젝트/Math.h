@@ -1,7 +1,12 @@
 #pragma once
 #include "Singleton.h"
+#include <cmath>
 
-#define MATH	Math::Instance()
+#define MATH				Math::Instance()
+#define EPSILON				0.01f
+#define PI					3.141592f
+#define ANGLE_TO_RADIAN		0.0174533f
+#define RADIAN_TO_ANGLE		57.2958f
 
 struct Vector
 {
@@ -24,8 +29,6 @@ struct Vector
 	Vector operator - (float num) { return Vector(x - num, y - num); }
 	Vector operator * (float num) { return Vector(x * num, y * num); }
 	Vector operator / (float num) { return Vector(x / num, y / num); }
-	Vector& operator += (float num) { x += num; y += num; return *this; }
-	Vector& operator -= (float num) { x -= num; y -= num; return *this; }
 	Vector& operator *= (float num) { x *= num; y *= num; return *this; }
 	Vector& operator /= (float num) { x /= num; y /= num; return *this; }
 
@@ -49,6 +52,7 @@ struct Vector
 	static Vector Down() { return Vector(0.0f, 1.0f); }
 };
 
+// 선분
 struct Line
 {
 	Vector point;
@@ -62,6 +66,12 @@ struct Line
 		length = (endPos - startPos).Magnitude();
 	}
 
+	void SetEndPoint(Vector endPoint)
+	{
+		dir = (endPoint - point).Normalize();
+		length = (endPoint - point).Magnitude();
+	}
+
 	Vector StartPoint() { return point; }
 	Vector EndPoint() { return point + dir * length; }
 	float Slope() { return (EndPoint().y - StartPoint().y) / (EndPoint().x - StartPoint().x); }
@@ -73,7 +83,7 @@ struct Circle
 	Vector center;
 	float radius;
 
-	Circle(){ }
+	Circle() {}
 	Circle(Vector center, float radius)
 	{
 		this->center = center;
@@ -84,23 +94,30 @@ struct Circle
 // 사각형
 struct Box
 {
-	Vector leftTop;
-	Vector width, height;
+	Vector center, size;
+	Vector dirX, dirY;
 
 	Box() {}
-	Box(Vector center, Vector size)
+	Box(Vector center, Vector size, float angle = 0)
 	{
-		leftTop = center - size * 0.5f;
-		width = Vector::Right() * size.x;
-		height = Vector::Down() * size.y;
+		this->center = center;
+		this->size = size;
+		SetAngle(angle);
 	}
 
-	Vector Center() { return LeftTop() + width * 0.5f + height * 0.5f; }
-	Vector LeftTop() { return leftTop; }
-	Vector LeftBottom() { return LeftTop() + height; }
-	Vector RightTop() { return leftTop + width; }
-	Vector RightBottom() { return LeftTop() + width + height; }
-	Vector Size() { return Vector(width.Magnitude(), height.Magnitude()); }
+	void SetAngle(float angle)
+	{
+		dirX = Vector(cosf(angle * ANGLE_TO_RADIAN), -sinf(angle * ANGLE_TO_RADIAN));
+		dirY = Vector(cosf((angle - 90) *ANGLE_TO_RADIAN), -sinf((angle - 90) * ANGLE_TO_RADIAN));
+	}
+
+	Vector Width() { return dirX * size.x; }
+	Vector Height() { return dirY * size.y; }
+
+	Vector LeftTop() { return center - Width() * 0.5f - Height() * 0.5f; }
+	Vector LeftBottom() { return LeftTop() + Height(); }
+	Vector RightTop() { return LeftTop() + Width(); }
+	Vector RightBottom() { return LeftTop() + Width() + Height(); }
 };
 
 // 삼각형
@@ -116,13 +133,8 @@ struct Triangle
 	}
 };
 
-
 class Math : public Singleton<Math>
 {
-	const float PI = 3.141592f;
-	const float ANGLE_TO_RADIAN = 0.0174533f;
-	const float RADIAN_TO_ANGLE = 57.2958f;
-
 public:
 
 	template <typename T>
@@ -142,6 +154,9 @@ public:
 	float Distance(Vector from, Vector to) { return (to - from).Magnitude(); }
 	float SqrDistance(Vector from, Vector to) { return (to - from).SqrMagnitude(); }
 	Vector ToDirection(float angle) { return Vector(Cos(angle), -Sin(angle)); }
+	Vector Project(Vector v, Vector axis) { return axis.Normalize() * ProjectLength(v, axis); }
+	float ProjectLength(Vector v, Vector axis) { return Dot(v, axis.Normalize()); }
+	float ProjectAbsLength(Vector v, Vector axis) { return abs(ProjectLength(v, axis)); }
 
 	float SinAngle(Vector from, Vector to)
 	{
@@ -169,6 +184,7 @@ public:
 		return angle;
 	}
 
+	// 값 선형보간
 	float MoveForward(float from, float to, float delta)
 	{
 		float t = delta / abs(from - to);
@@ -176,6 +192,7 @@ public:
 		return from + (to - from) * t;
 	}
 
+	// 벡터 선형보간
 	Vector MoveForward(Vector from, Vector to, float delta)
 	{
 		float t = delta / (to - from).Magnitude();
@@ -187,8 +204,10 @@ public:
 	Vector ClosestPoint(Vector point, Line line)
 	{
 		Vector vToPoint = point - line.StartPoint();
+
 		float length = Dot(vToPoint, line.dir);
 		length = Clamp(length, 0.0f, line.length);
+
 		return line.StartPoint() + line.dir * length;
 	}
 
@@ -206,19 +225,15 @@ public:
 	}
 
 	// Sin 함수 그래프
-	Vector SinGraph(float width, float height, float angle)
+	float SinGraph(float height, float angle)
 	{
-		float x = width * (angle / 180.0f);
-		float y = Sin(angle) * -height;
-		return Vector(x, y);
+		return Sin(angle) * -height;
 	}
 
 	// Cos 함수 그래프
-	Vector CosGraph(float width, float height, float angle)
+	float CosGraph(float height, float angle)
 	{
-		float x = width * (angle / 180.0f);
-		float y = Cos(angle) * -height;
-		return Vector(x, y);
+		return Cos(angle) * -height;
 	}
 
 	// 점과 선 충돌
@@ -227,8 +242,7 @@ public:
 		float y = LinearGraph(line.point, line.Slope(), point.x);
 		if (abs(point.y - y) < 0.01)
 		{
-			// 방향 체크
-			return Dot(point - line.StartPoint(), point - line.EndPoint()) < 0;
+			return Dot(point - line.StartPoint(), line.EndPoint() - point) > 0;
 		}
 		return false;
 	}
@@ -236,15 +250,36 @@ public:
 	// 점과 원 충돌
 	bool IsCollided(Vector point, Circle circle)
 	{
-		float sqrDistance = SqrDistance(point, circle.center);
-		return sqrDistance <= circle.radius * circle.radius;
+		float sqrDist = SqrDistance(point, circle.center);
+		return sqrDist <= circle.radius * circle.radius;
 	}
 
-	// 점과 박스 충돌
+	// 점과 사각형 충돌
 	bool IsCollided(Vector point, Box box)
 	{
-		if (abs(point.x - box.Center().x) > box.Size().x * 0.5f) return false;
-		if (abs(point.y - box.Center().y) > box.Size().y * 0.5f) return false;
+		// AABB 충돌
+		//Vector leftTop = box.LeftTop();
+		//Vector rightBottom = box.RightBottom();
+		//return point.x >= leftTop.x && point.x <= rightBottom.x
+		//	&& point.y >= leftTop.y && point.y <= rightBottom.y;
+
+		// OBB 충돌
+		float distX = ProjectAbsLength(point - box.center, Vector::Right());
+		float halfWidth = ProjectAbsLength(box.Width() * 0.5f, Vector::Right())
+			+ ProjectAbsLength(box.Height() * 0.5f, Vector::Right());
+		if (distX > halfWidth) return false;
+
+		float distY = ProjectAbsLength(point - box.center, Vector::Down());
+		float halfHeight = ProjectAbsLength(box.Width() * 0.5f, Vector::Down())
+			+ ProjectAbsLength(box.Height() * 0.5f, Vector::Down());
+		if (distY > halfHeight) return false;
+
+		distX = ProjectAbsLength(point - box.center, box.dirX);
+		if (distX > box.size.x * 0.5f) return false;
+
+		distY = ProjectAbsLength(point - box.center, box.dirY);
+		if (distY > box.size.y * 0.5f) return false;
+
 		return true;
 	}
 
@@ -260,15 +295,15 @@ public:
 	// 원과 선 충돌
 	bool IsCollided(Circle circle, Line line)
 	{
-		Vector point = ClosestPoint(circle.center, line);
-		return SqrDistance(point, circle.center) <= circle.radius * circle.radius;
+		Vector pos = ClosestPoint(circle.center, line);
+		return SqrDistance(pos, circle.center) <= circle.radius * circle.radius;
 	}
 
 	// 원과 원 충돌
-	bool IsCollided(Circle a, Circle b)
+	bool IsCollided(Circle c0, Circle c1)
 	{
-		float totalRadius = a.radius + b.radius;
-		return SqrDistance(a.center, b.center) <= totalRadius * totalRadius;
+		float totalRadius = c0.radius + c1.radius;
+		return SqrDistance(c0.center, c1.center) <= totalRadius * totalRadius;
 	}
 
 	// 원과 박스 충돌
@@ -290,5 +325,161 @@ public:
 		if (IsCollided(circle, Line(triangle.p1, triangle.p2))) return true;
 		if (IsCollided(circle, Line(triangle.p2, triangle.p0))) return true;
 		return false;
+	}
+
+	// 직선과 직선의 교차 여부 (교차점의 비율 반환)
+	bool IsIntersected(Line a, Line b, float* pRate)
+	{
+		Vector A = a.StartPoint();
+		Vector B = a.EndPoint();
+		Vector C = b.StartPoint();
+		Vector D = b.EndPoint();
+
+		float value = CrossZ(B - A, D - C);
+		if (abs(value) < EPSILON) return false;
+
+		*pRate = CrossZ(C - A, D - C) / value;
+		return true;
+	}
+
+	// 선과 선 충돌
+	bool IsCollided(Line a, Line b, Vector* pCollidedPoint = NULL)
+	{
+		Vector A = a.StartPoint();
+		Vector B = a.EndPoint();
+		Vector C = b.StartPoint();
+		Vector D = b.EndPoint();
+
+		// 교차 여부 확인
+		float t = 0.0f;
+		if (IsIntersected(a, b, &t) && t >= 0.0f && t <= 1.0f)
+		{
+			if (IsIntersected(b, a, &t) && t >= 0.0f && t <= 1.0f)
+			{
+				if (pCollidedPoint != NULL) *pCollidedPoint = C + (D - C) * t;
+				return true;
+			}
+		}
+
+		// 평행선 충돌 여부 확인
+		float value = CrossZ(a.EndPoint() - a.StartPoint(), b.EndPoint() - a.StartPoint());
+		if (abs(value) < EPSILON)
+		{
+			if (Dot(A - C, A - D) < 0) { if (pCollidedPoint != NULL) *pCollidedPoint = A; return true; }
+			if (Dot(B - C, B - D) < 0) { if (pCollidedPoint != NULL) *pCollidedPoint = B; return true; }
+			if (Dot(C - A, C - B) < 0) { if (pCollidedPoint != NULL) *pCollidedPoint = C; return true; }
+			if (Dot(D - A, D - B) < 0) { if (pCollidedPoint != NULL) *pCollidedPoint = D; return true; }
+		}
+		return false;
+	}
+
+	// 선과 박스 충돌
+	bool IsCollided(Line line, Box box)
+	{
+		if (IsCollided(line.StartPoint(), box)) return true;
+		if (IsCollided(line.EndPoint(), box)) return true;
+		if (IsCollided(line, Line(box.LeftTop(), box.RightTop()))) return true;
+		if (IsCollided(line, Line(box.LeftTop(), box.LeftBottom()))) return true;
+		if (IsCollided(line, Line(box.RightBottom(), box.RightTop()))) return true;
+		if (IsCollided(line, Line(box.RightBottom(), box.LeftBottom()))) return true;
+		return false;
+	}
+
+	// 선과 삼각형 충돌
+	bool IsCollided(Line line, Triangle triangle)
+	{
+		if (IsCollided(line.StartPoint(), triangle)) return true;
+		if (IsCollided(line.EndPoint(), triangle)) return true;
+		if (IsCollided(line, Line(triangle.p0, triangle.p1))) return true;
+		if (IsCollided(line, Line(triangle.p1, triangle.p2))) return true;
+		if (IsCollided(line, Line(triangle.p2, triangle.p0))) return true;
+		return false;
+	}
+
+	// 박스와 박스 충돌
+	bool IsCollided(Box a, Box b)
+	{
+		float distX = ProjectAbsLength(a.center - b.center, Vector::Right());
+		float aWidth = ProjectAbsLength(a.Width() * 0.5f, Vector::Right())
+			+ ProjectAbsLength(a.Height() * 0.5f, Vector::Right());
+		float bWidth = ProjectAbsLength(b.Width() * 0.5f, Vector::Right())
+			+ ProjectAbsLength(b.Height() * 0.5f, Vector::Right());
+		if (distX > aWidth + bWidth) return false;
+
+		float distY = ProjectAbsLength(a.center - b.center, Vector::Down());
+		float aHeight = ProjectAbsLength(a.Width() * 0.5f, Vector::Down())
+			+ ProjectAbsLength(a.Height() * 0.5f, Vector::Down());
+		float bHeight = ProjectAbsLength(b.Width() * 0.5f, Vector::Down())
+			+ ProjectAbsLength(b.Height() * 0.5f, Vector::Down());
+		if (distY > aHeight + bHeight) return false;
+
+		distX = ProjectAbsLength(a.center - b.center, a.dirX);
+		aWidth = ProjectAbsLength(a.Width() * 0.5f, a.dirX) + ProjectAbsLength(a.Height() * 0.5f, a.dirX);
+		bWidth = ProjectAbsLength(b.Width() * 0.5f, a.dirX) + ProjectAbsLength(b.Height() * 0.5f, a.dirX);
+		if (distX > aWidth + bWidth) return false;
+
+		distY = ProjectAbsLength(a.center - b.center, a.dirY);
+		aHeight = ProjectAbsLength(a.Width() * 0.5f, a.dirY) + ProjectAbsLength(a.Height() * 0.5f, a.dirY);
+		bHeight = ProjectAbsLength(b.Width() * 0.5f, a.dirY) + ProjectAbsLength(b.Height() * 0.5f, a.dirY);
+		if (distY > aHeight + bHeight) return false;
+
+		distX = ProjectAbsLength(a.center - b.center, b.dirX);
+		aWidth = ProjectAbsLength(a.Width() * 0.5f, b.dirX) + ProjectAbsLength(a.Height() * 0.5f, b.dirX);
+		bWidth = ProjectAbsLength(b.Width() * 0.5f, b.dirX) + ProjectAbsLength(b.Height() * 0.5f, b.dirX);
+		if (distX > aWidth + bWidth) return false;
+
+		distY = ProjectAbsLength(a.center - b.center, b.dirY);
+		aHeight = ProjectAbsLength(a.Width() * 0.5f, b.dirY) + ProjectAbsLength(a.Height() * 0.5f, b.dirY);
+		bHeight = ProjectAbsLength(b.Width() * 0.5f, b.dirY) + ProjectAbsLength(b.Height() * 0.5f, b.dirY);
+		if (distY > aHeight + bHeight) return false;
+
+		return true;
+	}
+	Vector GetOverlappedVector(Circle from, Circle to)
+	{
+		if (!IsCollided(from, to)) return Vector::Zero();
+
+		Line line(from.center, to.center);
+		float length = (from.radius + to.radius) - line.length;
+		return line.dir * length;
+	}
+
+	// 원과 선의 겹쳐진 벡터 반환
+	Vector GetOverlappedVector(Circle from, Line to)
+	{
+		if (!IsCollided(from, to)) return Vector::Zero();
+
+		Line line(from.center, ClosestPoint(from.center, to));
+		float length = from.radius - line.length;
+		return line.dir * length;
+	}
+
+	// 원과 박스의 겹쳐진 벡터 반환
+	Vector GetOverlappedVector(Circle from, Box to)
+	{
+		if (!IsCollided(from, to)) return Vector::Zero();
+
+		Vector v1 = GetOverlappedVector(from, Line(to.LeftTop(), to.RightTop()));
+		from.center -= v1;
+		Vector v2 = GetOverlappedVector(from, Line(to.LeftTop(), to.LeftBottom()));
+		from.center -= v2;
+		Vector v3 = GetOverlappedVector(from, Line(to.RightBottom(), to.RightTop()));
+		from.center -= v3;
+		Vector v4 = GetOverlappedVector(from, Line(to.RightBottom(), to.LeftBottom()));
+		return v1 + v2 + v3 + v4;
+	}
+
+	// 박스와 박스의 겹쳐진 벡터 반환
+	Vector GetOverlappedVector(Box from, Box to, Vector prevPos)
+	{
+		if (!IsCollided(from, to)) return Vector::Zero();
+
+		Vector distX = Project(to.center - from.center, Vector::Right());
+		float overlappedX = (to.size.x * 0.5f + from.size.x * 0.5f - distX.Magnitude());
+
+		Vector distY = Project(to.center - from.center, Vector::Down());
+		float overlappedY = (to.size.y * 0.5f + from.size.y * 0.5f - distY.Magnitude());
+
+		return (overlappedX < overlappedY) ? distX.Normalize() * overlappedX : distY.Normalize() * overlappedY;
 	}
 };

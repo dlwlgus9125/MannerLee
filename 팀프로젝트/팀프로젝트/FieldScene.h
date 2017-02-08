@@ -30,12 +30,12 @@ public:
 		RENDER->GetCamera(CAM_MAIN)->SetScreenRect(0, 0, 800, 600);
 		//RENDER->GetCamera(CAM_MAP)->SetScreenRect(0, 0, 200, 200);
 
-		OBJECT->CreateProps(OBJ_GROUND, Vector(350, 130), Vector(540, 0), Vector(0, 710));
-		OBJECT->CreateProps(OBJ_GROUND, Vector(250, 710), Vector(740, 0),Vector(0, 130));
-		OBJECT->CreateProps(OBJ_GROUND, Vector(560, 820), Vector(120, 0),Vector(0, 400));
-		OBJECT->CreateProps(OBJ_GROUND, Vector(300, 1150), Vector(190, 0), Vector(0, 230));
-		OBJECT->CreateProps(OBJ_GROUND, Vector(300, 1200), Vector(640, 0), Vector(0, 180));
-		OBJECT->CreateProps(OBJ_GROUND, Vector(750, 1150), Vector(190, 0), Vector(0, 230));
+		OBJECT->CreateProps(OBJ_GROUND, Vector(200, 100), Vector(100, 710));
+		//OBJECT->CreateProps(OBJ_GROUND, Vector(250, 710), Vector(740, 130));
+		//OBJECT->CreateProps(OBJ_GROUND, Vector(560, 820), Vector(120, 400));
+		//->CreateProps(OBJ_GROUND, Vector(300, 1150), Vector(190, 230));
+		//OBJECT->CreateProps(OBJ_GROUND, Vector(300, 1200), Vector(640, 180));
+		//OBJECT->CreateProps(OBJ_GROUND, Vector(750, 1150), Vector(190, 230));
 		}
 
 	void OnUpdate(float deltaTime)
