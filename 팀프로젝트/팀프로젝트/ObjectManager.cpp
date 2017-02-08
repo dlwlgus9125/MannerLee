@@ -1,6 +1,7 @@
 #include "ObjectManager.h"
 #include "Player.h"
 #include "Monster.h"
+#include "Skill.h"
 
 void ObjectManager::CreatePlayer(Vector pos, float colRadius)
 {
@@ -33,6 +34,19 @@ void ObjectManager::DestroyAllMonster()
 		DELETE_OBJECT((*it));
 	}
 	m_monsterList.clear();
+}
+
+void ObjectManager::CreateSkill(int id, Vector pos, float colRadius)
+{
+
+}
+void ObjectManager::DestroySkill(int id)
+{
+
+}
+void ObjectManager::DestroyAllSkill()
+{
+
 }
 
 void ObjectManager::CreateProps(int id, Vector pos, Vector width, Vector height)
