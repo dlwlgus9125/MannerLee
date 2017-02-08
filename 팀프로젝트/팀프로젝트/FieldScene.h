@@ -30,10 +30,13 @@ public:
 		RENDER->GetCamera(CAM_MAIN)->SetScreenRect(0, 0, 800, 600);
 		//RENDER->GetCamera(CAM_MAP)->SetScreenRect(0, 0, 200, 200);
 
-		OBJECT->CreateProps(OBJ_GROUND, Vector(200, 100), Vector(100, 710));
-		//OBJECT->CreateProps(OBJ_GROUND, Vector(250, 710), Vector(740, 130));
-		//OBJECT->CreateProps(OBJ_GROUND, Vector(560, 820), Vector(120, 400));
-		//->CreateProps(OBJ_GROUND, Vector(300, 1150), Vector(190, 230));
+		OBJECT->CreateProps(OBJ_GROUND, Vector(280, 370), Vector(100, 670));
+		OBJECT->CreateProps(OBJ_GROUND, Vector(630, 50), Vector(600, 100));
+		OBJECT->CreateProps(OBJ_GROUND, Vector(950, 370), Vector(100, 670));
+		OBJECT->CreateProps(OBJ_GROUND, Vector(180, 800), Vector(100, 200));
+		OBJECT->CreateProps(OBJ_GROUND, Vector(370, 900), Vector(280, 100));
+		OBJECT->CreateProps(OBJ_GROUND, Vector(1050, 800), Vector(100, 200));
+		OBJECT->CreateProps(OBJ_GROUND, Vector(890, 900), Vector(280, 100));
 		//OBJECT->CreateProps(OBJ_GROUND, Vector(300, 1200), Vector(640, 180));
 		//OBJECT->CreateProps(OBJ_GROUND, Vector(750, 1150), Vector(190, 230));
 		}

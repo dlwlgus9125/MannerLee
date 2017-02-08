@@ -60,11 +60,25 @@ public:
 		list<Object*> groundList = OBJECT->GetPropsList(OBJ_GROUND);
 		FOR_LIST(Object*, groundList)
 		{
-			if (MATH->IsCollided(this->Position(), (*it)->Collider()))
+			if (MATH->IsCollided(this->getCircle(), (*it)->Collider()))
 			{
 				return true;
 			}
 		}
 		return false;
+	}
+
+	Vector GroundPush(Vector movedPos)
+	{
+		list<Object*> groundList = OBJECT->GetPropsList(OBJ_GROUND);
+		
+		FOR_LIST(Object*, groundList)
+		{
+			if (MATH->IsCollided(this->getCircle(), (*it)->Collider()))
+			{
+				movedPos -= MATH->GetOverlappedVector(this->getCircle(), (*it)->Collider());
+			}		
+		}
+		return movedPos;
 	}
 };
