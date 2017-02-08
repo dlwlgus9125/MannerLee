@@ -87,3 +87,16 @@ void ObjectManager::Draw(Camera* pCamera)
 
 	m_pPlayer->Draw(pCamera);
 }
+
+void ObjectManager::CreateSkill(int id, Vector pos, float colRadius)
+{
+
+}
+void ObjectManager::DestroySkill(int id)
+{
+
+}
+void ObjectManager::DestroyAllSkill()
+{
+
+}
