@@ -36,6 +36,7 @@ public:
 	virtual Box Collider() { Box null; return null; }
 	virtual Circle getCircle() { Circle null; return null; }
 	virtual void SetCharacterCollider(float radius){ }
+	virtual void SetSkillCollider(Vector center, Vector dir, float lineSIze);
 	virtual void SetCollider(Vector size, float angle) {}
 	virtual void SetStandPosition(Vector pos) {}
 	virtual void Update(float deltaTime) { }
@@ -79,6 +80,7 @@ class ObjectManager : public Singleton<ObjectManager>
 	Object* m_pPlayer;
 	list<Object*> m_propsList;
 	list<Object*> m_monsterList;
+	list<Object*> m_skillList;
 
 public:
 	void CreatePlayer(Vector pos, float colRadius);
@@ -87,7 +89,11 @@ public:
 	void CreateMonster(int id, Vector pos, float colRadius);
 	void DestroyAllMonster();
 
-	void CreateProps(int id, Vector pos, Vector size, float angle=0);
+	void CreateSkill(int id, Vector pos, float colsize);
+	void DestroySkill(int id);
+	void DestroyAllSkill();
+	
+	void CreateProps(int id, Vector pos, Vector width, Vector height);
 	void DestroyProps(Object* pProps);
 	void DestroyAllProps();
 

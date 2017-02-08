@@ -10,6 +10,8 @@ protected:
 	Vector m_dir;
 	float m_speed;
 	Circle m_circle;
+	float m_life;
+
 
 public:
 	Character(int id) : Object(id)
@@ -17,7 +19,18 @@ public:
 		m_state = CHARACTER_IDLE;
 		m_dir = (Vector::Down()+Vector::Right()).Normalize();
 		m_speed = 300;
+		m_life = 1000;
 
+	}
+
+	float GetLife()
+	{
+		return m_life;
+	}
+
+	void SetLife(float damage)
+	{
+		m_life -= damage;
 	}
 
 	void SetCharacterCollider(float radius) 
@@ -31,6 +44,11 @@ public:
 		this->m_pos = pos;
 		m_circle.center = pos;
 		
+	}
+
+	Vector GetDIr()
+	{
+		return m_dir;
 	}
 
 	virtual void Update(float deltaTime) { }
