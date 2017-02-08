@@ -24,6 +24,8 @@ public:
 		case CHARACTER_IDLE: IdleState(); break;
 		case CHARACTER_RUN: RunState(deltaTime); break;
 		}
+
+		
 	}
 
 	void Draw(Camera* pCamera)

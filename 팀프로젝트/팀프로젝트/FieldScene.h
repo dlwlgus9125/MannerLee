@@ -46,6 +46,27 @@ public:
 	{
 		OBJECT->Update(deltaTime);
 		RENDER->GetCamera(CAM_MAIN)->SetCenterPos(OBJECT->GetPlayer()->Position());
+		bool test = true;
+
+		if (test)
+		{
+			
+
+			int t = (int)timeGetTime()/5%60%2;
+			int z = (int)timeGetTime() / 5 % 60 % 7;
+			int reverse1 = 7 - z;
+			//cout << t << endl;
+			cout << z << endl;
+			float y = sin(z*1.0f) * powf(0.5f, z);
+			float reverse2 = sin(reverse1*1.0f) * powf(0.5f, reverse1);
+			//cout << y*500 << endl;
+			if(t==0)RENDER->GetCamera(CAM_MAIN)->SetCenterPos(Vector(OBJECT->GetPlayer()->Position().x + y * 30, OBJECT->GetPlayer()->Position().y+ reverse2*30));
+			if (t == 1)RENDER->GetCamera(CAM_MAIN)->SetCenterPos(Vector(OBJECT->GetPlayer()->Position().x + reverse2 * 30, OBJECT->GetPlayer()->Position().y + y * 30));
+		}
+		
+
+		float t = deltaTime * 1000;
+		
 
 		
 	}
