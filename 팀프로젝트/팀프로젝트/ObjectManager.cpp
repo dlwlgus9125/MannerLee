@@ -20,7 +20,7 @@ void ObjectManager::CreateMonster(int id, Vector pos, float colRadius)
 	NEW_OBJECT(Object* monster, Monster(id));
 	monster->SetPosition(pos);
 	monster->SetCharacterCollider(colRadius);
-	monster->SetStandPosition(pos);
+	monster->SetStandPosition();
 	
 
 	m_monsterList.push_back(monster);

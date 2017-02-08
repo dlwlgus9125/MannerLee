@@ -81,4 +81,18 @@ public:
 		}
 		return movedPos;
 	}
+
+	void FowardToTargetPos(Vector targetPos, float deltaTime)
+	{
+		Vector prevPos = this->Position();
+		Vector movedPos = this->Position();
+
+		m_dir = Vector::Zero();
+	
+		m_dir = (targetPos - movedPos).Normalize();
+		movedPos += m_dir * m_speed * deltaTime;
+		if (IsGroundCollided())movedPos = GroundPush(movedPos);
+		this->SetPosition(movedPos);
+	}
+	
 };

@@ -13,31 +13,32 @@ class FieldScene : public IScene
 public:
 	FieldScene()
 	{
-		RENDER->CreateCamera(CAM_MAIN, 860*1.5f, 1100* 1.5f, VIEW_WIDTH, VIEW_HEIGHT);
+		RENDER->CreateCamera(CAM_MAIN, 860*2.0f, 1100* 2.0f, VIEW_WIDTH, VIEW_HEIGHT);
 		//RENDER->CreateCamera(CAM_MAP, 2000, 3000, 3000, 1000);
 
 		RENDER->LoadImageFile(TEXT("BossCastle"), TEXT("Image/Boss.png"));
 
 		OBJECT->CreatePlayer(Vector(600, 800), 30);
-		OBJECT->CreateMonster(OBJ_MONSTER, Vector(400, 600),30);
+		OBJECT->CreateMonster(OBJ_MONSTER, Vector(600, 600),30);
 	}
 
 	void OnEnter()
 	{
 		NEW_OBJECT(m_pBg, Sprite(RENDER->GetImage(TEXT("BossCastle")), 1.0f, 0, 0));
-		m_pBg->SetSize(860* 1.5f, 1100* 1.5f);
+		m_pBg->SetSize(860* 2.0f, 1100* 2.0f);
 
 		RENDER->GetCamera(CAM_MAIN)->SetScreenRect(0, 0, 800, 600);
 		//RENDER->GetCamera(CAM_MAP)->SetScreenRect(0, 0, 200, 200);
 
-		OBJECT->CreateProps(OBJ_GROUND, Vector(280, 370), Vector(100, 670));
-		OBJECT->CreateProps(OBJ_GROUND, Vector(630, 50), Vector(600, 100));
-		OBJECT->CreateProps(OBJ_GROUND, Vector(950, 370), Vector(100, 670));
-		OBJECT->CreateProps(OBJ_GROUND, Vector(180, 800), Vector(100, 200));
-		OBJECT->CreateProps(OBJ_GROUND, Vector(370, 900), Vector(280, 100));
-		OBJECT->CreateProps(OBJ_GROUND, Vector(1050, 800), Vector(100, 200));
-		OBJECT->CreateProps(OBJ_GROUND, Vector(890, 900), Vector(280, 100));
-		//OBJECT->CreateProps(OBJ_GROUND, Vector(300, 1200), Vector(640, 180));
+		OBJECT->CreateProps(OBJ_GROUND, Vector(280, 370)*1.33f, Vector(100, 670)*1.33f);
+		OBJECT->CreateProps(OBJ_GROUND, Vector(630, 50)*1.33f, Vector(600, 100)*1.33f);
+		OBJECT->CreateProps(OBJ_GROUND, Vector(950, 370)*1.33f, Vector(100, 670)*1.33f);
+		OBJECT->CreateProps(OBJ_GROUND, Vector(180, 800)*1.33f, Vector(100, 200)*1.33f);
+		OBJECT->CreateProps(OBJ_GROUND, Vector(370, 900)*1.33f, Vector(280, 100)*1.33f);
+		OBJECT->CreateProps(OBJ_GROUND, Vector(1050, 800)*1.33f, Vector(100, 200)*1.33f);
+		OBJECT->CreateProps(OBJ_GROUND, Vector(890, 900)*1.33f, Vector(280, 100)*1.33f);
+		OBJECT->CreateProps(OBJ_GROUND, Vector(725, 1000)*1.33f, Vector(50, 360)*1.33f);
+		OBJECT->CreateProps(OBJ_GROUND, Vector(520, 1000)*1.33f, Vector(50, 360)*1.33f);
 		//OBJECT->CreateProps(OBJ_GROUND, Vector(750, 1150), Vector(190, 230));
 		}
 

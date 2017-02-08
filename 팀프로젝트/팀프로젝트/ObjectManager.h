@@ -38,7 +38,7 @@ public:
 	virtual void SetCharacterCollider(float radius){ }
 	virtual void SetSkillCollider(Vector center, Vector dir, float lineSIze) {}
 	virtual void SetCollider(Vector size, float angle) {}
-	virtual void SetStandPosition(Vector pos) {}
+	virtual void SetStandPosition() {}
 	virtual void Update(float deltaTime) { }
 	virtual void Draw(Camera* pCamera){ }
 	virtual void Hit(float damage) { }
