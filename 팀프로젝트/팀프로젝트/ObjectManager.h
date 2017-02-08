@@ -36,7 +36,7 @@ public:
 	virtual Box Collider() { Box null; return null; }
 	virtual Circle getCircle() { Circle null; return null; }
 	virtual void SetCharacterCollider(float radius){ }
-	virtual void SetSkillCollider(Vector center, Vector dir, float lineSIze);
+	virtual void SetSkillCollider(Vector center, Vector dir, float lineSIze) {}
 	virtual void SetCollider(Vector size, float angle) {}
 	virtual void SetStandPosition(Vector pos) {}
 	virtual void Update(float deltaTime) { }
@@ -93,7 +93,7 @@ public:
 	void DestroySkill(int id);
 	void DestroyAllSkill();
 	
-	void CreateProps(int id, Vector pos, Vector width, Vector height);
+	void CreateProps(int id, Vector pos, Vector size, float angle=0);
 	void DestroyProps(Object* pProps);
 	void DestroyAllProps();
 
