@@ -9,6 +9,8 @@
 class FieldScene : public IScene
 {
 	Sprite* m_pBg;
+	Sprite* m_UI;
+	
 
 public:
 	FieldScene()
@@ -17,6 +19,7 @@ public:
 		//RENDER->CreateCamera(CAM_MAP, 2000, 3000, 3000, 1000);
 
 		RENDER->LoadImageFile(TEXT("BossCastle"), TEXT("Image/Boss.png"));
+		RENDER->LoadImageFile(TEXT("UI"), TEXT("Image/UI/UI.png"));
 
 		OBJECT->CreatePlayer(Vector(600, 800), 30);
 		OBJECT->CreateMonster(OBJ_MONSTER, Vector(600, 600),30);
@@ -26,6 +29,7 @@ public:
 	{
 		NEW_OBJECT(m_pBg, Sprite(RENDER->GetImage(TEXT("BossCastle")), 1.0f, 0, 0));
 		m_pBg->SetSize(860* 2.0f, 1100* 2.0f);
+		NEW_OBJECT(m_UI, Sprite(RENDER->GetImage(TEXT("UI")), 1.0f, 0, 0));
 
 		RENDER->GetCamera(CAM_MAIN)->SetScreenRect(0, 0, 800, 600);
 		//RENDER->GetCamera(CAM_MAP)->SetScreenRect(0, 0, 200, 200);
@@ -46,34 +50,33 @@ public:
 	{
 		OBJECT->Update(deltaTime);
 		RENDER->GetCamera(CAM_MAIN)->SetCenterPos(OBJECT->GetPlayer()->Position());
-		bool test = true;
+		bool test = false;
 
 		if (test)
 		{
-			
-
-			int t = (int)timeGetTime()/5%60%2;
-			int z = (int)timeGetTime() / 5 % 60 % 7;
+			int t = (int)timeGetTime()/5%30%2;
+			int z = (int)timeGetTime() / 5 % 30 % 7;
 			int reverse1 = 7 - z;
 			//cout << t << endl;
-			cout << z << endl;
-			float y = sin(z*1.0f) * powf(0.5f, z);
+			//cout << z << endl;
+			float y = sin(z*1.0f) * powf(1.0f, z);
 			float reverse2 = sin(reverse1*1.0f) * powf(0.5f, reverse1);
-			//cout << y*500 << endl;
-			if(t==0)RENDER->GetCamera(CAM_MAIN)->SetCenterPos(Vector(OBJECT->GetPlayer()->Position().x + y * 30, OBJECT->GetPlayer()->Position().y+ reverse2*30));
-			if (t == 1)RENDER->GetCamera(CAM_MAIN)->SetCenterPos(Vector(OBJECT->GetPlayer()->Position().x + reverse2 * 30, OBJECT->GetPlayer()->Position().y + y * 30));
+			cout << y << endl;
+			if(t==0)RENDER->GetCamera(CAM_MAIN)->SetCenterPos(Vector(OBJECT->GetPlayer()->Position().x + y * 20, OBJECT->GetPlayer()->Position().y+ reverse2*20));
+			if (t == 1)RENDER->GetCamera(CAM_MAIN)->SetCenterPos(Vector(OBJECT->GetPlayer()->Position().x + reverse2 * 20, OBJECT->GetPlayer()->Position().y + y * 20));
 		}
 		
 
 		float t = deltaTime * 1000;
 		
-
+		
 		
 	}
 
 	void OnExit()
 	{
 		OBJECT->DestroyAllProps();
+		DELETE_OBJECT(m_UI);
 		DELETE_OBJECT(m_pBg);
 	}
 
@@ -84,6 +87,7 @@ public:
 	//	pMapCamera->Draw(m_pBg, Vector(0, 0));
 
 		pMainCamera->Draw(m_pBg, Vector(0, 0));
+		RENDER->Draw(m_UI, 0, 0);
 		OBJECT->Draw(pMainCamera);
 	}
 };
