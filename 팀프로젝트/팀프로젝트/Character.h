@@ -7,11 +7,12 @@ class Character : public Object
 {
 protected:
 	CHARACTER_STATE m_state;
+	SPRITE_STATE m_spriteState;
 	Vector m_dir;
 	float m_speed;
 	Circle m_circle;
 	float m_life;
-
+	DIR_STATE    m_dirState;
 
 public:
 	Character(int id) : Object(id)
@@ -54,6 +55,8 @@ public:
 	virtual void Update(float deltaTime) { }
 	virtual void Draw(Camera* pCamera) {  }
 	virtual void Hit(float damage) { }
+	virtual void SetMonsterKind(MONSTER_KIND kind) {}
+	virtual void LoadingMonsterImage() {}
 
 	bool IsGroundCollided()
 	{
@@ -95,4 +98,18 @@ public:
 		this->SetPosition(movedPos);
 	}
 	
+	void Get_Dir_state()
+	{
+		DIR_STATE state = DIR_DOWN;
+
+		float angle = MATH->ToAngle(m_dir);
+		//cout << angle << endl;
+
+		if (45.0f <= angle && angle <= 135.0f)m_dirState = DIR_UP;
+		if (45.0f + 90.0f <= angle && angle <= 135.0f + 90.0f)m_dirState = DIR_RIGHT;
+		if (135.0f + 90.0f <= angle && angle <= 135.0f + 180.0f)m_dirState = DIR_DOWN;
+		if (135.0f + 180.0f <= angle && angle <= 360.0f)m_dirState = DIR_LEFT;
+		if (45.0f >= angle)m_dirState = DIR_LEFT;
+		//cout << state << endl;
+	}
 };

@@ -3,11 +3,8 @@
 
 class Player : public Character
 {
-	CHARACTER_STATE m_state;
-	SPRITE_STATE m_spriteState;
-	DIR_STATE    m_dirState;
-	Vector m_dir;
-	float m_speed;
+	
+	
 
 
 public:
@@ -16,8 +13,17 @@ public:
 		m_state = CHARACTER_IDLE;
 		m_dir = Vector::Down();
 		m_dirState = DIR_DOWN;
-		m_speed = 300;
+		m_speed = 150;
 
+		RENDER->LoadImageFiles(TEXT("Idle_Up"), TEXT("Image/Monster/Player/Idle/Up/Up"), TEXT("png"), 1);
+		RENDER->LoadImageFiles(TEXT("Idle_Down"), TEXT("Image/Monster/Player/Idle/Down/Down"), TEXT("png"), 1);
+		RENDER->LoadImageFiles(TEXT("Idle_Left"), TEXT("Image/Monster/Player/Idle/Left/Left"), TEXT("png"), 1);
+		RENDER->LoadImageFiles(TEXT("Idle_Right"), TEXT("Image/Monster/Player/Idle/Right/Right"), TEXT("png"), 1);
+
+		RENDER->LoadImageFiles(TEXT("Run_Up"), TEXT("Image/Monster/Player/Run/Up/Run_Up"), TEXT("png"), 3);
+		RENDER->LoadImageFiles(TEXT("Run_Down"), TEXT("Image/Monster/Player/Run/Down/Run_Down"), TEXT("png"), 3);
+		RENDER->LoadImageFiles(TEXT("Run_Left"), TEXT("Image/Monster/Player/Run/Left/Run_Left"), TEXT("png"), 3);
+		RENDER->LoadImageFiles(TEXT("Run_Right"), TEXT("Image/Monster/Player/Run/Right/Run_Right"), TEXT("png"), 3);
 	}
 
 	void Update(float deltaTime)
@@ -28,7 +34,7 @@ public:
 		case CHARACTER_RUN: RunState(deltaTime); break;
 		}
 		Get_Dir_state();
-
+		Animation()->Update(deltaTime);
 	}
 
 	void Draw(Camera* pCamera)
@@ -57,7 +63,6 @@ public:
 		case DIR_RIGHT: m_spriteState = IDLE_RIGHT; break;
 		case DIR_DOWN: m_spriteState = IDLE_DOWN; break;
 		}
-		//cout << state << endl;
 		Animation()->Play(m_spriteState);
 		if (INPUT->IsMouseDown(MOUSE_LEFT)) { m_state = CHARACTER_RUN; }
 	}
@@ -71,7 +76,7 @@ public:
 		case DIR_RIGHT: m_spriteState = RUN_RIGHT; break;
 		case DIR_DOWN: m_spriteState =  RUN_DOWN; break;
 		}
-		//cout << m_spriteState << endl;
+		
 		
 		Animation()->Play(m_spriteState);
 
@@ -120,19 +125,6 @@ public:
 	}
 
 
-	void Get_Dir_state()
-	{
-		DIR_STATE state = DIR_DOWN;
-
-		float angle = MATH->ToAngle(m_dir);
-		//cout << angle << endl;
-
-		if (45.0f <= angle && angle<= 135.0f)m_dirState = DIR_UP;
-		if (45.0f + 90.0f <= angle && angle <= 135.0f + 90.0f)m_dirState = DIR_RIGHT;
-		if (135.0f + 90.0f <= angle && angle <= 135.0f + 180.0f)m_dirState = DIR_DOWN;
-		if (135.0f + 180.0f <= angle && angle <= 360.0f)m_dirState = DIR_LEFT;
-		if (45.0f >= angle)m_dirState = DIR_LEFT;
-		//cout << state << endl;
-	}
+	
 
 };
