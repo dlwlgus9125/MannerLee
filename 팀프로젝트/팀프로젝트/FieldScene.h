@@ -10,28 +10,38 @@ class FieldScene : public IScene
 {
 	Sprite* m_pBg;
 	Sprite* m_UI;
-	
+
 
 	Vector SkillSize;
 public:
 	FieldScene()
 	{
-		RENDER->CreateCamera(CAM_MAIN, 860*2.0f, 1100* 2.0f, VIEW_WIDTH, VIEW_HEIGHT);
+		RENDER->CreateCamera(CAM_MAIN, 860 * 2.0f, 1100 * 2.0f, VIEW_WIDTH, VIEW_HEIGHT);
 		//RENDER->CreateCamera(CAM_MAP, 2000, 3000, 3000, 1000);
 
 		RENDER->LoadImageFile(TEXT("BossCastle"), TEXT("Image/Boss.png"));
 		RENDER->LoadImageFile(TEXT("UI"), TEXT("Image/UI/UI.png"));
 
+		RENDER->LoadImageFiles(TEXT("Idle_Up"), TEXT("Image/Monster/Player/Idle/Up/Up"), TEXT("png"), 1);
+		RENDER->LoadImageFiles(TEXT("Idle_Down"), TEXT("Image/Monster/Player/Idle/Down/Down"), TEXT("png"), 1);
+		RENDER->LoadImageFiles(TEXT("Idle_Left"), TEXT("Image/Monster/Player/Idle/Left/Left"), TEXT("png"), 1);
+		RENDER->LoadImageFiles(TEXT("Idle_Right"), TEXT("Image/Monster/Player/Idle/Right/Right"), TEXT("png"), 1);
+
+		RENDER->LoadImageFiles(TEXT("Run_Up"), TEXT("Image/Monster/Player/Run/Up/Up"), TEXT("png"), 3);
+		RENDER->LoadImageFiles(TEXT("Run_Down"), TEXT("Image/Monster/Player/Run/Down/Down"), TEXT("png"), 3);
+		RENDER->LoadImageFiles(TEXT("Run_Left"), TEXT("Image/Monster/Player/Run/Left/Left"), TEXT("png"), 3);
+		RENDER->LoadImageFiles(TEXT("Run_Right"), TEXT("Image/Monster/Player/Run/Right/Right"), TEXT("png"), 3);
+
 		OBJECT->CreatePlayer(Vector(600, 800), 30);
-		OBJECT->CreateSkill(OBJECT->GetPlayer(), OBJECT->GetPlayer()->Position(), SKILL_NONE, SkillSize);
-		
-		OBJECT->CreateMonster(OBJ_MONSTER, Vector(600, 600),30);
+		OBJECT->CreateSkill(OBJECT->GetPlayer(), SKILL_NONE, SkillSize);
+
+		OBJECT->CreateMonster(OBJ_MONSTER, Vector(600, 600), 30);
 	}
 
 	void OnEnter()
 	{
 		NEW_OBJECT(m_pBg, Sprite(RENDER->GetImage(TEXT("BossCastle")), 1.0f, 0, 0));
-		m_pBg->SetSize(860* 2.0f, 1100* 2.0f);
+		m_pBg->SetSize(860 * 2.0f, 1100 * 2.0f);
 		NEW_OBJECT(m_UI, Sprite(RENDER->GetImage(TEXT("UI")), 1.0f, 0, 0));
 
 		RENDER->GetCamera(CAM_MAIN)->SetScreenRect(0, 0, 800, 600);
@@ -47,7 +57,7 @@ public:
 		OBJECT->CreateProps(OBJ_GROUND, Vector(725, 1000)*1.33f, Vector(50, 360)*1.33f);
 		OBJECT->CreateProps(OBJ_GROUND, Vector(520, 1000)*1.33f, Vector(50, 360)*1.33f);
 		//OBJECT->CreateProps(OBJ_GROUND, Vector(750, 1150), Vector(190, 230));
-		}
+	}
 
 	void OnUpdate(float deltaTime)
 	{
@@ -57,7 +67,7 @@ public:
 
 		if (test)
 		{
-			int t = (int)timeGetTime()/5%30%2;
+			int t = (int)timeGetTime() / 5 % 30 % 2;
 			int z = (int)timeGetTime() / 5 % 30 % 7;
 			int reverse1 = 7 - z;
 			//cout << t << endl;
@@ -65,15 +75,15 @@ public:
 			float y = sin(z*1.0f) * powf(1.0f, z);
 			float reverse2 = sin(reverse1*1.0f) * powf(0.5f, reverse1);
 			cout << y << endl;
-			if(t==0)RENDER->GetCamera(CAM_MAIN)->SetCenterPos(Vector(OBJECT->GetPlayer()->Position().x + y * 20, OBJECT->GetPlayer()->Position().y+ reverse2*20));
+			if (t == 0)RENDER->GetCamera(CAM_MAIN)->SetCenterPos(Vector(OBJECT->GetPlayer()->Position().x + y * 20, OBJECT->GetPlayer()->Position().y + reverse2 * 20));
 			if (t == 1)RENDER->GetCamera(CAM_MAIN)->SetCenterPos(Vector(OBJECT->GetPlayer()->Position().x + reverse2 * 20, OBJECT->GetPlayer()->Position().y + y * 20));
 		}
-		
+
 
 		float t = deltaTime * 1000;
-		
-		
-		
+
+
+
 	}
 
 	void OnExit()
@@ -86,8 +96,8 @@ public:
 	void OnDraw()
 	{
 		Camera* pMainCamera = RENDER->GetCamera(CAM_MAIN);
-	//	Camera* pMapCamera = RENDER->GetCamera(CAM_MAP);
-	//	pMapCamera->Draw(m_pBg, Vector(0, 0));
+		//	Camera* pMapCamera = RENDER->GetCamera(CAM_MAP);
+		//	pMapCamera->Draw(m_pBg, Vector(0, 0));
 
 		pMainCamera->Draw(m_pBg, Vector(0, 0));
 		RENDER->Draw(m_UI, 0, 0);
