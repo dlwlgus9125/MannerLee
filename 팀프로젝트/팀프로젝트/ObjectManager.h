@@ -4,6 +4,7 @@
 #include "AnimationController.h"
 #include <list>
 #include "Common.h"
+
 using namespace std;
 
 #define OBJECT ObjectManager::Instance()
@@ -14,7 +15,7 @@ protected:
 	AnimationController* m_pAnim;
 	int m_id;
 	Vector m_pos;
-
+	Vector m_dir;
 
 public:
 	Object(int id)
@@ -36,12 +37,15 @@ public:
 	virtual Box Collider() { Box null; return null; }
 	virtual Circle getCircle() { Circle null; return null; }
 	virtual void SetCharacterCollider(float radius){ }
-	virtual void SetSkillCollider(Vector center, Vector dir, float lineSIze) {}
+	virtual void SetSkillCollider(Vector center, Vector dir, Vector size) {}
 	virtual void SetCollider(Vector size, float angle) {}
-	virtual void SetStandPosition(Vector pos) {}
+	virtual void SetStandPosition() {}
 	virtual void Update(float deltaTime) { }
 	virtual void Draw(Camera* pCamera){ }
 	virtual void Hit(float damage) { }
+	virtual Vector GetDir() { return m_dir; }
+
+	Object(){}
 };
 
 class Prop : public Object
@@ -89,8 +93,8 @@ public:
 	void CreateMonster(int id, Vector pos, float colRadius);
 	void DestroyAllMonster();
 
-	void CreateSkill(int id, Vector pos, float colsize);
-	void DestroySkill(int id);
+	void CreateSkill(Object* pCharacter, SKILL_LIST id, Vector size);
+	void DestroySkill(Object* pSkill);
 	void DestroyAllSkill();
 	
 	void CreateProps(int id, Vector pos, Vector size, float angle=0);

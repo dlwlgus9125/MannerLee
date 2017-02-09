@@ -71,14 +71,27 @@ public:
 	Vector GroundPush(Vector movedPos)
 	{
 		list<Object*> groundList = OBJECT->GetPropsList(OBJ_GROUND);
-		
+
 		FOR_LIST(Object*, groundList)
 		{
 			if (MATH->IsCollided(this->getCircle(), (*it)->Collider()))
 			{
 				movedPos -= MATH->GetOverlappedVector(this->getCircle(), (*it)->Collider());
-			}		
+			}
 		}
 		return movedPos;
+	}
+
+	void FowardToTargetPos(Vector targetPos, float deltaTime)
+	{
+		Vector prevPos = this->Position();
+		Vector movedPos = this->Position();
+
+		m_dir = Vector::Zero();
+
+		m_dir = (targetPos - movedPos).Normalize();
+		movedPos += m_dir * m_speed * deltaTime;
+		if (IsGroundCollided())movedPos = GroundPush(movedPos);
+		this->SetPosition(movedPos);
 	}
 };
