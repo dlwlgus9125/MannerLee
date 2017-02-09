@@ -5,6 +5,7 @@ class Player : public Character
 {
 	CHARACTER_STATE m_state;
 	SPRITE_STATE m_spriteState;
+	DIR_STATE    m_dirState;
 	Vector m_dir;
 	float m_speed;
 
@@ -14,6 +15,7 @@ public:
 	{
 		m_state = CHARACTER_IDLE;
 		m_dir = Vector::Down();
+		m_dirState = DIR_DOWN;
 		m_speed = 300;
 
 	}
@@ -25,7 +27,7 @@ public:
 		case CHARACTER_IDLE: IdleState(); break;
 		case CHARACTER_RUN: RunState(deltaTime); break;
 		}
-
+		Get_Dir_state();
 
 	}
 
@@ -48,7 +50,7 @@ public:
 		if (INPUT->IsKeyPress(VK_DOWN)) { m_state = CHARACTER_RUN; }*/
 		
 
-		switch (Get_Dir_state())
+		switch (m_dirState)
 		{
 		case DIR_UP: m_spriteState = IDLE_UP; break;
 		case DIR_LEFT: m_spriteState = IDLE_LEFT; break;
@@ -62,14 +64,15 @@ public:
 
 	void RunState(float deltaTime)
 	{
-		switch (Get_Dir_state())
+		switch (m_dirState)
 		{
 		case DIR_UP: m_spriteState =    RUN_UP; break;
 		case DIR_LEFT: m_spriteState =  RUN_LEFT; break;
 		case DIR_RIGHT: m_spriteState = RUN_RIGHT; break;
 		case DIR_DOWN: m_spriteState =  RUN_DOWN; break;
 		}
-		//cout << state << endl;
+		//cout << m_spriteState << endl;
+		
 		Animation()->Play(m_spriteState);
 
 		Vector prevPos = this->Position();
@@ -117,20 +120,19 @@ public:
 	}
 
 
-	int Get_Dir_state()
+	void Get_Dir_state()
 	{
 		DIR_STATE state = DIR_DOWN;
 
 		float angle = MATH->ToAngle(m_dir);
-		cout << angle << endl;
+		//cout << angle << endl;
 
-		if (45.0f <= angle && angle<= 135.0f)state = DIR_UP;
-		if (45.0f + 90.0f <= angle && angle <= 135.0f + 90.0f)state = DIR_RIGHT;
-		if (135.0f + 90.0f <= angle && angle <= 135.0f + 180.0f)state = DIR_DOWN;
-		if (135.0f + 180.0f <= angle && angle <= 360.0f)state = DIR_LEFT;
-		if (45.0f >= angle)state = DIR_LEFT;
-		cout << state << endl;
-		return state;
+		if (45.0f <= angle && angle<= 135.0f)m_dirState = DIR_UP;
+		if (45.0f + 90.0f <= angle && angle <= 135.0f + 90.0f)m_dirState = DIR_RIGHT;
+		if (135.0f + 90.0f <= angle && angle <= 135.0f + 180.0f)m_dirState = DIR_DOWN;
+		if (135.0f + 180.0f <= angle && angle <= 360.0f)m_dirState = DIR_LEFT;
+		if (45.0f >= angle)m_dirState = DIR_LEFT;
+		//cout << state << endl;
 	}
 
 };

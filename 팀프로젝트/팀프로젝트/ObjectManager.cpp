@@ -16,10 +16,10 @@ void ObjectManager::CreatePlayer(Vector pos, float colRadius)
 	m_pPlayer->Animation()->Register(IDLE_RIGHT, new Animation(TEXT("Idle_Right"), 1, 10, true, 2.0f));
 	m_pPlayer->Animation()->Register(IDLE_DOWN, new Animation(TEXT("Idle_Down"), 1, 10, true, 2.0f));
 
-	m_pPlayer->Animation()->Register(RUN_UP, new Animation(TEXT("Run_Up"), 3, 10, true, 2.0f));
-	m_pPlayer->Animation()->Register(RUN_LEFT, new Animation(TEXT("Run_Left"), 3, 10, true, 2.0f));
-	m_pPlayer->Animation()->Register(RUN_RIGHT, new Animation(TEXT("Run_Right"), 3, 10, true, 2.0f));
-	m_pPlayer->Animation()->Register(RUN_DOWN, new Animation(TEXT("Run_Down"), 3, 10, true, 2.0f));
+	m_pPlayer->Animation()->Register(RUN_UP, new Animation(TEXT("Run_Up"), 3, 60, true, 2.0f));
+	m_pPlayer->Animation()->Register(RUN_LEFT, new Animation(TEXT("Run_Left"), 3, 60, true, 2.0f));
+	m_pPlayer->Animation()->Register(RUN_RIGHT, new Animation(TEXT("Run_Right"), 3, 60, true, 2.0f));
+	m_pPlayer->Animation()->Register(RUN_DOWN, new Animation(TEXT("Run_Down"), 3, 60, true, 2.0f));
 
 }
 
