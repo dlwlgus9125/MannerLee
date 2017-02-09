@@ -4,7 +4,7 @@
 #include "Math.h"
 #include "InputManager.h"
 
-
+#define SKILL 
 
 class Skill : public Object
 {
@@ -23,11 +23,11 @@ class Skill : public Object
 	float			m_sustainmentTime;
 
 public:
-	Skill(Character* pCharacter,SKILL_LIST id) : Object(id)
+	Skill(Object* pCharacter, SKILL_LIST id) : Object(id)
 	{
 		m_skillname = id;
 		
-		m_dir	=	pCharacter->GetDIr();
+		m_dir = pCharacter->GetDir();
 		m_pos = pCharacter->Position();
 	}
 	
@@ -102,7 +102,16 @@ public:
 
 	void Update(float deltaTime)
 	{
-		
+		switch (m_skillState)
+		{
+		case STATE_ATTRIBUTE:	AttributeState();			break;
+		case STATE_TYPE:		TypeState();				break;
+		case STATE_BOLT:		BoltState(deltaTime);		break;
+		case STATE_WALL:		WallState(deltaTime);		break;
+		case STATE_SHIELD:		ShieldState(deltaTime);		break;
+		case STATE_STATUS:		StatusState();				break;
+		case MONSTER_ATTACK:	MonsterAttack(deltaTime);	break;
+		}
 	}
 
 	void Draw(Camera* pCamera)

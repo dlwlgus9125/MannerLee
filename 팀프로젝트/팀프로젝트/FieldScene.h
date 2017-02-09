@@ -12,6 +12,7 @@ class FieldScene : public IScene
 	Sprite* m_UI;
 	
 
+	Vector SkillSize;
 public:
 	FieldScene()
 	{
@@ -22,6 +23,8 @@ public:
 		RENDER->LoadImageFile(TEXT("UI"), TEXT("Image/UI/UI.png"));
 
 		OBJECT->CreatePlayer(Vector(600, 800), 30);
+		OBJECT->CreateSkill(OBJECT->GetPlayer(), OBJECT->GetPlayer()->Position(), SKILL_NONE, SkillSize);
+		
 		OBJECT->CreateMonster(OBJ_MONSTER, Vector(600, 600),30);
 	}
 
