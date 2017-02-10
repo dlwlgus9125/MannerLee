@@ -22,13 +22,19 @@ class Skill : public Object
 	float			m_life;
 	float			m_sustainmentTime;
 
+	Object* m_pcharacter;
+
 public:
 	Skill(Object* pCharacter, SKILL_LIST id) : Object(id)
 	{
 		m_skillname = id;
-		
+		m_pcharacter = pCharacter;
 		m_dir = pCharacter->GetDir();
 		m_pos = pCharacter->Position();
+		m_skillState = STATE_IDLE;
+		m_skilltype = TYPE_NONE;
+		m_attribute = ATTRIBUTE_NONE;
+		m_skillname = SKILL_NONE;
 	}
 	
 	void SetSkillStatus(SKILL_LIST id)
@@ -36,64 +42,65 @@ public:
 		switch (id)
 		{
 		case SKILL_NONE:
+			m_pos=m_pcharacter->Position();
 			m_speed = 0;
 			m_damage = 0;
 			m_life =0;
 			m_sustainmentTime =0;
 			break;
 		case FIRE_BOLT:
-			m_speed = 1000;
-			m_damage = 300;
-			m_life = 1;
-			m_sustainmentTime = 1;
+			m_speed = 1000.0f;
+			m_damage = 300.0f;
+			m_life = 1.0f;
+			m_sustainmentTime = 1.0f;
 			break;
 		case FIRE_WALL:
-			m_speed =	300;
-			m_damage = 300;
-			m_life = 900;
-			m_sustainmentTime = 5;
+			m_speed =	300.0f;
+			m_damage = 300.0f;
+			m_life = 900.0f;
+			m_sustainmentTime = 5.0f;
 			break;
 		case FIRE_SHIELD:
-			m_speed = 0;
-			m_damage = 1;
-			m_life = 600;
-			m_sustainmentTime = 10;
+			m_speed = 0.0f;
+			m_damage = 1.0f;
+			m_life = 600.0f;
+			m_sustainmentTime = 10.0f;
 			break;
 		case WATER_BOLT:
-			m_speed = 1000;
-			m_damage = 300;
-			m_life = 1;
-			m_sustainmentTime = 1;
+			m_speed = 1000.0f;
+			m_damage = 300.0f;
+			m_life = 1.0f;
+			m_sustainmentTime = 1.0f;
 			break;
 		case WATER_WALL:
-			m_speed = 300;
-			m_damage = 300;
-			m_life = 900;
-			m_sustainmentTime = 5;
+			m_speed = 300.0f;
+			m_damage = 300.0f;
+			m_life = 900.0f;
+			m_sustainmentTime = 5.0f;
 			break;
 		case WATER_SHIELD:
-			m_speed = 300;
-			m_damage = 300;
-			m_life = 600;
-			m_sustainmentTime = 10;
+			m_speed = 300.0f;
+			m_damage = 300.0f;
+			m_life = 600.0f;
+			m_sustainmentTime = 10.0f;
 			break;
 		case ELECTRICITY_BOLT:
-			m_speed = 1000;
-			m_damage = 300;
-			m_life = 1;
-			m_sustainmentTime = 1;
+			m_speed = 1000.0f;
+			m_damage = 300.0f;
+			m_life = 1.0f;
+			m_sustainmentTime = 1.0f;
 			break;
 		case ELECTRICITY_WALL:
-			m_speed = 300;
-			m_damage = 300;
-			m_life =	900;
-			m_sustainmentTime = 5;
+			m_speed = 300.0f;
+			m_damage = 300.0f;
+			m_life =	900.0f;
+			m_sustainmentTime = 5.0f;
 			break;
 		case ELECTRICITY_SHIELD:
-			m_speed = 0;
-			m_damage = 0;
-			m_life = 600;
-			m_sustainmentTime = 10;
+			m_speed = 0.0f;
+			m_damage = 0.0f;
+			m_life = 600.0f;
+			m_sustainmentTime = 10.0f;
 			break;
 		}
 
@@ -104,19 +111,52 @@ public:
 	{
 		switch (m_skillState)
 		{
+		case STATE_IDLE:		IdleState();				break;
+		case STATE_START:		CastStartState();			break;
 		case STATE_ATTRIBUTE:	AttributeState();			break;
 		case STATE_TYPE:		TypeState();				break;
 		case STATE_BOLT:		BoltState(deltaTime);		break;
 		case STATE_WALL:		WallState(deltaTime);		break;
 		case STATE_SHIELD:		ShieldState(deltaTime);		break;
-		case STATE_STATUS:		StatusState();				break;
 		case MONSTER_ATTACK:	MonsterAttack(deltaTime);	break;
 		}
+
 	}
 
 	void Draw(Camera* pCamera)
 	{
-		pCamera->DrawFillCircle(Position(), 30, ColorF::HotPink);
+
+		switch (m_skillState)
+		{
+		case STATE_ATTRIBUTE:	pCamera->DrawCircle(m_pos, 100, ColorF::Blue,2);			break;
+		case STATE_TYPE:		pCamera->DrawCircle(m_pos, 100, ColorF::Red);		break;
+		case MONSTER_ATTACK:	pCamera->DrawFillCircle(m_pos, 30, ColorF::Yellow);			break;
+		case STATE_BOLT:		pCamera->DrawCircle(m_pos, 100, ColorF::Yellow);	break;
+		case STATE_WALL:		pCamera->DrawCircle(m_pos, 100, ColorF::HotPink);	break;
+		case STATE_SHIELD:		pCamera->DrawCircle(m_pos, 100, ColorF::RosyBrown); break;
+
+		}
+
+		switch (m_attribute)
+		{
+		
+		}
+
+		switch (m_skillname)
+		{
+		case SKILL_NONE:													break;
+		case FIRE_BOLT:					pCamera->DrawFillCircle(m_pcharacter->Position(), 30, ColorF::Red);														break;
+		case FIRE_WALL:					pCamera->DrawFillCircle(m_pcharacter->Position(), 30, ColorF::Yellow);											break;
+		case FIRE_SHIELD:													break;
+		case WATER_BOLT:													break;
+		case WATER_WALL:													break;
+		case WATER_SHIELD:													break;
+		case ELECTRICITY_BOLT:												break;
+		case ELECTRICITY_WALL:												break;
+		case ELECTRICITY_SHIELD:											break;
+		}
+
+		
 	}
 
 	void AttributeMatch(Skill a,Skill b)
@@ -177,18 +217,18 @@ public:
 	
 	void SetDamage(float damage) {	m_damage *= damage; }
 	void SetLife(float damage) {	m_life-=damage;}
-	void SetsustainmentTime(float time) { m_sustainmentTime *= time; }
+	void SetsustainmentTime(float time) { m_sustainmentTime * time; }
 	float GetDamage() { return m_damage; }
 
 	void AttributeState()
 	{
 		SetSkillStatus(m_skillname);
 
-		if (INPUT->IsKeyDown('1'))		m_attribute = ATTRIBUTE_FIRE;
-		if (INPUT->IsKeyDown('2'))		m_attribute = ATTRIBUTE_WATER;
-		if (INPUT->IsKeyDown('3'))		m_attribute = ATTRIBUTE_ELECTRICITY;
+		if (INPUT->IsKeyDown('1'))		m_attribute = ATTRIBUTE_FIRE;	m_skillState = STATE_TYPE;
+		if (INPUT->IsKeyDown('2'))		m_attribute = ATTRIBUTE_WATER;	m_skillState = STATE_TYPE;
+		if (INPUT->IsKeyDown('3'))		m_attribute = ATTRIBUTE_ELECTRICITY;	m_skillState = STATE_TYPE;
 
-		m_skillState = STATE_TYPE;
+	
 	}
 
 	void TypeState()
@@ -202,7 +242,7 @@ public:
 		case TYPE_BOLT:
 			switch (m_attribute)
 			{
-				case ATTRIBUTE_FIRE:m_skillname = FIRE_BOLT;		break;
+				case ATTRIBUTE_FIRE:m_skillname = FIRE_BOLT;					break;
 				case ATTRIBUTE_WATER:m_skillname = WATER_BOLT;					break;
 				case ATTRIBUTE_ELECTRICITY:m_skillname = ELECTRICITY_BOLT;		break;
 			}
@@ -212,7 +252,7 @@ public:
 		case TYPE_WALL: 
 			switch (m_attribute)
 			{
-				case ATTRIBUTE_FIRE:m_skillname = FIRE_WALL;		break;
+				case ATTRIBUTE_FIRE:m_skillname = FIRE_WALL;					break;
 				case ATTRIBUTE_WATER:m_skillname = WATER_WALL;					break;
 				case ATTRIBUTE_ELECTRICITY:m_skillname = ELECTRICITY_WALL;		break;
 			}
@@ -232,36 +272,61 @@ public:
 		}
 				
 	}
-	void StatusState()
-	{
-		m_skillState = STATE_STATUS;	
-	}
+
 	void BoltState(float deltaTime)
 	{
 		SetPosition(m_pos + m_dir*m_speed*deltaTime);
 		SetsustainmentTime(1 / deltaTime);
-		if(m_sustainmentTime<0.01f)m_skillState = STATE_ATTRIBUTE; m_skillname = SKILL_NONE;
+		switch (m_attribute)
+		{
+		case ATTRIBUTE_NONE:break;
+		case ATTRIBUTE_FIRE:break;
+		case ATTRIBUTE_WATER:break;
+		case ATTRIBUTE_ELECTRICITY:break;
+		}
+		if (m_sustainmentTime < 0.01f)
+		{
+			m_skillState = STATE_IDLE; 
+		}
+		
 	}
 
 	void WallState(float deltaTime)
 	{
 		this->SetPosition(m_pos + m_dir*m_speed);
+
+		switch (m_attribute)
+		{
+		case ATTRIBUTE_NONE:break;
+		case ATTRIBUTE_FIRE:break;
+		case ATTRIBUTE_WATER:break;
+		case ATTRIBUTE_ELECTRICITY:break;
+		}
 		SetsustainmentTime(1 / deltaTime);
-		if (m_sustainmentTime < 0.01f)m_skillState = STATE_ATTRIBUTE; m_skillname = SKILL_NONE;
+		if (m_sustainmentTime < 0.01f)m_skillState = STATE_IDLE;
 	}
 
 	void ShieldState(float deltaTime)
 	{
 		this->SetPosition(m_pos);
+
+		switch (m_attribute)
+		{
+		case ATTRIBUTE_NONE:break;
+		case ATTRIBUTE_FIRE:break;
+		case ATTRIBUTE_WATER:break;
+		case ATTRIBUTE_ELECTRICITY:break;
+		}
+
 		SetsustainmentTime(1/deltaTime);
-		if (m_sustainmentTime<0.01f)m_skillState = STATE_ATTRIBUTE; m_skillname = SKILL_NONE;
+		if (m_sustainmentTime<0.01f)m_skillState = STATE_IDLE;
 	}
 
 	void MonsterAttack(float delTatime)
 	{
 		SetPosition(m_pos + m_dir*m_speed*delTatime);
 		SetsustainmentTime(1 / delTatime);
-		if (m_sustainmentTime<0.01f)m_skillState = MONSTER_ATTACK; m_skillname = FIRE_BOLT;
+		if (m_sustainmentTime<0.01f)m_skillState = MONSTER_ATTACK;
 	}
 
 	void ColliedWithCharacter(Skill A,Character* pCharacter)
@@ -285,5 +350,20 @@ public:
 		{
 			B.SetsustainmentTime(0);
 		}
+	}
+
+	void CastStartState()
+	{
+		
+		if (INPUT->IsKeyDown('1'))m_skillState = STATE_ATTRIBUTE;
+	}
+
+	void IdleState()
+	{
+		if (INPUT->IsKeyDown('1'))
+		{
+			m_skillState = STATE_START;
+		}
+		SetSkillStatus(SKILL_NONE);
 	}
 };

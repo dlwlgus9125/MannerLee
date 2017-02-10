@@ -18,7 +18,7 @@ public:
 
 		RENDER->LoadImageFile(TEXT("BossCastle"), TEXT("Image/Boss.png"));
 		OBJECT->CreatePlayer(Vector(600, 800), 30);
-		OBJECT->CreateSkill(OBJECT->GetPlayer(), OBJECT->GetPlayer()->Position(), SKILL_NONE, SkillSize);
+		OBJECT->CreateSkill(OBJECT->GetPlayer(), SKILL_NONE, SkillSize);
 		
 		OBJECT->CreateMonster(OBJ_MONSTER, Vector(600, 600),30);
 	}
