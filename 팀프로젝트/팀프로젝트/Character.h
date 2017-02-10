@@ -7,11 +7,13 @@ class Character : public Object
 {
 protected:
 	CHARACTER_STATE m_state;
+	SPRITE_STATE m_spriteState;
 	Vector m_dir;
 	float m_speed;
 	Circle m_circle;
 	float m_life;
-
+	DIR_STATE    m_dirState;
+	float m_maxLife;
 
 public:
 	Character(int id) : Object(id)
@@ -20,7 +22,13 @@ public:
 		m_dir = (Vector::Down()+Vector::Right()).Normalize();
 		m_speed = 300;
 		m_life = 1000;
+		m_maxLife = m_life;
 
+	}
+
+	float MaxLife()
+	{
+		return m_maxLife;
 	}
 
 	float GetLife()
@@ -54,6 +62,8 @@ public:
 	virtual void Update(float deltaTime) { }
 	virtual void Draw(Camera* pCamera) {  }
 	virtual void Hit(float damage) { }
+	virtual void SetMonsterKind(MONSTER_KIND kind) {}
+	virtual void LoadingMonsterImage() {}
 
 	bool IsGroundCollided()
 	{
@@ -71,13 +81,13 @@ public:
 	Vector GroundPush(Vector movedPos)
 	{
 		list<Object*> groundList = OBJECT->GetPropsList(OBJ_GROUND);
-		
+
 		FOR_LIST(Object*, groundList)
 		{
 			if (MATH->IsCollided(this->getCircle(), (*it)->Collider()))
 			{
 				movedPos -= MATH->GetOverlappedVector(this->getCircle(), (*it)->Collider());
-			}		
+			}
 		}
 		return movedPos;
 	}
@@ -88,11 +98,25 @@ public:
 		Vector movedPos = this->Position();
 
 		m_dir = Vector::Zero();
-	
+
 		m_dir = (targetPos - movedPos).Normalize();
 		movedPos += m_dir * m_speed * deltaTime;
 		if (IsGroundCollided())movedPos = GroundPush(movedPos);
 		this->SetPosition(movedPos);
 	}
-	
+	void Get_Dir_state()
+	{
+		DIR_STATE state = DIR_DOWN;
+
+		float angle = MATH->ToAngle(m_dir);
+		//cout << angle << endl;
+
+		if (45.0f <= angle && angle <= 135.0f)m_dirState = DIR_UP;
+		if (45.0f + 90.0f <= angle && angle <= 135.0f + 90.0f)m_dirState = DIR_RIGHT;
+		if (135.0f + 90.0f <= angle && angle <= 135.0f + 180.0f)m_dirState = DIR_DOWN;
+		if (135.0f + 180.0f <= angle && angle <= 360.0f)m_dirState = DIR_LEFT;
+		if (45.0f >= angle)m_dirState = DIR_LEFT;
+		//cout << state << endl;
+	}
+
 };

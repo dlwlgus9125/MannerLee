@@ -96,7 +96,6 @@ struct Box
 {
 	Vector center, size;
 	Vector dirX, dirY;
-
 	Box() {}
 	Box(Vector center, Vector size, float angle = 0)
 	{
@@ -284,6 +283,18 @@ public:
 	}
 
 	// 점과 삼각형 충돌
+	bool IsCollided(Vector point, Vector LeftTop, Vector RightBottom)
+	{
+		if (LeftTop.x <= point.x && point.x <= RightBottom.x)
+		{
+			if (LeftTop.y <= point.y && point.y <= RightBottom.y)
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
 	bool IsCollided(Vector point, Triangle tri)
 	{
 		bool dir0 = CrossZ(tri.p1 - tri.p0, point - tri.p1) > 0;

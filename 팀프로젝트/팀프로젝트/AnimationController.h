@@ -31,7 +31,9 @@ public:
 		m_isLoop = loop;
 	}
 
-	Sprite* GetSprite() { return m_sprites[m_currentIndex]; }
+	Sprite* GetSprite() { 
+		
+		return m_sprites[m_currentIndex]; }
 	bool IsLoop() { return m_isLoop; }
 	float GetX() { return GetSprite()->GetLeftX(); }
 	float GetY() { return GetSprite()->GetTopY(); }
@@ -50,7 +52,7 @@ public:
 		if (m_elapsedTime >= m_frameTime)
 		{
 			m_elapsedTime -= m_frameTime;
-
+			
 			++m_currentIndex;
 			if (m_currentIndex >= m_spriteCount)
 			{
@@ -132,6 +134,7 @@ public:
 	void Update(float deltaTime)
 	{
 		Animation* pAnim = Current();
+	
 		if (pAnim != NULL && pAnim->Update(deltaTime))
 		{
 			if (!pAnim->IsLoop()) Play(m_default);
