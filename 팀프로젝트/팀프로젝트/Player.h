@@ -1,5 +1,6 @@
 #pragma once
 #include "Character.h"
+#include "UIManager.h"
 
 class Player : public Character
 {
@@ -63,58 +64,61 @@ public:
 	}
 
 	void RunState(float deltaTime)
-	{
-		switch (m_dirState)
+	{	
+		if (UI->NotRun() == false)
 		{
-		case DIR_UP: m_spriteState =    RUN_UP; break;
-		case DIR_LEFT: m_spriteState =  RUN_LEFT; break;
-		case DIR_RIGHT: m_spriteState = RUN_RIGHT; break;
-		case DIR_DOWN: m_spriteState =  RUN_DOWN; break;
-		}
-		//cout << m_spriteState << endl;
-		
-		Animation()->Play(m_spriteState);
+			switch (m_dirState)
+			{
+			case DIR_UP: m_spriteState = RUN_UP; break;
+			case DIR_LEFT: m_spriteState = RUN_LEFT; break;
+			case DIR_RIGHT: m_spriteState = RUN_RIGHT; break;
+			case DIR_DOWN: m_spriteState = RUN_DOWN; break;
+			}
+			//cout << m_spriteState << endl;
 
-		Vector prevPos = this->Position();
-		Vector movedPos = this->Position();
+			Animation()->Play(m_spriteState);
 
-		m_dir = Vector::Zero();
-		Vector targetPos = RENDER->GetCamera(CAM_MAIN)->ScreenToWorldPos(INPUT->GetMousePos());
+			Vector prevPos = this->Position();
+			Vector movedPos = this->Position();
 
-
-
-		if (MATH->SqrDistance(targetPos, movedPos) <= 30.0f)m_state = CHARACTER_IDLE;
-		m_dir = (targetPos - movedPos).Normalize();
+			m_dir = Vector::Zero();
+			Vector targetPos = RENDER->GetCamera(CAM_MAIN)->ScreenToWorldPos(INPUT->GetMousePos());
 
 
-		if (!INPUT->IsMouseUp(MOUSE_LEFT))
-		{
+
+			if (MATH->SqrDistance(targetPos, movedPos) <= 30.0f)m_state = CHARACTER_IDLE;
+			m_dir = (targetPos - movedPos).Normalize();
+
+
+			if (!INPUT->IsMouseUp(MOUSE_LEFT))
+			{
+				movedPos += m_dir * m_speed * deltaTime;
+				if (IsGroundCollided())movedPos = GroundPush(movedPos);
+				this->SetPosition(movedPos);
+			}
+
+			/*m_dir = Vector::Zero();
+			if (INPUT->IsKeyPress(VK_LEFT)) m_dir += Vector::Left();
+			if (INPUT->IsKeyPress(VK_RIGHT)) m_dir += Vector::Right();
+			if (INPUT->IsKeyPress(VK_UP)) m_dir += Vector::Up();
+			if (INPUT->IsKeyPress(VK_DOWN)) m_dir += Vector::Down();
+			m_dir = m_dir.Normalize();
 			movedPos += m_dir * m_speed * deltaTime;
-			if (IsGroundCollided())movedPos = GroundPush(movedPos);
-			this->SetPosition(movedPos);
-		}
+			this->SetPosition(movedPos);*/
 
-		/*m_dir = Vector::Zero();
-		if (INPUT->IsKeyPress(VK_LEFT)) m_dir += Vector::Left();
-		if (INPUT->IsKeyPress(VK_RIGHT)) m_dir += Vector::Right();
-		if (INPUT->IsKeyPress(VK_UP)) m_dir += Vector::Up();
-		if (INPUT->IsKeyPress(VK_DOWN)) m_dir += Vector::Down();
-		m_dir = m_dir.Normalize();
-		movedPos += m_dir * m_speed * deltaTime;
-		this->SetPosition(movedPos);*/
+			/*float x1 = OBJECT->GetPlayer()->Position().x;
+			float y1 = OBJECT->GetPlayer()->Position().y;
 
-		/*float x1 = OBJECT->GetPlayer()->Position().x;
-		float y1 = OBJECT->GetPlayer()->Position().y;
-
-		cout << "플레이어 x : " << x1 << "   y : " << y1 << endl;
-		float x2 = RENDER->GetCamera(CAM_MAIN)->GetPos().x;
-		float y2 = RENDER->GetCamera(CAM_MAIN)->GetPos().y;
-		cout << "카메라 x : " << x2 << "   y : " << y2 << endl;
-		cout << "원 센터 x: " << getCircle().center.x << "원 센터 y: " << getCircle().center.y << endl;
-*/
-		if (MATH->SqrDistance(prevPos, movedPos) == 0)
-		{
-			m_state = CHARACTER_IDLE;
+			cout << "플레이어 x : " << x1 << "   y : " << y1 << endl;
+			float x2 = RENDER->GetCamera(CAM_MAIN)->GetPos().x;
+			float y2 = RENDER->GetCamera(CAM_MAIN)->GetPos().y;
+			cout << "카메라 x : " << x2 << "   y : " << y2 << endl;
+			cout << "원 센터 x: " << getCircle().center.x << "원 센터 y: " << getCircle().center.y << endl;
+	*/
+			if (MATH->SqrDistance(prevPos, movedPos) == 0)
+			{
+				m_state = CHARACTER_IDLE;
+			}
 		}
 
 	}

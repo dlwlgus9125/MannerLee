@@ -154,6 +154,7 @@
     <ClCompile Include="ObjectManager.cpp" />
     <ClCompile Include="RenderManager.cpp" />
     <ClCompile Include="SceneManager.cpp" />
+    <ClCompile Include="UIManager.cpp" />
     <ClCompile Include="WinManager.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -173,6 +174,7 @@
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="Singleton.h" />
     <ClInclude Include="Skill.h" />
+    <ClInclude Include="UIManager.h" />
     <ClInclude Include="WinManager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

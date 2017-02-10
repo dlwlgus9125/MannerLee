@@ -426,6 +426,14 @@ public:
 		m_queText.push(text);
 	}
 
+	void Draw(Box box, ColorF color, float lineSize = 1)
+	{
+		DrawLine(box.LeftTop(), box.RightTop(), color, lineSize);
+		DrawLine(box.LeftTop(), box.LeftBottom(), color, lineSize);
+		DrawLine(box.RightBottom(), box.RightTop(), color, lineSize);
+		DrawLine(box.RightBottom(), box.LeftBottom(), color, lineSize);
+	}
+
 	void DrawLine(Vector startPos, Vector endPos,
 		ColorF color = ColorF::Black, float lineSize = 1)
 	{

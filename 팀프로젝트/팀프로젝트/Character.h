@@ -11,6 +11,7 @@ protected:
 	float m_speed;
 	Circle m_circle;
 	float m_life;
+	float m_maxLife;
 
 
 public:
@@ -20,7 +21,13 @@ public:
 		m_dir = (Vector::Down()+Vector::Right()).Normalize();
 		m_speed = 300;
 		m_life = 1000;
+		m_maxLife = m_life;
 
+	}
+
+	float MaxLife()
+	{
+		return m_maxLife;
 	}
 
 	float GetLife()

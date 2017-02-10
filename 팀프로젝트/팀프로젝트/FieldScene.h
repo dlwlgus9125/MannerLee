@@ -2,25 +2,38 @@
 #include "SceneManager.h"
 #include "RenderManager.h"
 #include "ObjectManager.h"
+#include "UIManager.h"
 #include "Common.h"
 
-// ;;;;
+
 
 class FieldScene : public IScene
 {
 	Sprite* m_pBg;
-	Sprite* m_UI;
-
-
+	float MaxHp;
+	float CurrentHp;
 	Vector SkillSize;
+	Vector m_cursor;// 커서 위치
 public:
 	FieldScene()
 	{
+		MaxHp = 1000.0f;
+		CurrentHp = 800.0f;
 		RENDER->CreateCamera(CAM_MAIN, 860 * 2.0f, 1100 * 2.0f, VIEW_WIDTH, VIEW_HEIGHT);
 		//RENDER->CreateCamera(CAM_MAP, 2000, 3000, 3000, 1000);
 
 		RENDER->LoadImageFile(TEXT("BossCastle"), TEXT("Image/Boss.png"));
-		RENDER->LoadImageFile(TEXT("UI"), TEXT("Image/UI/UI.png"));
+
+		RENDER->LoadImageFiles(TEXT("Idle_Up"), TEXT("Image/Monster/Player/Idle/Up/Up"), TEXT("png"), 1);
+		RENDER->LoadImageFiles(TEXT("Idle_Down"), TEXT("Image/Monster/Player/Idle/Down/Down"), TEXT("png"), 1);
+		RENDER->LoadImageFiles(TEXT("Idle_Left"), TEXT("Image/Monster/Player/Idle/Left/Left"), TEXT("png"), 1);
+		RENDER->LoadImageFiles(TEXT("Idle_Right"), TEXT("Image/Monster/Player/Idle/Right/Right"), TEXT("png"), 1);
+
+		RENDER->LoadImageFiles(TEXT("Run_Up"), TEXT("Image/Monster/Player/Run/Up/Run_Up"), TEXT("png"), 3);
+		RENDER->LoadImageFiles(TEXT("Run_Down"), TEXT("Image/Monster/Player/Run/Down/Run_Down"), TEXT("png"), 3);
+		RENDER->LoadImageFiles(TEXT("Run_Left"), TEXT("Image/Monster/Player/Run/Left/Run_Left"), TEXT("png"), 3);
+		RENDER->LoadImageFiles(TEXT("Run_Right"), TEXT("Image/Monster/Player/Run/Right/Run_Right"), TEXT("png"), 3);
+
 		OBJECT->CreatePlayer(Vector(600, 800), 30);
 		OBJECT->CreateSkill(OBJECT->GetPlayer(), SKILL_NONE, SkillSize);
 
@@ -31,7 +44,6 @@ public:
 	{
 		NEW_OBJECT(m_pBg, Sprite(RENDER->GetImage(TEXT("BossCastle")), 1.0f, 0, 0));
 		m_pBg->SetSize(860 * 2.0f, 1100 * 2.0f);
-		NEW_OBJECT(m_UI, Sprite(RENDER->GetImage(TEXT("UI")), 1.0f, 0, 0));
 
 		RENDER->GetCamera(CAM_MAIN)->SetScreenRect(0, 0, 800, 600);
 		//RENDER->GetCamera(CAM_MAP)->SetScreenRect(0, 0, 200, 200);
@@ -50,6 +62,7 @@ public:
 
 	void OnUpdate(float deltaTime)
 	{
+		m_cursor = INPUT->GetMousePos();
 		OBJECT->Update(deltaTime);
 		RENDER->GetCamera(CAM_MAIN)->SetCenterPos(OBJECT->GetPlayer()->Position());
 		bool test = false;
@@ -68,6 +81,21 @@ public:
 			if (t == 1)RENDER->GetCamera(CAM_MAIN)->SetCenterPos(Vector(OBJECT->GetPlayer()->Position().x + reverse2 * 20, OBJECT->GetPlayer()->Position().y + y * 20));
 		}
 
+		if (INPUT->IsMouseDown(MOUSE_LEFT))
+		{
+			if (MATH->IsCollided(m_cursor, Vector(634, 10), Vector(690, 63)))
+			{
+				CurrentHp += UI->EatPotion();
+				UI->SetNotRun(true);
+			}
+			else
+			{
+				UI->SetNotRun(false);
+			}
+		}
+		if (INPUT->IsKeyPress(VK_LEFT)) CurrentHp -= 8;
+		if (INPUT->IsKeyPress(VK_RIGHT)) CurrentHp += 8;
+
 
 		float t = deltaTime * 1000;
 
@@ -78,9 +106,7 @@ public:
 	void OnExit()
 	{
 		OBJECT->DestroyAllProps();
-		DELETE_OBJECT(m_UI);
 		DELETE_OBJECT(m_pBg);
-		DELETE_OBJECT(m_UI);
 	}
 
 	void OnDraw()
@@ -89,9 +115,8 @@ public:
 		//	Camera* pMapCamera = RENDER->GetCamera(CAM_MAP);
 		//	pMapCamera->Draw(m_pBg, Vector(0, 0));
 
-		RENDER->Draw(m_UI, 0, 0);
+		UI->Draw(MaxHp, CurrentHp);
 		pMainCamera->Draw(m_pBg, Vector(0, 0));
-		RENDER->Draw(m_UI, 0, 0);
 		OBJECT->Draw(pMainCamera);
 	}
 };
