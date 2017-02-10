@@ -121,47 +121,36 @@ public:
 
 	void LoadingMonsterImage()
 	{
-		/*TCHAR Address[200] = {};
+		TCHAR Address[200] = {};
+		TCHAR Kind[100] = {};
 		switch (m_kind)
 		{
-		case MONSTER_MINION_RED:
-		{
-			wsprintf(Address, TEXT("Image/Monster/%s/Idle/Up/Up"), TEXT("FireMinion"));
-			RENDER->LoadImageFiles(TEXT("Minion_Idle_Up"), TEXT("FireMinion"), TEXT("png"), 1);
-			wsprintf(Address, TEXT("Image/Monster/%s/Idle/Down/Down"), TEXT("FireMinion"));
-			RENDER->LoadImageFiles(TEXT("Minion_Idle_Down"), Address, TEXT("png"), 1);
-			wsprintf(Address, TEXT("Image/Monster/%s/Idle/Left/Left"), TEXT("FireMinion"));
-			RENDER->LoadImageFiles(TEXT("Minion_Idle_Left"), Address, TEXT("png"), 1);
-			wsprintf(Address, TEXT("Image/Monster/%s/Idle/Right/Right"), TEXT("FireMinion"));
-			RENDER->LoadImageFiles(TEXT("Minion_Idle_Right"), Address, TEXT("png"), 1);
+		case MONSTER_MINION_RED:wsprintf(Kind, TEXT("FireMinion"));break;
 
-			wsprintf(Address, TEXT("Image/Monster/%s/Run/Up/Up"), TEXT("FireMinion"));
-			RENDER->LoadImageFiles(TEXT("Minion_Run_Up"), Address, TEXT("png"), 3);
-			wsprintf(Address, TEXT("Image/Monster/%s/Run/Down/Down"), TEXT("FireMinion"));
-			RENDER->LoadImageFiles(TEXT("Minion_Run_Down"), Address, TEXT("png"), 3);
-			wsprintf(Address, TEXT("Image/Monster/%s/Run/Left/Left"), TEXT("FireMinion"));
-			RENDER->LoadImageFiles(TEXT("Minion_Run_Left"), Address, TEXT("png"), 3);
-			wsprintf(Address, TEXT("Image/Monster/%s/Idle/Right/Right"), TEXT("FireMinion"));
-			RENDER->LoadImageFiles(TEXT("Minion_Run_Right"), Address, TEXT("png"), 3);
-
-		}break;
-
-		}*/
+		}
 		
 		
+		wsprintf(Address, TEXT("Image/Monster/%s/Idle/Up/Up"), Kind);
+		RENDER->LoadImageFiles(TEXT("Minion_Idle_Up"), Address, TEXT("png"), 1);
+		wsprintf(Address, TEXT("Image/Monster/%s/Idle/Down/Down"), Kind);
+		RENDER->LoadImageFiles(TEXT("Minion_Idle_Down"), Address, TEXT("png"), 1);
+		wsprintf(Address, TEXT("Image/Monster/%s/Idle/Left/Left"), Kind);
+		RENDER->LoadImageFiles(TEXT("Minion_Idle_Left"), Address, TEXT("png"), 1);
+		wsprintf(Address, TEXT("Image/Monster/%s/Idle/Right/Right"), Kind);
+		RENDER->LoadImageFiles(TEXT("Minion_Idle_Right"), Address, TEXT("png"), 1);
 
+		wsprintf(Address, TEXT("Image/Monster/%s/Run/Up/Up"), Kind);
+		RENDER->LoadImageFiles(TEXT("Minion_Run_Up"), Address, TEXT("png"), 3);
+		wsprintf(Address, TEXT("Image/Monster/%s/Run/Down/Down"), Kind);
+		RENDER->LoadImageFiles(TEXT("Minion_Run_Down"), Address, TEXT("png"), 3);
+		wsprintf(Address, TEXT("Image/Monster/%s/Run/Left/Left"), Kind);
+		RENDER->LoadImageFiles(TEXT("Minion_Run_Left"), Address, TEXT("png"), 3);
+		wsprintf(Address, TEXT("Image/Monster/%s/Run/Right/Right"), Kind);
+		RENDER->LoadImageFiles(TEXT("Minion_Run_Right"), Address, TEXT("png"), 3);
 		
 
 
-		RENDER->LoadImageFiles(TEXT("Minion_Idle_Up"), TEXT("Image/Monster/FireMinion/Idle/Up/Up"), TEXT("png"), 1);
-		RENDER->LoadImageFiles(TEXT("Minion_Idle_Down"), TEXT("Image/Monster/FireMinion/Idle/Down/Down"), TEXT("png"), 1);
-		RENDER->LoadImageFiles(TEXT("Minion_Idle_Left"), TEXT("Image/Monster/FireMinion/Idle/Left/Left"), TEXT("png"), 1);
-		RENDER->LoadImageFiles(TEXT("Minion_Idle_Right"), TEXT("Image/Monster/FireMinion/Idle/Right/Right"), TEXT("png"), 1);
-
-		RENDER->LoadImageFiles(TEXT("Minion_Run_Up"), TEXT("Image/Monster/FireMinion/Run/Up/Up"), TEXT("png"), 3);
-		RENDER->LoadImageFiles(TEXT("Minion_Run_Down"), TEXT("Image/Monster/FireMinion/Run/Down/Down"), TEXT("png"), 3);
-		RENDER->LoadImageFiles(TEXT("Minion_Run_Left"), TEXT("Image/Monster/FireMinion/Run/Left/Left"), TEXT("png"), 3);
-		RENDER->LoadImageFiles(TEXT("Minion_Run_Right"), TEXT("Image/Monster/FireMinion/Run/Right/Right"), TEXT("png"), 3);
+		
 
 
 	}

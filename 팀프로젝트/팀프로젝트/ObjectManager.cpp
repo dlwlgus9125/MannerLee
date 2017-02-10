@@ -35,7 +35,7 @@ void ObjectManager::CreateMonster(int id, MONSTER_KIND kind, Vector pos, float c
 	monster->SetCharacterCollider(colRadius);
 	monster->SetStandPosition();
 	monster->SetMonsterKind(kind);
-	
+
 	monster->LoadingMonsterImage();
 	monster->Animation()->Register(MINION_IDLE_UP, new Animation(TEXT("Minion_Idle_Up"), 1, 10, true, 2.0f));
 	monster->Animation()->Register(MINION_IDLE_LEFT, new Animation(TEXT("Minion_Idle_Left"), 1, 10, true, 2.0f));
@@ -46,7 +46,7 @@ void ObjectManager::CreateMonster(int id, MONSTER_KIND kind, Vector pos, float c
 	monster->Animation()->Register(MINION_RUN_LEFT, new Animation(TEXT("Minion_Run_Left"), 3, 5, true, 2.0f));
 	monster->Animation()->Register(MINION_RUN_RIGHT, new Animation(TEXT("Minion_Run_Right"), 3, 5, true, 2.0f));
 	monster->Animation()->Register(MINION_RUN_DOWN, new Animation(TEXT("Minion_Run_Down"), 3, 5, true, 2.0f));
-	
+
 	m_monsterList.push_back(monster);
 }
 
