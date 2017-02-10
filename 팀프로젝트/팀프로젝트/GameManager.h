@@ -4,6 +4,7 @@
 #include "WinManager.h"
 #include "InputManager.h"
 #include "RenderManager.h"
+#include "SoundManager.h"
 #include "SceneManager.h"
 #include "FieldScene.h"
 

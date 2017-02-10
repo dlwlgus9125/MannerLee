@@ -25,7 +25,7 @@ IScene* SceneManager::GetScene(int tag)
 }
 
 // ¾À º¯°æ
-void SceneManager::SceneManager::ChangeScene(int tag)
+void SceneManager::ChangeScene(int tag)
 {
 	if (m_current != tag)
 	{

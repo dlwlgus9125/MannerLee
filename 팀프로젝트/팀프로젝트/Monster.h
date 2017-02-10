@@ -1,6 +1,7 @@
 #pragma once
 #include "Character.h"
 
+
 class Monster : public Character
 {
 	Circle m_sightRange;
@@ -47,6 +48,7 @@ public:
 
 	void RunState(float deltaTime)
 	{
+
 		switch (m_dirState)
 		{
 		case DIR_UP: m_spriteState = MINION_RUN_UP; break;
@@ -60,18 +62,28 @@ public:
 
 		if (MATH->IsCollided(OBJECT->GetPlayer()->getCircle(), m_sightRange))
 		{
+			
+			if(SOUND->FindChannel("IntroBgm")!=NULL)SOUND->Pause("IntroBgm");
+			if (SOUND->FindChannel("Boss1Bgm") == NULL){SOUND->Play("Boss1Bgm");}				
+			
+
 			FowardToTargetPos(OBJECT->GetPlayer()->Position(), deltaTime);
 		}
 		else
 		{
+			
 			FowardToTargetPos(m_standPos, deltaTime);
 
 			if (MATH->SqrDistance(m_standPos, m_pos) <= 10.0f)
-			{
+			{				
 				m_dir = m_standDir;
 				m_sightRange.radius = 100;
 				m_state = CHARACTER_IDLE;
 			}
+
+			if (SOUND->FindChannel("IntroBgm") != NULL)SOUND->Resume("IntroBgm");
+			if (SOUND->FindChannel("Boss1Bgm") != NULL)SOUND->Stop("Boss1Bgm");
+			
 		}
 	}
 
