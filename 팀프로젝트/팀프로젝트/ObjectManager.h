@@ -44,6 +44,8 @@ public:
 	virtual void Draw(Camera* pCamera){ }
 	virtual void Hit(float damage) { }
 	virtual Vector GetDir() { return m_dir; }
+	virtual void SetMonsterKind(MONSTER_KIND kind) {}
+	virtual void LoadingMonsterImage() {}
 
 	Object(){}
 };
@@ -90,7 +92,7 @@ public:
 	void CreatePlayer(Vector pos, float colRadius);
 	void DestroyPlayer();
 
-	void CreateMonster(int id, Vector pos, float colRadius);
+	void CreateMonster(int id, MONSTER_KIND kind, Vector pos, float colRadius);
 	void DestroyAllMonster();
 
 	void CreateSkill(Object* pCharacter, SKILL_LIST id, Vector size);

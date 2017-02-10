@@ -155,6 +155,9 @@ class Camera
 	Vector m_center;
 	float m_opacity;
 	D2D1_RECT_F m_screenRect;
+	bool m_isWave;
+	int  m_wavePower;
+	int m_waveTimer;
 
 public:
 	Camera(ID2D1BitmapRenderTarget* pBitmapTarget, float sizeX, float sizeY)
@@ -165,7 +168,8 @@ public:
 		m_pBitmapTarget->EndDraw();
 		m_size = Vector(sizeX, sizeY);
 		m_opacity = 1.0f;
-
+		m_isWave = false;
+		m_wavePower = 20;
 		SetCenterPos(Vector(0, 0));
 		SetScreenRect(0.0f, 0.0f, sizeX, sizeY);
 	}
@@ -176,6 +180,8 @@ public:
 
 	Vector GetLeftTop() { return m_center - m_size * 0.5f; }
 	Vector GetRightBottom() { return m_center + m_size * 0.5f; }
+	bool   GetIsWave() { return m_isWave; }
+	void   SetIsWaveTrue() { m_isWave = true; }
 	void SetOpacity(float opacity) { m_opacity = opacity; }
 	void SetScreenRect(float x, float y, float width, float height)
 	{
@@ -183,12 +189,36 @@ public:
 	}
 	void SetCenterPos(Vector center)
 	{
+		
+
 		m_center = center;
 
 		AlignLeftTop();
 		AlignRightBottom();
 	}
 
+	void ShakingCamera(int wavePower)
+	{
+		
+		int pattern = (int)timeGetTime() / 5 % 30 % 2;
+		int waveCount1 = (int)timeGetTime() / 5 % 30 % 7;
+		int waveCount2 = 7 - waveCount1;
+		cout << m_waveTimer << endl;
+		
+		float wave1 = sin(waveCount1*1.0f) * powf(1.0f, waveCount1);
+		float wave2 = sin(waveCount2*1.0f) * powf(0.5f, waveCount2);
+		
+		if (pattern == 0)SetCenterPos(Vector(m_center.x + wave1 * wavePower, m_center.y + wave2 * wavePower));
+		if (pattern == 1)SetCenterPos(Vector(m_center.x + wave2 * wavePower, m_center.y + wave1 * wavePower));
+
+
+		m_waveTimer += pattern;
+		if (m_waveTimer >= 8)
+		{
+			m_isWave = false;
+			m_waveTimer = 0;
+		}
+	}
 
 
 	void AlignLeftTop()
@@ -401,6 +431,9 @@ public:
 			LoadImageFile(strKey, strName);
 		}
 	}
+
+	
+
 
 	ID2D1Bitmap* GetImage(wstring key)
 	{

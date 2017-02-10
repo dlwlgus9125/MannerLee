@@ -24,20 +24,10 @@ public:
 
 		RENDER->LoadImageFile(TEXT("BossCastle"), TEXT("Image/Boss.png"));
 
-		RENDER->LoadImageFiles(TEXT("Idle_Up"), TEXT("Image/Monster/Player/Idle/Up/Up"), TEXT("png"), 1);
-		RENDER->LoadImageFiles(TEXT("Idle_Down"), TEXT("Image/Monster/Player/Idle/Down/Down"), TEXT("png"), 1);
-		RENDER->LoadImageFiles(TEXT("Idle_Left"), TEXT("Image/Monster/Player/Idle/Left/Left"), TEXT("png"), 1);
-		RENDER->LoadImageFiles(TEXT("Idle_Right"), TEXT("Image/Monster/Player/Idle/Right/Right"), TEXT("png"), 1);
-
-		RENDER->LoadImageFiles(TEXT("Run_Up"), TEXT("Image/Monster/Player/Run/Up/Run_Up"), TEXT("png"), 3);
-		RENDER->LoadImageFiles(TEXT("Run_Down"), TEXT("Image/Monster/Player/Run/Down/Run_Down"), TEXT("png"), 3);
-		RENDER->LoadImageFiles(TEXT("Run_Left"), TEXT("Image/Monster/Player/Run/Left/Run_Left"), TEXT("png"), 3);
-		RENDER->LoadImageFiles(TEXT("Run_Right"), TEXT("Image/Monster/Player/Run/Right/Run_Right"), TEXT("png"), 3);
-
 		OBJECT->CreatePlayer(Vector(600, 800), 30);
 		OBJECT->CreateSkill(OBJECT->GetPlayer(), SKILL_NONE, SkillSize);
 
-		OBJECT->CreateMonster(OBJ_MONSTER, Vector(600, 600), 30);
+		OBJECT->CreateMonster(OBJ_MONSTER, MONSTER_MINION_RED, Vector(600, 600), 30);
 	}
 
 	void OnEnter()
@@ -65,20 +55,11 @@ public:
 		m_cursor = INPUT->GetMousePos();
 		OBJECT->Update(deltaTime);
 		RENDER->GetCamera(CAM_MAIN)->SetCenterPos(OBJECT->GetPlayer()->Position());
-		bool test = false;
-
-		if (test)
+	
+		if (INPUT->IsKeyDown(VK_TAB))RENDER->GetCamera(CAM_MAIN)->SetIsWaveTrue();
+		if (RENDER->GetCamera(CAM_MAIN)->GetIsWave())
 		{
-			int t = (int)timeGetTime() / 5 % 30 % 2;
-			int z = (int)timeGetTime() / 5 % 30 % 7;
-			int reverse1 = 7 - z;
-			//cout << t << endl;
-			//cout << z << endl;
-			float y = sin(z*1.0f) * powf(1.0f, z);
-			float reverse2 = sin(reverse1*1.0f) * powf(0.5f, reverse1);
-			cout << y << endl;
-			if (t == 0)RENDER->GetCamera(CAM_MAIN)->SetCenterPos(Vector(OBJECT->GetPlayer()->Position().x + y * 20, OBJECT->GetPlayer()->Position().y + reverse2 * 20));
-			if (t == 1)RENDER->GetCamera(CAM_MAIN)->SetCenterPos(Vector(OBJECT->GetPlayer()->Position().x + reverse2 * 20, OBJECT->GetPlayer()->Position().y + y * 20));
+			RENDER->GetCamera(CAM_MAIN)->ShakingCamera(5);
 		}
 
 		if (INPUT->IsMouseDown(MOUSE_LEFT))
@@ -97,7 +78,6 @@ public:
 		if (INPUT->IsKeyPress(VK_RIGHT)) CurrentHp += 8;
 
 
-		float t = deltaTime * 1000;
 
 
 

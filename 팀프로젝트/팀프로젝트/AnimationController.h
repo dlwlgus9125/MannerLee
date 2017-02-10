@@ -31,7 +31,9 @@ public:
 		m_isLoop = loop;
 	}
 
-	Sprite* GetSprite() { return m_sprites[m_currentIndex]; }
+	Sprite* GetSprite() { 
+		
+		return m_sprites[m_currentIndex]; }
 	bool IsLoop() { return m_isLoop; }
 	float GetX() { return GetSprite()->GetLeftX(); }
 	float GetY() { return GetSprite()->GetTopY(); }
