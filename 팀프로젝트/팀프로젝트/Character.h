@@ -8,7 +8,7 @@ class Character : public Object
 protected:
 	CHARACTER_STATE m_state;
 	SPRITE_STATE m_spriteState;
-	Vector m_dir;
+	
 	float m_speed;
 	Circle m_circle;
 	float m_life;

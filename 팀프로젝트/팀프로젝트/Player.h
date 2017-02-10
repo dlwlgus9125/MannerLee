@@ -12,7 +12,6 @@ public:
 	Player(int id) : Character(id)
 	{
 		m_state = CHARACTER_IDLE;
-		m_dir = Vector::Down();
 		m_dirState = DIR_DOWN;
 		m_speed = 150;
 
@@ -25,6 +24,8 @@ public:
 		RENDER->LoadImageFiles(TEXT("Run_Down"), TEXT("Image/Monster/Player/Run/Down/Run_Down"), TEXT("png"), 3);
 		RENDER->LoadImageFiles(TEXT("Run_Left"), TEXT("Image/Monster/Player/Run/Left/Run_Left"), TEXT("png"), 3);
 		RENDER->LoadImageFiles(TEXT("Run_Right"), TEXT("Image/Monster/Player/Run/Right/Run_Right"), TEXT("png"), 3);
+
+
 	}
 
 	void Update(float deltaTime)

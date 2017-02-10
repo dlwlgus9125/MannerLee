@@ -124,7 +124,7 @@ void ObjectManager::Draw(Camera* pCamera)
 	}
 }
 
-void ObjectManager::CreateSkill(Object* pCharacter, SKILL_LIST id, Vector size)
+void ObjectManager::CreateSkill(Object* pCharacter, SKILL_USER id, Vector size)
 {
 	NEW_OBJECT(Object* skill, Skill(pCharacter, id));
 

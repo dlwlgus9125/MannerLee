@@ -6,28 +6,31 @@
 
 #define SKILL 
 
+
+
 class Skill : public Object
 {
 	SKILL_ATTRIBUTE m_attribute;
 	SKILL_TYPE		m_skilltype;
 
+	float           m_damage;
+	float           m_speed;
+	float			m_life;
+	int				m_sustainmentTime;
 	SKILL_STATE		m_skillState;
 	SKILL_LIST		m_skillname;
 
 	Vector			m_pos;
 	Vector          m_dir;
+	Vector			skillsize;
 
-	float           m_damage;
-	float           m_speed;
-	float			m_life;
-	float			m_sustainmentTime;
-
-	Object* m_pcharacter;
+	Object*			m_pcharacter;
+	int m_Second;
 
 public:
-	Skill(Object* pCharacter, SKILL_LIST id) : Object(id)
+	Skill(Object* pCharacter,SKILL_USER id) : Object(id)
 	{
-		m_skillname = id;
+		m_skillname = SKILL_NONE;
 		m_pcharacter = pCharacter;
 		m_dir = pCharacter->GetDir();
 		m_pos = pCharacter->Position();
@@ -35,6 +38,8 @@ public:
 		m_skilltype = TYPE_NONE;
 		m_attribute = ATTRIBUTE_NONE;
 		m_skillname = SKILL_NONE;
+		m_Second= timeGetTime() / 1000 % 60;
+
 	}
 	
 	void SetSkillStatus(SKILL_LIST id)
@@ -47,6 +52,8 @@ public:
 			m_damage = 0;
 			m_life =0;
 			m_sustainmentTime =0;
+			m_attribute = ATTRIBUTE_NONE;
+			m_skilltype = TYPE_NONE;
 			break;
 		case FIRE_BOLT:
 			m_speed = 1000.0f;
@@ -55,7 +62,7 @@ public:
 			m_sustainmentTime = 1.0f;
 			break;
 		case FIRE_WALL:
-			m_speed =	300.0f;
+			m_speed =	200.0f;
 			m_damage = 300.0f;
 			m_life = 900.0f;
 			m_sustainmentTime = 5.0f;
@@ -73,7 +80,7 @@ public:
 			m_sustainmentTime = 1.0f;
 			break;
 		case WATER_WALL:
-			m_speed = 300.0f;
+			m_speed = 200.0f;
 			m_damage = 300.0f;
 			m_life = 900.0f;
 			m_sustainmentTime = 5.0f;
@@ -91,7 +98,7 @@ public:
 			m_sustainmentTime = 1.0f;
 			break;
 		case ELECTRICITY_WALL:
-			m_speed = 300.0f;
+			m_speed =	200.0f;
 			m_damage = 300.0f;
 			m_life =	900.0f;
 			m_sustainmentTime = 5.0f;
@@ -112,7 +119,6 @@ public:
 		switch (m_skillState)
 		{
 		case STATE_IDLE:		IdleState();				break;
-		case STATE_START:		CastStartState();			break;
 		case STATE_ATTRIBUTE:	AttributeState();			break;
 		case STATE_TYPE:		TypeState();				break;
 		case STATE_BOLT:		BoltState(deltaTime);		break;
@@ -121,6 +127,7 @@ public:
 		case MONSTER_ATTACK:	MonsterAttack(deltaTime);	break;
 		}
 
+		Animation()->Update(deltaTime);
 	}
 
 	void Draw(Camera* pCamera)
@@ -128,26 +135,21 @@ public:
 
 		switch (m_skillState)
 		{
-		case STATE_ATTRIBUTE:	pCamera->DrawCircle(m_pos, 100, ColorF::Blue,2);			break;
-		case STATE_TYPE:		pCamera->DrawCircle(m_pos, 100, ColorF::Red);		break;
-		case MONSTER_ATTACK:	pCamera->DrawFillCircle(m_pos, 30, ColorF::Yellow);			break;
-		case STATE_BOLT:		pCamera->DrawCircle(m_pos, 100, ColorF::Yellow);	break;
-		case STATE_WALL:		pCamera->DrawCircle(m_pos, 100, ColorF::HotPink);	break;
-		case STATE_SHIELD:		pCamera->DrawCircle(m_pos, 100, ColorF::RosyBrown); break;
-
+		case STATE_ATTRIBUTE:	pCamera->DrawCircle(m_pcharacter->Position(), 100, ColorF::Blue,2);			break;
+		case STATE_TYPE:		pCamera->DrawCircle(m_pcharacter->Position(), 100, ColorF::Red);		break;
+		case STATE_BOLT:		pCamera->DrawCircle(m_pcharacter->Position(), 100, ColorF::Yellow);	break;
+		case STATE_WALL:		pCamera->DrawCircle(m_pcharacter->Position(), 100, ColorF::HotPink);	break;
+		case STATE_SHIELD:		pCamera->DrawCircle(m_pcharacter->Position(), 100, ColorF::RosyBrown); break;
+		case MONSTER_ATTACK:	pCamera->DrawFillCircle(m_pcharacter->Position(), 30, ColorF::Yellow);			break;
 		}
-
-		switch (m_attribute)
-		{
-		
-		}
-
+		cout << "스킬이름::"<<m_skillname << endl;
+	
 		switch (m_skillname)
 		{
 		case SKILL_NONE:													break;
-		case FIRE_BOLT:					pCamera->DrawFillCircle(m_pcharacter->Position(), 30, ColorF::Red);														break;
-		case FIRE_WALL:					pCamera->DrawFillCircle(m_pcharacter->Position(), 30, ColorF::Yellow);											break;
-		case FIRE_SHIELD:													break;
+		case FIRE_BOLT:					pCamera->DrawFillCircle(m_pos, 30, ColorF::Red);														break;
+		case FIRE_WALL:					pCamera->DrawFillCircle(m_pos, 100, ColorF::Blue);											break;
+		case FIRE_SHIELD:				pCamera->DrawCircle(m_pos, 150, ColorF::Yellow,2);											break;
 		case WATER_BOLT:													break;
 		case WATER_WALL:													break;
 		case WATER_SHIELD:													break;
@@ -217,28 +219,40 @@ public:
 	
 	void SetDamage(float damage) {	m_damage *= damage; }
 	void SetLife(float damage) {	m_life-=damage;}
-	void SetsustainmentTime(float time) { m_sustainmentTime * time; }
+	void SetsustainmentTime(float time) { m_sustainmentTime *=time; }
 	float GetDamage() { return m_damage; }
 
 	void AttributeState()
 	{
-		SetSkillStatus(m_skillname);
-
-		if (INPUT->IsKeyDown('1'))		m_attribute = ATTRIBUTE_FIRE;	m_skillState = STATE_TYPE;
-		if (INPUT->IsKeyDown('2'))		m_attribute = ATTRIBUTE_WATER;	m_skillState = STATE_TYPE;
-		if (INPUT->IsKeyDown('3'))		m_attribute = ATTRIBUTE_ELECTRICITY;	m_skillState = STATE_TYPE;
-
+		cout << "순서 3" << endl;
 	
+		int key = 0;
+		if (INPUT->IsKeyDown('1'))	key = 1;
+		if (INPUT->IsKeyDown('2'))	key = 2;
+		if (INPUT->IsKeyDown('3'))	key = 3;
+		switch (key)
+		{
+		case 0:m_skillState = STATE_ATTRIBUTE; break;
+		case 1:m_attribute = ATTRIBUTE_FIRE; m_skillState = STATE_TYPE; break;
+		case 2:m_attribute = ATTRIBUTE_WATER; m_skillState = STATE_TYPE; break;
+		case 3:m_attribute = ATTRIBUTE_ELECTRICITY; m_skillState = STATE_TYPE; break;
+		}
 	}
 
 	void TypeState()
 	{
+	
 		if (INPUT->IsKeyDown('1'))	m_skilltype = TYPE_BOLT; 
 		if (INPUT->IsKeyDown('2'))	m_skilltype = TYPE_WALL;
 		if (INPUT->IsKeyDown('3'))	m_skilltype = TYPE_SHIELD;
-
+		cout << "스킬타입 : " << m_skilltype << endl;
+		cout << "스킬타입 : " << m_skilltype << endl;
+		cout << "순서 4" << endl;
+		m_pos = m_pcharacter->Position();
+		m_dir = m_pcharacter->GetDir();
 		switch (m_skilltype)
 		{
+		case TYPE_NONE:				m_skillState = STATE_TYPE; break;
 		case TYPE_BOLT:
 			switch (m_attribute)
 			{
@@ -247,7 +261,10 @@ public:
 				case ATTRIBUTE_ELECTRICITY:m_skillname = ELECTRICITY_BOLT;		break;
 			}
 			SetSkillStatus(m_skillname);
-			m_skillState = STATE_BOLT;
+			if(INPUT->IsKeyDown('A'))
+			{
+				m_skillState = STATE_BOLT;
+			}
 			break;
 		case TYPE_WALL: 
 			switch (m_attribute)
@@ -257,7 +274,11 @@ public:
 				case ATTRIBUTE_ELECTRICITY:m_skillname = ELECTRICITY_WALL;		break;
 			}
 			SetSkillStatus(m_skillname);
-			m_skillState = STATE_WALL;
+			m_pos += m_dir*m_speed;
+			if (INPUT->IsKeyDown('A'))
+			{
+				m_skillState = STATE_WALL;
+			}
 			break;
 		case TYPE_SHIELD: 
 			switch (m_attribute)
@@ -267,7 +288,10 @@ public:
 				case ATTRIBUTE_ELECTRICITY:m_skillname = ELECTRICITY_SHIELD;	break;
 			}
 			SetSkillStatus(m_skillname);
-			m_skillState = STATE_SHIELD;
+			if (INPUT->IsKeyDown('A'))
+			{
+				m_skillState = STATE_SHIELD;
+			}
 			break;
 		}
 				
@@ -275,58 +299,31 @@ public:
 
 	void BoltState(float deltaTime)
 	{
-		SetPosition(m_pos + m_dir*m_speed*deltaTime);
-		SetsustainmentTime(1 / deltaTime);
-		switch (m_attribute)
-		{
-		case ATTRIBUTE_NONE:break;
-		case ATTRIBUTE_FIRE:break;
-		case ATTRIBUTE_WATER:break;
-		case ATTRIBUTE_ELECTRICITY:break;
-		}
-		if (m_sustainmentTime < 0.01f)
-		{
-			m_skillState = STATE_IDLE; 
-		}
 		
+		cout << "순서 5" << m_sustainmentTime<< endl;
+		m_pos +=m_dir*deltaTime*m_speed;
+		SetsustainmentTime(60*deltaTime);
+		if (m_sustainmentTime < 0.01f)m_skillState = STATE_IDLE;
 	}
 
 	void WallState(float deltaTime)
 	{
-		this->SetPosition(m_pos + m_dir*m_speed);
-
-		switch (m_attribute)
-		{
-		case ATTRIBUTE_NONE:break;
-		case ATTRIBUTE_FIRE:break;
-		case ATTRIBUTE_WATER:break;
-		case ATTRIBUTE_ELECTRICITY:break;
-		}
-		SetsustainmentTime(1 / deltaTime);
-		if (m_sustainmentTime < 0.01f)m_skillState = STATE_IDLE;
+		SetsustainmentTime(60 * deltaTime);
+		if (m_sustainmentTime < 0.001f)m_skillState = STATE_IDLE;
 	}
 
 	void ShieldState(float deltaTime)
 	{
-		this->SetPosition(m_pos);
-
-		switch (m_attribute)
-		{
-		case ATTRIBUTE_NONE:break;
-		case ATTRIBUTE_FIRE:break;
-		case ATTRIBUTE_WATER:break;
-		case ATTRIBUTE_ELECTRICITY:break;
-		}
-
-		SetsustainmentTime(1/deltaTime);
-		if (m_sustainmentTime<0.01f)m_skillState = STATE_IDLE;
+		m_pos = m_pcharacter->Position();
+		SetsustainmentTime(60 * deltaTime);
+		if (m_sustainmentTime < 0.001f)m_skillState = STATE_IDLE;
 	}
 
 	void MonsterAttack(float delTatime)
 	{
 		SetPosition(m_pos + m_dir*m_speed*delTatime);
-		SetsustainmentTime(1 / delTatime);
-		if (m_sustainmentTime<0.01f)m_skillState = MONSTER_ATTACK;
+		SetsustainmentTime(60 * delTatime);
+		if (m_sustainmentTime < 0.001f)m_skillState = STATE_IDLE;
 	}
 
 	void ColliedWithCharacter(Skill A,Character* pCharacter)
@@ -352,18 +349,16 @@ public:
 		}
 	}
 
-	void CastStartState()
-	{
-		
-		if (INPUT->IsKeyDown('1'))m_skillState = STATE_ATTRIBUTE;
-	}
-
 	void IdleState()
 	{
+		cout << "순서 1" << endl;
+		SetSkillStatus(SKILL_NONE);
 		if (INPUT->IsKeyDown('1'))
 		{
-			m_skillState = STATE_START;
+			m_skillState = STATE_ATTRIBUTE;
 		}
-		SetSkillStatus(SKILL_NONE);
+		else m_skillState = STATE_IDLE;
 	}
+
+
 };
