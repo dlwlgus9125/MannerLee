@@ -4,6 +4,7 @@
 #include "AnimationController.h"
 #include <list>
 #include "Common.h"
+#include "SoundManager.h"
 
 using namespace std;
 

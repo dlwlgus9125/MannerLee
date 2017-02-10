@@ -49,6 +49,9 @@
     <Filter Include="소스 파일\Manager\UI">
       <UniqueIdentifier>{05b62d21-ebfd-46eb-9cf6-2c3735b2542b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\Manager\Sound">
+      <UniqueIdentifier>{59743ab9-6ad5-43aa-a2a5-a195c394f62a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -74,6 +77,9 @@
     </ClCompile>
     <ClCompile Include="UIManager.cpp">
       <Filter>소스 파일\Manager\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundManager.cpp">
+      <Filter>소스 파일\Manager\Sound</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -130,6 +136,9 @@
     </ClInclude>
     <ClInclude Include="UIManager.h">
       <Filter>소스 파일\Manager\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundManager.h">
+      <Filter>소스 파일\Manager\Sound</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

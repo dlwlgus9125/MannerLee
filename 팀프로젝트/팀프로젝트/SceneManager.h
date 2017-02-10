@@ -1,5 +1,6 @@
 #pragma once
 #include "Singleton.h"
+#include "SoundManager.h"
 #include <map>
 using namespace std;
 

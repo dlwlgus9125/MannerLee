@@ -8,6 +8,7 @@
 #include <queue>
 #include <map>
 #include "Math.h"
+#include "SoundManager.h"
 #pragma comment(lib, "D2D1.lib")
 #pragma comment(lib, "dwrite.lib")
 using namespace D2D1;
@@ -199,7 +200,7 @@ public:
 
 	void ShakingCamera(int wavePower)
 	{
-		
+		if (SOUND->FindChannel("Explosion1") == NULL) { SOUND->Play("Explosion1",2.0f); }
 		int pattern = (int)timeGetTime() / 5 % 30 % 2;
 		int waveCount1 = (int)timeGetTime() / 5 % 30 % 7;
 		int waveCount2 = 7 - waveCount1;
@@ -213,8 +214,9 @@ public:
 
 
 		m_waveTimer += pattern;
-		if (m_waveTimer >= 8)
+		if (m_waveTimer >= 10)
 		{
+			
 			m_isWave = false;
 			m_waveTimer = 0;
 		}
