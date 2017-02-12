@@ -96,7 +96,7 @@ public:
 	void CreateMonster(int id, MONSTER_KIND kind, Vector pos, float colRadius);
 	void DestroyAllMonster();
 
-	void CreateSkill(Object* pCharacter, SKILL_LIST id, Vector size);
+	void CreateSkill(Object* pCharacter, SKILL_USER id, Vector size);
 	void DestroySkill(Object* pSkill);
 	void DestroyAllSkill();
 	
