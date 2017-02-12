@@ -112,10 +112,10 @@ public:
 		//cout << angle << endl;
 
 		if (45.0f <= angle && angle <= 135.0f)m_dirState = DIR_UP;
-		if (45.0f + 90.0f <= angle && angle <= 135.0f + 90.0f)m_dirState = DIR_RIGHT;
+		if (45.0f + 90.0f <= angle && angle <= 135.0f + 90.0f)m_dirState = DIR_LEFT;
 		if (135.0f + 90.0f <= angle && angle <= 135.0f + 180.0f)m_dirState = DIR_DOWN;
-		if (135.0f + 180.0f <= angle && angle <= 360.0f)m_dirState = DIR_LEFT;
-		if (45.0f >= angle)m_dirState = DIR_LEFT;
+		if (135.0f + 180.0f <= angle && angle <= 360.0f)m_dirState = DIR_RIGHT;
+		if (45.0f >= angle)m_dirState = DIR_RIGHT;
 		//cout << state << endl;
 	}
 

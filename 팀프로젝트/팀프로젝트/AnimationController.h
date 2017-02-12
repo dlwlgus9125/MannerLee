@@ -24,7 +24,6 @@ public:
 			wsprintf(key, TEXT("%s%d"), imageKey.c_str(), i);
 			m_sprites.push_back(new Sprite(RENDER->GetImage(key), scale, anchorX, anchorY));
 		}
-
 		m_frameTime = 1.0f / (float)fps;
 		m_elapsedTime = 0.0f;
 		m_spriteCount = imageCount;
