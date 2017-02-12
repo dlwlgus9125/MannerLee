@@ -70,6 +70,7 @@ public:
 		{
 			if (MATH->IsCollided(m_cursor, Vector(634, 10), Vector(690, 63)))
 			{
+
 				CurrentHp += UI->EatPotion();
 				UI->SetNotRun(true);
 			}

@@ -4,6 +4,7 @@
 #include <map>
 using namespace std;
 
+
 class Animation
 {
 	vector<Sprite*> m_sprites;
