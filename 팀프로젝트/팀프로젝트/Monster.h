@@ -89,6 +89,7 @@ public:
 
 	void Draw(Camera* pCamera)
 	{
+		if (IsHideToWall())Animation()->Current()->GetSprite()->SetOpacity(0.5f);
 		//pCamera->DrawFillCircle(Position(), 30, ColorF::Red);
 		//pCamera->DrawCircle(m_sightRange.center, m_sightRange.radius, ColorF::Red, 2.0f);
 		pCamera->DrawLine(Position() + 15.0f, Position() + 15.0f + m_dir * 30, ColorF::Blue, 3);

@@ -43,15 +43,25 @@ public:
 		RENDER->GetCamera(CAM_MAIN)->SetScreenRect(0, 0, 800, 600);
 		//RENDER->GetCamera(CAM_MAP)->SetScreenRect(0, 0, 200, 200);
 
-		OBJECT->CreateProps(OBJ_GROUND, Vector(280, 370)*1.33f, Vector(100, 670)*1.33f);
-		OBJECT->CreateProps(OBJ_GROUND, Vector(630, 50)*1.33f, Vector(600, 100)*1.33f);
-		OBJECT->CreateProps(OBJ_GROUND, Vector(950, 370)*1.33f, Vector(100, 670)*1.33f);
-		OBJECT->CreateProps(OBJ_GROUND, Vector(180, 800)*1.33f, Vector(100, 200)*1.33f);
-		OBJECT->CreateProps(OBJ_GROUND, Vector(370, 900)*1.33f, Vector(280, 100)*1.33f);
-		OBJECT->CreateProps(OBJ_GROUND, Vector(1050, 800)*1.33f, Vector(100, 200)*1.33f);
-		OBJECT->CreateProps(OBJ_GROUND, Vector(890, 900)*1.33f, Vector(280, 100)*1.33f);
-		OBJECT->CreateProps(OBJ_GROUND, Vector(725, 1000)*1.33f, Vector(50, 360)*1.33f);
-		OBJECT->CreateProps(OBJ_GROUND, Vector(520, 1000)*1.33f, Vector(50, 360)*1.33f);
+		OBJECT->CreateProps(OBJ_GROUND, Vector(320, 370)*1.33f, Vector(100, 670)*1.33f);
+		OBJECT->CreateProps(OBJ_GROUND, Vector(650, 80)*1.33f, Vector(600, 100)*1.33f);
+		OBJECT->CreateProps(OBJ_GROUND, Vector(1010, 370)*1.33f, Vector(100, 670)*1.33f);
+		OBJECT->CreateProps(OBJ_GROUND, Vector(220, 800)*1.33f, Vector(100, 200)*1.33f);
+		OBJECT->CreateProps(OBJ_GROUND, Vector(410, 900)*1.33f, Vector(280, 100)*1.33f);
+		OBJECT->CreateProps(OBJ_GROUND, Vector(1100, 800)*1.33f, Vector(100, 200)*1.33f);
+		OBJECT->CreateProps(OBJ_GROUND, Vector(930, 900)*1.33f, Vector(280, 100)*1.33f);
+		OBJECT->CreateProps(OBJ_GROUND, Vector(760, 1000)*1.33f, Vector(50, 360)*1.33f);
+		OBJECT->CreateProps(OBJ_GROUND, Vector(575, 1000)*1.33f, Vector(50, 360)*1.33f);
+
+		OBJECT->CreateProps(OBJ_HIDE, Vector(280, 840)*1.33f, Vector(10, 10)*1.33f);
+		OBJECT->CreateProps(OBJ_HIDE, Vector(350, 840)*1.33f, Vector(10, 10)*1.33f);
+		OBJECT->CreateProps(OBJ_HIDE, Vector(420, 840)*1.33f, Vector(10, 10)*1.33f);
+		OBJECT->CreateProps(OBJ_HIDE, Vector(490, 840)*1.33f, Vector(10, 10)*1.33f);
+
+		OBJECT->CreateProps(OBJ_HIDE, Vector(830, 840)*1.33f, Vector(10, 10)*1.33f);
+		OBJECT->CreateProps(OBJ_HIDE, Vector(900, 840)*1.33f, Vector(10, 10)*1.33f);
+		OBJECT->CreateProps(OBJ_HIDE, Vector(970, 840)*1.33f, Vector(10, 10)*1.33f);
+		OBJECT->CreateProps(OBJ_HIDE, Vector(1045, 840)*1.33f, Vector(10, 10)*1.33f);
 		//OBJECT->CreateProps(OBJ_GROUND, Vector(750, 1150), Vector(190, 230));
 	}
 

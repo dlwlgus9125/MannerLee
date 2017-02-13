@@ -136,7 +136,7 @@ public:
 	void Draw(Camera* pCamera)
 	{
 		
-		pCamera->Draw(Animation()->Current()->GetSprite(), m_pos, m_dir);
+		ColorF color = ColorF::GhostWhite;
 		switch (m_skillState)
 		{
 		case STATE_ATTRIBUTE:	pCamera->DrawCircle(m_pcharacter->Position(), 100, ColorF::Blue,2);			break;
@@ -151,7 +151,7 @@ public:
 		switch (m_skillname)
 		{
 		case SKILL_NONE:													break;
-		case FIRE_BOLT:			break;	//	pCamera->DrawFillCircle(m_pos, 30, ColorF::Red);														break;
+		case FIRE_BOLT:		pCamera->Draw(Animation()->Current()->GetSprite(), m_pos, m_dir);	break;	//	pCamera->DrawFillCircle(m_pos, 30, ColorF::Red);														break;
 		case FIRE_WALL:					pCamera->DrawFillCircle(m_pos, 100, ColorF::Blue);	break;										break;
 		case FIRE_SHIELD:				pCamera->DrawCircle(m_pos, 150, ColorF::Yellow,2);	break;										break;
 		case WATER_BOLT:													break;

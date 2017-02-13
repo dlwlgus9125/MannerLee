@@ -35,11 +35,13 @@ public:
 		case CHARACTER_RUN: RunState(deltaTime); break;
 		}
 		Get_Dir_state();
+		
 		Animation()->Update(deltaTime);
 	}
 
 	void Draw(Camera* pCamera)
 	{
+		if (IsHideToWall())Animation()->Current()->GetSprite()->SetOpacity(0.5f);
 		pCamera->Draw(Animation()->Current()->GetSprite(), Position());
 		//pCamera->DrawCircle(getCircle().center, getCircle().radius, ColorF::Red, 2.0f);
 		//pCamera->DrawFillCircle(Position(), 30, ColorF::Red);
@@ -79,8 +81,10 @@ public:
 		case DIR_DOWN: m_spriteState = RUN_DOWN; break;
 		}
 
-
+		
+		
 		Animation()->Play(m_spriteState);
+		
 
 			Vector prevPos = this->Position();
 			Vector movedPos = this->Position();
