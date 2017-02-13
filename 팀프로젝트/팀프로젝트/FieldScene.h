@@ -14,6 +14,7 @@ class FieldScene : public IScene
 	float CurrentHp;
 	Vector SkillSize;
 	Vector m_cursor;// 커서 위치
+
 public:
 	FieldScene()
 	{
