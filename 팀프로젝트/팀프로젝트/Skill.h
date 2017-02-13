@@ -40,6 +40,8 @@ public:
 		m_skillname = SKILL_NONE;
 		m_Second= timeGetTime() / 1000 % 60;
 
+		RENDER->LoadImageFiles(TEXT("Fire_Bolt"), TEXT("Image/Magic/Fire/Bolt/Bolt"), TEXT("png"), 11);
+
 	}
 	
 	void SetSkillStatus(SKILL_LIST id)
@@ -116,6 +118,7 @@ public:
 
 	void Update(float deltaTime)
 	{
+		Animation()->Update(deltaTime);
 		switch (m_skillState)
 		{
 		case STATE_IDLE:		IdleState();				break;
@@ -127,12 +130,13 @@ public:
 		case MONSTER_ATTACK:	MonsterAttack(deltaTime);	break;
 		}
 
-		Animation()->Update(deltaTime);
+		
 	}
 
 	void Draw(Camera* pCamera)
 	{
-
+		
+		pCamera->Draw(Animation()->Current()->GetSprite(), m_pos, m_dir);
 		switch (m_skillState)
 		{
 		case STATE_ATTRIBUTE:	pCamera->DrawCircle(m_pcharacter->Position(), 100, ColorF::Blue,2);			break;
@@ -142,14 +146,14 @@ public:
 		case STATE_SHIELD:		pCamera->DrawCircle(m_pcharacter->Position(), 100, ColorF::RosyBrown); break;
 		case MONSTER_ATTACK:	pCamera->DrawFillCircle(m_pcharacter->Position(), 30, ColorF::Yellow);			break;
 		}
-		cout << "스킬이름::"<<m_skillname << endl;
+		//cout << "스킬이름::"<<m_skillname << endl;
 	
 		switch (m_skillname)
 		{
 		case SKILL_NONE:													break;
-		case FIRE_BOLT:					pCamera->DrawFillCircle(m_pos, 30, ColorF::Red);														break;
-		case FIRE_WALL:					pCamera->DrawFillCircle(m_pos, 100, ColorF::Blue);											break;
-		case FIRE_SHIELD:				pCamera->DrawCircle(m_pos, 150, ColorF::Yellow,2);											break;
+		case FIRE_BOLT:			break;	//	pCamera->DrawFillCircle(m_pos, 30, ColorF::Red);														break;
+		case FIRE_WALL:					pCamera->DrawFillCircle(m_pos, 100, ColorF::Blue);	break;										break;
+		case FIRE_SHIELD:				pCamera->DrawCircle(m_pos, 150, ColorF::Yellow,2);	break;										break;
 		case WATER_BOLT:													break;
 		case WATER_WALL:													break;
 		case WATER_SHIELD:													break;
@@ -157,7 +161,7 @@ public:
 		case ELECTRICITY_WALL:												break;
 		case ELECTRICITY_SHIELD:											break;
 		}
-
+	
 		
 	}
 
@@ -224,7 +228,7 @@ public:
 
 	void AttributeState()
 	{
-		cout << "순서 3" << endl;
+	//	cout << "순서 3" << endl;
 	
 		int key = 0;
 		if (INPUT->IsKeyDown('1'))	key = 1;
@@ -245,9 +249,9 @@ public:
 		if (INPUT->IsKeyDown('1'))	m_skilltype = TYPE_BOLT; 
 		if (INPUT->IsKeyDown('2'))	m_skilltype = TYPE_WALL;
 		if (INPUT->IsKeyDown('3'))	m_skilltype = TYPE_SHIELD;
+		/*cout << "스킬타입 : " << m_skilltype << endl;
 		cout << "스킬타입 : " << m_skilltype << endl;
-		cout << "스킬타입 : " << m_skilltype << endl;
-		cout << "순서 4" << endl;
+		cout << "순서 4" << endl;*/
 		m_pos = m_pcharacter->Position();
 		m_dir = m_pcharacter->GetDir();
 		switch (m_skilltype)
@@ -299,8 +303,9 @@ public:
 
 	void BoltState(float deltaTime)
 	{
-		
-		cout << "순서 5" << m_sustainmentTime<< endl;
+		cout << "여기 잇음" << endl;
+		Animation()->Play(FIRE_BOLT);
+		//cout << "순서 5" << m_sustainmentTime<< endl;
 		m_pos +=m_dir*deltaTime*m_speed;
 		SetsustainmentTime(60*deltaTime);
 		if (m_sustainmentTime < 0.01f)m_skillState = STATE_IDLE;
@@ -351,7 +356,7 @@ public:
 
 	void IdleState()
 	{
-		cout << "순서 1" << endl;
+		//cout << "순서 1" << endl;
 		SetSkillStatus(SKILL_NONE);
 		if (INPUT->IsKeyDown('1'))
 		{

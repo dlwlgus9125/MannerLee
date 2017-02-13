@@ -27,6 +27,7 @@ public:
 		//SOUND->LoadFile("Boss1Bgm", "Sound/Boss1.wav", true);
 		//SOUND->LoadFile("Explosion1", "Sound/Effect/Explosion1.wav", false);
 
+
 		OBJECT->CreatePlayer(Vector(600, 800), 30);
 		OBJECT->CreateSkill(OBJECT->GetPlayer(), USER_PLAYER, SkillSize);
 
@@ -70,6 +71,7 @@ public:
 		{
 			if (MATH->IsCollided(m_cursor, Vector(634, 10), Vector(690, 63)))
 			{
+
 				CurrentHp += UI->EatPotion();
 				UI->SetNotRun(true);
 			}

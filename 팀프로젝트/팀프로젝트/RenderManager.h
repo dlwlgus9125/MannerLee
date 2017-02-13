@@ -102,17 +102,20 @@ struct GraphicsObject
 class Sprite
 {
 	ID2D1Bitmap* m_pImage;
+	
 	float m_x, m_y;
 	float m_width;
 	float m_height;
 	float m_scale;
 	float m_anchorX;
 	float m_anchorY;
-	int m_dir;
+	float m_angle;
+	Vector m_dir;
+
 
 public:
 	Sprite(ID2D1Bitmap* pImage, float scale = 1.0f,
-		float anchorX = 0.5f, float anchorY = 0.5f)
+		float anchorX = 0.5f, float anchorY = 0.5f, Vector dir = Vector::Right())
 	{
 		m_pImage = pImage;
 		m_width = pImage->GetSize().width;
@@ -120,30 +123,44 @@ public:
 		m_scale = scale;
 		m_anchorX = anchorX;
 		m_anchorY = anchorY;
-		m_dir = 1;
+		m_dir = dir;
+		m_angle = 360-MATH->ToAngle(m_dir);
 	}
 
 	void SetPosition(float x, float y) { m_x = x; m_y = y; }
-	void SetDirection(int dir) { m_dir = dir; }
+	void SetDirection(Vector dir) { m_dir = dir; }
 	void SetSize(float w, float h) { m_width = w; m_height = h; }
+	void SetAngle() { m_angle = MATH->ToAngle(m_dir); }
+	Vector GetDir() { return m_dir; }
+	float GetAngle() { return m_angle; }
 	float GetLeftX() { return m_x - GetWidth() * m_anchorX; }
 	float GetTopY() { return m_y - GetHeight() * m_anchorY; }
 	float GetWidth() { return m_width * m_scale; }
 	float GetHeight() { return m_height * m_scale; }
 
-	void Render(ID2D1RenderTarget* pRenderTarget, float opacity = 1.0f)
+	void Render(ID2D1RenderTarget* pRenderTarget, Vector dir = Vector::Right(), float opacity = 1.0f)
 	{
 		Vector leftTop = Vector(GetLeftX(), GetTopY());
 		Vector size = Vector(GetWidth(), GetHeight());
+		
 
+
+		D2D1_SIZE_F renderSize = pRenderTarget->GetSize();
+		D2D1_POINT_2F centerPos = { renderSize.width / 2, renderSize.height / 2 };
+		
+		//cout << "angle : " << m_angle << endl;
 		// 스케일 적용
-		pRenderTarget->SetTransform(Matrix3x2F::Scale(m_dir, 1.0f,
-			Point2F(leftTop.x + size.x * 0.5f, leftTop.y + size.y * 0.5f)));
+	
+		pRenderTarget->SetTransform(Matrix3x2F::Rotation(360-MATH->ToAngle(dir), Point2F(leftTop.x + size.x * 0.5f, leftTop.y + size.y * 0.5f)));
+
+		/*pRenderTarget->SetTransform(Matrix3x2F::Scale(1.0f, 1.0f,
+			Point2F(leftTop.x + size.x * 0.5f, leftTop.y + size.y * 0.5f)));*/
 
 		// 비트맵 드로우
+		
 		pRenderTarget->DrawBitmap(m_pImage,
 			RectF(leftTop.x, leftTop.y, leftTop.x + size.x, leftTop.y + size.y), opacity);
-
+	
 		// 스케일 초기화
 		pRenderTarget->SetTransform(Matrix3x2F::Identity());
 	}
@@ -243,13 +260,12 @@ public:
 		m_center = rightBottom - m_size * 0.5f;
 	}
 
-	void Draw(Sprite* sprite, Vector pos, int dir = -1, float opacity = 1.0f)
+	void Draw(Sprite* sprite, Vector pos, Vector dir = Vector::Right(), float opacity = 1.0f)
 	{
 		m_pBitmapTarget->BeginDraw();
 
 		sprite->SetPosition(pos.x, pos.y);
-		sprite->SetDirection(dir);
-		sprite->Render(m_pBitmapTarget);
+		sprite->Render(m_pBitmapTarget, dir);
 
 		m_pBitmapTarget->EndDraw();
 	}
@@ -443,12 +459,11 @@ public:
 		return m_images[key];
 	}
 
-	void Draw(Sprite* pSprite, float x, float y, int dir = 1)
+	void Draw(Sprite* pSprite, float x, float y)
 	{
 		if (pSprite != NULL)
 		{
 			pSprite->SetPosition(x, y);
-			pSprite->SetDirection(dir);
 			m_queSprite.push(pSprite);
 		}
 	}

@@ -127,9 +127,10 @@ void ObjectManager::Draw(Camera* pCamera)
 void ObjectManager::CreateSkill(Object* pCharacter, SKILL_USER id, Vector size)
 {
 	NEW_OBJECT(Object* skill, Skill(pCharacter, id));
-
 	skill->SetPosition(pCharacter->Position());
 	skill->SetSkillCollider(pCharacter->Position(), pCharacter->GetDir(), size);
+	skill->Animation()->Register(FIRE_BOLT, new Animation(TEXT("Fire_Bolt"), 11, 60, true, 0.5f));
+
 
 	m_skillList.push_back(skill);
 

@@ -41,7 +41,6 @@ public:
 	void Draw(Camera* pCamera)
 	{
 		pCamera->Draw(Animation()->Current()->GetSprite(), Position());
-
 		//pCamera->DrawCircle(getCircle().center, getCircle().radius, ColorF::Red, 2.0f);
 		//pCamera->DrawFillCircle(Position(), 30, ColorF::Red);
 		pCamera->DrawLine(Position() + 15.0f, Position() + 15.0f + m_dir * 30, ColorF::Blue, 3);
