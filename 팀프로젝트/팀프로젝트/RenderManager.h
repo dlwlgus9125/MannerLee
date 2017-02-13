@@ -200,7 +200,7 @@ public:
 
 	void ShakingCamera(int wavePower)
 	{
-		if (SOUND->FindChannel("Explosion1") == NULL) { SOUND->Play("Explosion1",2.0f); }
+		/*if (SOUND->FindChannel("Explosion1") == NULL) { SOUND->Play("Explosion1",2.0f); }*/
 		int pattern = (int)timeGetTime() / 5 % 30 % 2;
 		int waveCount1 = (int)timeGetTime() / 5 % 30 % 7;
 		int waveCount2 = 7 - waveCount1;
