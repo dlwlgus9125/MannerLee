@@ -132,6 +132,7 @@ public:
 	void SetPosition(float x, float y) { m_x = x; m_y = y; }
 	void SetDirection(Vector dir) { m_dir = dir; }
 	void SetSize(float w, float h) { m_width = w; m_height = h; }
+	void SetAngleToFloat(float angle) { m_angle = angle; }
 	void SetAngle() { m_angle = MATH->ToAngle(m_dir); }
 	void SetOpacity(float opacity=1.0f) { m_opacity = opacity; }
 	Vector GetDir() { return m_dir; }

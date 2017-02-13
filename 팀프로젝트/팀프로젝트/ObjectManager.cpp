@@ -115,13 +115,12 @@ void ObjectManager::Draw(Camera* pCamera)
 		(*it)->Draw(pCamera);
 	}
 
-	m_pPlayer->Draw(pCamera);
-
-
 	FOR_LIST(Object*, m_skillList)
 	{
 		(*it)->Draw(pCamera);
 	}
+
+	m_pPlayer->Draw(pCamera);	
 }
 
 void ObjectManager::CreateSkill(Object* pCharacter, SKILL_USER id, Vector size)
@@ -130,6 +129,7 @@ void ObjectManager::CreateSkill(Object* pCharacter, SKILL_USER id, Vector size)
 	skill->SetPosition(pCharacter->Position());
 	skill->SetSkillCollider(pCharacter->Position(), pCharacter->GetDir(), size);
 	skill->Animation()->Register(FIRE_BOLT, new Animation(TEXT("Fire_Bolt"), 11, 60, true, 0.5f));
+	skill->Animation()->Register(CIRCLE_SHIELD, new Animation(TEXT("Circle_Shield"), 1, 10, true, 1.0f));
 
 
 	m_skillList.push_back(skill);

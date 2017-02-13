@@ -132,8 +132,12 @@ struct Triangle
 	}
 };
 
+
+
 class Math : public Singleton<Math>
 {
+	
+
 public:
 
 	template <typename T>
