@@ -121,7 +121,7 @@ public:
 	}
 
 	// 애니메이션 플레이
-	void Play(int tag)
+	void Play(int tag, Vector dir = Vector::Right())
 	{
 		if (m_current != tag)
 		{

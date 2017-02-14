@@ -89,7 +89,6 @@ public:
 			}
 		}
 		return false;
-
 	}
 
 	Vector GroundPush(Vector movedPos)

@@ -30,7 +30,7 @@ public:
 	{
 		m_angle += m_rotateSpeed * deltaTime;
 		m_dir = (m_point + MATH->ToDirection(m_angle) * m_distance).Normalize();
-		cout << m_dir.x << ", " << m_dir.y << endl;
+		//cout << m_dir.x << ", " << m_dir.y << endl;
 	}
 	
 
@@ -76,7 +76,7 @@ public:
 		m_rotateDir = new RotateDir();
 
 		RENDER->LoadImageFiles(TEXT("Fire_Bolt"), TEXT("Image/Magic/Fire/Bolt/Bolt"), TEXT("png"), 11);
-		RENDER->LoadImageFiles(TEXT("Circle_Shield"), TEXT("Image/testcircle"), TEXT("png"), 1);
+		RENDER->LoadImageFiles(TEXT("Attribute_Water"), TEXT("Image/Magic/Circle/Blue/Circle_Blue_"), TEXT("png"), 8);
 
 	}
 
@@ -166,7 +166,7 @@ public:
 		case MONSTER_ATTACK:	MonsterAttack(deltaTime);	break;
 		}
 		m_rotateDir->Update(deltaTime);
-
+		Animation()->Get(ATTRIBUTE_WATER)->Update(deltaTime);
 
 	}
 
@@ -179,11 +179,12 @@ public:
 		{
 			switch (m_skillState)
 			{
-			case STATE_ATTRIBUTE:	pCamera->Draw(Animation()->Get(CIRCLE_SHIELD)->GetSprite(), m_pcharacter->Position(), rotateDir); break;
-			case STATE_TYPE:		pCamera->Draw(Animation()->Get(CIRCLE_SHIELD)->GetSprite(), m_pcharacter->Position(), rotateDir); break;
-			case STATE_BOLT:		pCamera->Draw(Animation()->Get(CIRCLE_SHIELD)->GetSprite(), m_pcharacter->Position(), rotateDir); break;
-			case STATE_WALL:		pCamera->Draw(Animation()->Get(CIRCLE_SHIELD)->GetSprite(), m_pcharacter->Position(), rotateDir); break;
-			case STATE_SHIELD:		pCamera->Draw(Animation()->Get(CIRCLE_SHIELD)->GetSprite(), m_pcharacter->Position(), rotateDir); break;
+				
+			case STATE_ATTRIBUTE:	pCamera->Draw(Animation()->Get(ATTRIBUTE_WATER)->GetSprite(), m_pcharacter->Position(), rotateDir); break;
+			case STATE_TYPE:		pCamera->Draw(Animation()->Get(ATTRIBUTE_WATER)->GetSprite(), m_pcharacter->Position(), rotateDir); break;
+			case STATE_BOLT:		pCamera->Draw(Animation()->Get(ATTRIBUTE_WATER)->GetSprite(), m_pcharacter->Position(), rotateDir); break;
+			case STATE_WALL:		pCamera->Draw(Animation()->Get(ATTRIBUTE_WATER)->GetSprite(), m_pcharacter->Position(), rotateDir); break;
+			case STATE_SHIELD:		pCamera->Draw(Animation()->Get(ATTRIBUTE_WATER)->GetSprite(), m_pcharacter->Position(), rotateDir); break;
 			case MONSTER_ATTACK:	pCamera->DrawFillCircle(m_pcharacter->Position(), 30, ColorF::Yellow);			break;
 			}
 		}
