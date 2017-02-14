@@ -26,6 +26,7 @@ class Skill : public Object
 
 	Object*			m_pcharacter;
 	int m_Second;
+	int m_castcount;
 
 public:
 	Skill(Object* pCharacter,SKILL_USER id) : Object(id)
@@ -34,14 +35,14 @@ public:
 		m_pcharacter = pCharacter;
 		m_dir = pCharacter->GetDir();
 		m_pos = pCharacter->Position();
-		m_skillState = STATE_IDLE;
+		m_skillState = STATE_ATTRIBUTE;
 		m_skilltype = TYPE_NONE;
 		m_attribute = ATTRIBUTE_NONE;
 		m_skillname = SKILL_NONE;
 		m_Second= timeGetTime() / 1000 % 60;
 
 		RENDER->LoadImageFiles(TEXT("Fire_Bolt"), TEXT("Image/Magic/Fire/Bolt/Bolt"), TEXT("png"), 11);
-
+		m_castcount = 1;
 	}
 	
 	void SetSkillStatus(SKILL_LIST id)
@@ -121,7 +122,6 @@ public:
 		Animation()->Update(deltaTime);
 		switch (m_skillState)
 		{
-		case STATE_IDLE:		IdleState();				break;
 		case STATE_ATTRIBUTE:	AttributeState();			break;
 		case STATE_TYPE:		TypeState();				break;
 		case STATE_BOLT:		BoltState(deltaTime);		break;
@@ -136,10 +136,10 @@ public:
 	void Draw(Camera* pCamera)
 	{
 		
-		pCamera->Draw(Animation()->Current()->GetSprite(), m_pos, m_dir);
+		
 		switch (m_skillState)
 		{
-		case STATE_ATTRIBUTE:	pCamera->DrawCircle(m_pcharacter->Position(), 100, ColorF::Blue,2);			break;
+		case STATE_ATTRIBUTE:	pCamera->Draw(Animation()->Current()->GetSprite(), m_pos, Vector(0,1));			break;
 		case STATE_TYPE:		pCamera->DrawCircle(m_pcharacter->Position(), 100, ColorF::Red);		break;
 		case STATE_BOLT:		pCamera->DrawCircle(m_pcharacter->Position(), 100, ColorF::Yellow);	break;
 		case STATE_WALL:		pCamera->DrawCircle(m_pcharacter->Position(), 100, ColorF::HotPink);	break;
@@ -151,9 +151,9 @@ public:
 		switch (m_skillname)
 		{
 		case SKILL_NONE:													break;
-		case FIRE_BOLT:			break;	//	pCamera->DrawFillCircle(m_pos, 30, ColorF::Red);														break;
-		case FIRE_WALL:					pCamera->DrawFillCircle(m_pos, 100, ColorF::Blue);	break;										break;
-		case FIRE_SHIELD:				pCamera->DrawCircle(m_pos, 150, ColorF::Yellow,2);	break;										break;
+		case FIRE_BOLT:			if (m_castcount == 0)pCamera->Draw(Animation()->Current()->GetSprite(), m_pos, m_dir); break;	//	pCamera->DrawFillCircle(m_pos, 30, ColorF::Red);														break;
+		case FIRE_WALL:			if (m_castcount == 0)pCamera->DrawFillCircle(m_pos, 100, ColorF::Blue);	break;										break;
+		case FIRE_SHIELD:		if (m_castcount == 0)	pCamera->DrawCircle(m_pos, 150, ColorF::Yellow,2);	break;										break;
 		case WATER_BOLT:													break;
 		case WATER_WALL:													break;
 		case WATER_SHIELD:													break;
@@ -267,6 +267,7 @@ public:
 			SetSkillStatus(m_skillname);
 			if(INPUT->IsKeyDown('A'))
 			{
+				m_castcount--;
 				m_skillState = STATE_BOLT;
 			}
 			break;
@@ -281,6 +282,7 @@ public:
 			m_pos += m_dir*m_speed;
 			if (INPUT->IsKeyDown('A'))
 			{
+				m_castcount--;
 				m_skillState = STATE_WALL;
 			}
 			break;
@@ -294,6 +296,7 @@ public:
 			SetSkillStatus(m_skillname);
 			if (INPUT->IsKeyDown('A'))
 			{
+				m_castcount--;
 				m_skillState = STATE_SHIELD;
 			}
 			break;
@@ -331,10 +334,10 @@ public:
 		if (m_sustainmentTime < 0.001f)m_skillState = STATE_IDLE;
 	}
 
-	void ColliedWithCharacter(Skill A,Character* pCharacter)
-	{
-		pCharacter->SetLife(-A.GetDamage());
-	}
+	//void ColliedWithCharacter(Skill A,Character* pCharacter)
+	//{
+	//	pCharacter->SetLife(-A.GetDamage());
+	//}
 	
 	void ColliedWithSkill(Skill A, Skill B)
 	{
@@ -354,16 +357,6 @@ public:
 		}
 	}
 
-	void IdleState()
-	{
-		//cout << "¼ø¼­ 1" << endl;
-		SetSkillStatus(SKILL_NONE);
-		if (INPUT->IsKeyDown('1'))
-		{
-			m_skillState = STATE_ATTRIBUTE;
-		}
-		else m_skillState = STATE_IDLE;
-	}
 
 
 };
