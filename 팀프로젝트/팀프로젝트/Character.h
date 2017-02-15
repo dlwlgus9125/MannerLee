@@ -79,6 +79,19 @@ public:
 		return false;
 	}
 
+	bool IsHideToWall()
+	{
+		list<Object*> groundList = OBJECT->GetPropsList(OBJ_HIDE);
+		FOR_LIST(Object*, groundList)
+		{
+			if (MATH->IsCollided(this->getCircle(), (*it)->Collider()))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
 	Vector GroundPush(Vector movedPos)
 	{
 		list<Object*> groundList = OBJECT->GetPropsList(OBJ_GROUND);

@@ -110,6 +110,7 @@ class Sprite
 	float m_anchorX;
 	float m_anchorY;
 	float m_angle;
+	float m_opacity;
 	Vector m_dir;
 
 
@@ -125,12 +126,15 @@ public:
 		m_anchorY = anchorY;
 		m_dir = dir;
 		m_angle = 360-MATH->ToAngle(m_dir);
+		m_opacity = 1.0f;
 	}
 
 	void SetPosition(float x, float y) { m_x = x; m_y = y; }
 	void SetDirection(Vector dir) { m_dir = dir; }
 	void SetSize(float w, float h) { m_width = w; m_height = h; }
+	void SetAngleToFloat(float angle) { m_angle = angle; }
 	void SetAngle() { m_angle = MATH->ToAngle(m_dir); }
+	void SetOpacity(float opacity=1.0f) { m_opacity = opacity; }
 	Vector GetDir() { return m_dir; }
 	float GetAngle() { return m_angle; }
 	float GetLeftX() { return m_x - GetWidth() * m_anchorX; }
@@ -138,20 +142,15 @@ public:
 	float GetWidth() { return m_width * m_scale; }
 	float GetHeight() { return m_height * m_scale; }
 
-	void Render(ID2D1RenderTarget* pRenderTarget, Vector dir = Vector::Right(), float opacity = 1.0f)
+	void Render(ID2D1RenderTarget* pRenderTarget, Vector dir = Vector::Right())
 	{
 		Vector leftTop = Vector(GetLeftX(), GetTopY());
 		Vector size = Vector(GetWidth(), GetHeight());
 		
-
-
-		D2D1_SIZE_F renderSize = pRenderTarget->GetSize();
-		D2D1_POINT_2F centerPos = { renderSize.width / 2, renderSize.height / 2 };
-		
 		//cout << "angle : " << m_angle << endl;
 		// 스케일 적용
 	
-		pRenderTarget->SetTransform(Matrix3x2F::Rotation(360-MATH->ToAngle(dir), Point2F(leftTop.x + size.x * 0.5f, leftTop.y + size.y * 0.5f)));
+		pRenderTarget->SetTransform(Matrix3x2F::Rotation(360-MATH->ToAngle(m_dir), Point2F(leftTop.x + size.x * 0.5f, leftTop.y + size.y * 0.5f)));
 
 		/*pRenderTarget->SetTransform(Matrix3x2F::Scale(1.0f, 1.0f,
 			Point2F(leftTop.x + size.x * 0.5f, leftTop.y + size.y * 0.5f)));*/
@@ -159,10 +158,12 @@ public:
 		// 비트맵 드로우
 		
 		pRenderTarget->DrawBitmap(m_pImage,
-			RectF(leftTop.x, leftTop.y, leftTop.x + size.x, leftTop.y + size.y), opacity);
+			RectF(leftTop.x, leftTop.y, leftTop.x + size.x, leftTop.y + size.y), m_opacity);
 	
 		// 스케일 초기화
 		pRenderTarget->SetTransform(Matrix3x2F::Identity());
+
+		if (m_opacity != 1.0f)m_opacity = 1.0f;
 	}
 };
 
@@ -217,7 +218,7 @@ public:
 
 	void ShakingCamera(int wavePower)
 	{
-		if (SOUND->FindChannel("Explosion1") == NULL) { SOUND->Play("Explosion1",2.0f); }
+		/*if (SOUND->FindChannel("Explosion1") == NULL) { SOUND->Play("Explosion1",2.0f); }*/
 		int pattern = (int)timeGetTime() / 5 % 30 % 2;
 		int waveCount1 = (int)timeGetTime() / 5 % 30 % 7;
 		int waveCount2 = 7 - waveCount1;
@@ -265,7 +266,8 @@ public:
 		m_pBitmapTarget->BeginDraw();
 
 		sprite->SetPosition(pos.x, pos.y);
-		sprite->Render(m_pBitmapTarget, dir);
+		sprite->SetDirection(dir);
+		sprite->Render(m_pBitmapTarget);
 
 		m_pBitmapTarget->EndDraw();
 	}

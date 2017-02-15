@@ -4,6 +4,7 @@
 #include <map>
 #include <list>
 #pragma comment (lib, "fmod/fmodex_vc.lib")
+
 using namespace FMOD;
 using namespace std;
 
@@ -29,7 +30,7 @@ public:
 
 	void LoadFile(string key, string fileName, bool bgm);
 
-	void Play(string key, float volume = 1.0f);
+	void Play(string key, float volume);
 
 	void Stop(string key);
 

@@ -1,20 +1,18 @@
 #include "SoundManager.h"
 
-
-
 void SoundManager::Init()
 {
 	System_Create(&m_pSystem);
 	m_pSystem->init(SOUND_MAX_CHANNEL, FMOD_INIT_NORMAL, 0);
 }
 
-void SoundManager::Release()
+void  SoundManager::Release()
 {
 	m_pSystem->release();
 	m_pSystem->close();
 }
 
-void SoundManager::Update(float deltaTime)
+void  SoundManager::Update(float deltaTime)
 {
 	m_pSystem->update();
 
@@ -31,71 +29,73 @@ void SoundManager::Update(float deltaTime)
 	}
 }
 
-Sound* SoundManager::FindSound(string key)
+Sound*  SoundManager::FindSound(string key)
 {
-	if (m_sounds.find(key) == m_sounds.end())return NULL;
+	if (m_sounds.find(key) == m_sounds.end()) return NULL;
 	return m_sounds[key];
 }
 
-void SoundManager::LoadFile(string key, string fileName, bool bgm)
+void  SoundManager::LoadFile(string key, string filename, bool bgm)
 {
 	Sound* pSound = FindSound(key);
-	if (pSound != NULL)return;
+	if (pSound != NULL) return;
 
 	if (bgm)
 	{
-		m_pSystem->createStream(fileName.c_str(), FMOD_LOOP_NORMAL, NULL, &pSound);
+		m_pSystem->createStream(filename.c_str(),
+			FMOD_LOOP_NORMAL, NULL, &pSound);
 	}
 	else
 	{
-		m_pSystem->createSound(fileName.c_str(), FMOD_DEFAULT, NULL, &pSound);
+		m_pSystem->createSound(filename.c_str(),
+			FMOD_DEFAULT, NULL, &pSound);
 	}
 
-	if (pSound != NULL)m_sounds[key] = pSound;
+	if (pSound != NULL) m_sounds[key] = pSound;
 }
 
-void SoundManager::Play(string key, float volume )
+void SoundManager::Play(string key, float volume)
 {
 	Sound* pSound = FindSound(key);
-	if (pSound == NULL)return;
+	if (pSound == NULL) return;
 
 	Channel* pChannel;
 	m_pSystem->playSound(FMOD_CHANNEL_FREE, pSound, false, &pChannel);
-	if (pChannel == NULL)return;
+	if (pChannel == NULL) return;
+
 	pChannel->setVolume(volume);
 	m_channels.push_back(pChannel);
 }
 
-void SoundManager::Stop(string key)
+void  SoundManager::Stop(string key)
 {
-	Channel* pCh = FindChannel(key);
-	if (pCh != NULL)pCh->stop();
+	Channel* pChannel = FindChannel(key);
+	if (pChannel != NULL) pChannel->stop();
 }
 
-void SoundManager::Pause(string key)
+void  SoundManager::Pause(string key)
 {
-	Channel* pCh = FindChannel(key);
-	if (pCh != NULL)pCh->setPaused(true);
+	Channel* pChannel = FindChannel(key);
+	if (pChannel != NULL) pChannel->setPaused(true);
 }
 
-void SoundManager::Resume(string key)
+void  SoundManager::Resume(string key)
 {
-	Channel* pCh = FindChannel(key);
-	if (pCh != NULL)pCh->setPaused(false);
+	Channel* pChannel = FindChannel(key);
+	if (pChannel != NULL) pChannel->setPaused(false);
 }
 
-
-Channel* SoundManager::FindChannel(string key)
+Channel*  SoundManager::FindChannel(string key)
 {
 	Sound* pSound = FindSound(key);
-	if (pSound == NULL)return NULL;
+	if (pSound == NULL) return NULL;
 
 	list<Channel*>::iterator it;
 	for (it = m_channels.begin(); it != m_channels.end(); it++)
 	{
 		Sound* pCurrentSound;
 		(*it)->getCurrentSound(&pCurrentSound);
-		if (pCurrentSound == pSound)return (*it);
+		if (pCurrentSound == pSound) return (*it);
 	}
 	return NULL;
 }

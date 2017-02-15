@@ -3,6 +3,7 @@
 #include "RenderManager.h"
 #include "ObjectManager.h"
 #include "UIManager.h"
+#include "SoundManager.h"
 #include "Common.h"
 
 
@@ -14,6 +15,7 @@ class FieldScene : public IScene
 	float CurrentHp;
 	Vector SkillSize;
 	Vector m_cursor;// 커서 위치
+
 public:
 	FieldScene()
 	{
@@ -43,15 +45,25 @@ public:
 		RENDER->GetCamera(CAM_MAIN)->SetScreenRect(0, 0, 800, 600);
 		//RENDER->GetCamera(CAM_MAP)->SetScreenRect(0, 0, 200, 200);
 
-		OBJECT->CreateProps(OBJ_GROUND, Vector(280, 370)*1.33f, Vector(100, 670)*1.33f);
-		OBJECT->CreateProps(OBJ_GROUND, Vector(630, 50)*1.33f, Vector(600, 100)*1.33f);
-		OBJECT->CreateProps(OBJ_GROUND, Vector(950, 370)*1.33f, Vector(100, 670)*1.33f);
-		OBJECT->CreateProps(OBJ_GROUND, Vector(180, 800)*1.33f, Vector(100, 200)*1.33f);
-		OBJECT->CreateProps(OBJ_GROUND, Vector(370, 900)*1.33f, Vector(280, 100)*1.33f);
-		OBJECT->CreateProps(OBJ_GROUND, Vector(1050, 800)*1.33f, Vector(100, 200)*1.33f);
-		OBJECT->CreateProps(OBJ_GROUND, Vector(890, 900)*1.33f, Vector(280, 100)*1.33f);
-		OBJECT->CreateProps(OBJ_GROUND, Vector(725, 1000)*1.33f, Vector(50, 360)*1.33f);
-		OBJECT->CreateProps(OBJ_GROUND, Vector(520, 1000)*1.33f, Vector(50, 360)*1.33f);
+		OBJECT->CreateProps(OBJ_GROUND, Vector(320, 370)*1.33f, Vector(100, 670)*1.33f);
+		OBJECT->CreateProps(OBJ_GROUND, Vector(650, 80)*1.33f, Vector(600, 100)*1.33f);
+		OBJECT->CreateProps(OBJ_GROUND, Vector(1010, 370)*1.33f, Vector(100, 670)*1.33f);
+		OBJECT->CreateProps(OBJ_GROUND, Vector(220, 800)*1.33f, Vector(100, 200)*1.33f);
+		OBJECT->CreateProps(OBJ_GROUND, Vector(410, 900)*1.33f, Vector(280, 100)*1.33f);
+		OBJECT->CreateProps(OBJ_GROUND, Vector(1100, 800)*1.33f, Vector(100, 200)*1.33f);
+		OBJECT->CreateProps(OBJ_GROUND, Vector(930, 900)*1.33f, Vector(280, 100)*1.33f);
+		OBJECT->CreateProps(OBJ_GROUND, Vector(760, 1000)*1.33f, Vector(50, 360)*1.33f);
+		OBJECT->CreateProps(OBJ_GROUND, Vector(575, 1000)*1.33f, Vector(50, 360)*1.33f);
+
+		OBJECT->CreateProps(OBJ_HIDE, Vector(280, 840)*1.33f, Vector(10, 10)*1.33f);
+		OBJECT->CreateProps(OBJ_HIDE, Vector(350, 840)*1.33f, Vector(10, 10)*1.33f);
+		OBJECT->CreateProps(OBJ_HIDE, Vector(420, 840)*1.33f, Vector(10, 10)*1.33f);
+		OBJECT->CreateProps(OBJ_HIDE, Vector(490, 840)*1.33f, Vector(10, 10)*1.33f);
+
+		OBJECT->CreateProps(OBJ_HIDE, Vector(830, 840)*1.33f, Vector(10, 10)*1.33f);
+		OBJECT->CreateProps(OBJ_HIDE, Vector(900, 840)*1.33f, Vector(10, 10)*1.33f);
+		OBJECT->CreateProps(OBJ_HIDE, Vector(970, 840)*1.33f, Vector(10, 10)*1.33f);
+		OBJECT->CreateProps(OBJ_HIDE, Vector(1045, 840)*1.33f, Vector(10, 10)*1.33f);
 		//OBJECT->CreateProps(OBJ_GROUND, Vector(750, 1150), Vector(190, 230));
 	}
 
@@ -69,19 +81,51 @@ public:
 
 		if (INPUT->IsMouseDown(MOUSE_LEFT))
 		{
-			if (MATH->IsCollided(m_cursor, Vector(634, 10), Vector(690, 63)))
+			if (MATH->IsCollided(m_cursor, Vector(634, 10), Vector(690, 63))) //포션
 			{
 
 				CurrentHp += UI->EatPotion();
 				UI->SetNotRun(true);
 			}
-			else
+
+			else if (MATH->IsCollided(m_cursor, Vector(710, 10), Vector(766, 63))) // 설정
 			{
-				UI->SetNotRun(false);
+				UI->SetSettingDraw(true);
+				UI->SetNotRun(true);
 			}
+
+			else if (UI->SettingDraw())
+			{
+				if (MATH->IsCollided(m_cursor, Vector(494, 197), Vector(532, 238)))
+				{
+					UI->SetKey(KEYBOARD);
+				}
+				
+				else if (MATH->IsCollided(m_cursor, Vector(494, 272), Vector(532, 313)))
+				{
+					UI->SetKey(MOUSE);
+				}
+
+				else if (MATH->IsCollided(m_cursor, Vector(590, 144), Vector(632, 187)))
+				{
+					UI->SetSettingDraw(false);
+				}
+
+				else if (MATH->IsCollided(m_cursor, Vector(494, 344), Vector(532, 385)))
+				{
+					PostQuitMessage(0);
+				}
+
+			}
+
 		}
-		if (INPUT->IsKeyPress(VK_LEFT)) CurrentHp -= 8;
-		if (INPUT->IsKeyPress(VK_RIGHT)) CurrentHp += 8;
+
+		if (UI->SettingDraw() == false)
+		{
+			UI->SetNotRun(false);
+		}
+		//if (INPUT->IsKeyPress(VK_LEFT)) CurrentHp -= 8;
+		//if (INPUT->IsKeyPress(VK_RIGHT)) CurrentHp += 8;
 
 
 
@@ -91,7 +135,7 @@ public:
 
 	void OnExit()
 	{
-		SOUND->Stop("IntroBgm");
+		/*SOUND->Stop("IntroBgm");*/
 		OBJECT->DestroyAllProps();
 		DELETE_OBJECT(m_pBg);
 	}
@@ -103,6 +147,7 @@ public:
 		//	pMapCamera->Draw(m_pBg, Vector(0, 0));
 
 		UI->Draw(MaxHp, CurrentHp);
+		UI->DrawSetting();
 		pMainCamera->Draw(m_pBg, Vector(0, 0));
 		OBJECT->Draw(pMainCamera);
 	}
