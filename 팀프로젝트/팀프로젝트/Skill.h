@@ -28,7 +28,7 @@ public:
 
 	void Update(float deltaTime)
 	{
-		
+		//dirÈ¸Àü
 		m_angle += m_rotateSpeed * deltaTime;
 		//cout << m_angle << endl;
 		m_dir = (m_point + MATH->ToDirection(m_angle) * m_distance).Normalize();
