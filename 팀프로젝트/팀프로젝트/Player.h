@@ -14,6 +14,7 @@ class Player : public Character
 public:
 	Player(int id) : Character(id)
 	{
+		test = 0;
 		m_state = CHARACTER_IDLE;
 		m_dir = Vector::Down();
 		m_dirState = DIR_DOWN;
