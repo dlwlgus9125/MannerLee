@@ -376,10 +376,10 @@ public:
 		if (m_sustainmentTime < 0.001f)m_skillState = STATE_IDLE;
 	}
 
-	void ColliedWithCharacter(Skill A, Character* pCharacter)
-	{
-		pCharacter->SetLife(-A.GetDamage());
-	}
+	//void ColliedWithCharacter(Skill A, Character* pCharacter)
+	//{
+	//	pCharacter->SetLife(-A.GetDamage());
+	//}
 
 	void ColliedWithSkill(Skill A, Skill B)
 	{

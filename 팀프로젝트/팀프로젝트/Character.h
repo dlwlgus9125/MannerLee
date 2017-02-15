@@ -2,6 +2,7 @@
 #include "RenderManager.h"
 #include "InputManager.h"
 #include "ObjectManager.h"
+#include "Skill.h"
 
 class Character : public Object
 {
