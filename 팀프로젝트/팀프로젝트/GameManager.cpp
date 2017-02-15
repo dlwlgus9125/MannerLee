@@ -10,7 +10,7 @@ void GameManager::Init()
 	WINDOW->Create(WND_MAIN, TEXT("Main"), TEXT("MainWindow"), 0, 0, VIEW_WIDTH, VIEW_HEIGHT);
 
 	INPUT->Init(WINDOW->GetHandle(WND_MAIN));
-	//SOUND->Init();
+	SOUND->Init();
 	RENDER->Init(WINDOW->GetHandle(WND_MAIN));
 	SCENE->Register(SCENE_FEILD, new FieldScene());
 	SCENE->ChangeScene(SCENE_FEILD);
@@ -19,7 +19,7 @@ void GameManager::Init()
 void GameManager::Release()
 {
 	RENDER->Release();
-	//SOUND->Release();
+	SOUND->Release();
 	INPUT->Release();
 	WINDOW->Destroy(WND_MAIN);
 }
@@ -34,7 +34,7 @@ void GameManager::Update()
 	if (deltaTime >= m_frameTime)
 	{
 		m_prevTime = m_currentTime;
-		//SOUND->Update(deltaTime);
+		SOUND->Update(deltaTime);
 		INPUT->Update();
 		SCENE->Update(deltaTime);
 

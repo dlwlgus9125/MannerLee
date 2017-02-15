@@ -78,7 +78,7 @@ public:
 		m_rotateDir = new RotateDir();
 
 		RENDER->LoadImageFiles(TEXT("Fire_Bolt"), TEXT("Image/Magic/Fire/Bolt/Bolt"), TEXT("png"), 11);
-		RENDER->LoadImageFiles(TEXT("Attribute_Water"), TEXT("Image/Magic/Circle/Blue/Circle_Blue_"), TEXT("png"), 8);
+		
 
 	}
 
@@ -160,15 +160,12 @@ public:
 		switch (m_skillState)
 		{
 		case STATE_IDLE:		IdleState();				break;
-		case STATE_ATTRIBUTE:	AttributeState();			break;
-		case STATE_TYPE:		TypeState();				break;
-		case STATE_BOLT:		BoltState(deltaTime);		break;
-		case STATE_WALL:		WallState(deltaTime);		break;
-		case STATE_SHIELD:		ShieldState(deltaTime);		break;
-		case MONSTER_ATTACK:	MonsterAttack(deltaTime);	break;
+		
 		}
 		m_rotateDir->Update(deltaTime);
 		Animation()->Get(ATTRIBUTE_WATER)->Update(deltaTime);
+		
+		cout << "success" << endl;
 
 	}
 
@@ -276,9 +273,9 @@ public:
 
 
 		int key = 0;
-		if (INPUT->IsKeyDown('1'))	key = 1;
-		if (INPUT->IsKeyDown('2'))	key = 2;
-		if (INPUT->IsKeyDown('3'))	key = 3;
+		//if (INPUT->IsKeyDown('1'))	key = 1;
+		//if (INPUT->IsKeyDown('2'))	key = 2;
+		//if (INPUT->IsKeyDown('3'))	key = 3;
 		switch (key)
 		{
 		case 0:m_skillState = STATE_ATTRIBUTE; break;
@@ -291,9 +288,9 @@ public:
 	void TypeState()
 	{
 
-		if (INPUT->IsKeyDown('1'))	m_skilltype = TYPE_BOLT;
-		if (INPUT->IsKeyDown('2'))	m_skilltype = TYPE_WALL;
-		if (INPUT->IsKeyDown('3'))	m_skilltype = TYPE_SHIELD;
+		//if (INPUT->IsKeyDown('1'))	m_skilltype = TYPE_BOLT;
+		//if (INPUT->IsKeyDown('2'))	m_skilltype = TYPE_WALL;
+		//if (INPUT->IsKeyDown('3'))	m_skilltype = TYPE_SHIELD;
 		/*cout << "스킬타입 : " << m_skilltype << endl;
 		cout << "스킬타입 : " << m_skilltype << endl;
 		cout << "순서 4" << endl;*/
@@ -401,13 +398,7 @@ public:
 
 	void IdleState()
 	{
-		//cout << "순서 1" << endl;
-		SetSkillStatus(SKILL_NONE);
-		if (INPUT->IsKeyDown('1'))
-		{
-			m_skillState = STATE_ATTRIBUTE;
-		}
-		else m_skillState = STATE_IDLE;
+		
 	}
 
 };
