@@ -372,7 +372,7 @@ public:
 	void MonsterAttack(float delTatime)
 	{
 		SetPosition(m_pos + m_dir*m_speed*delTatime);
-		SetsustainmentTime(60 * delTatime);
+		SetsustainmentTime(360 * delTatime);
 		if (m_sustainmentTime < 0.001f)m_skillState = STATE_IDLE;
 	}
 

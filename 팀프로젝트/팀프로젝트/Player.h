@@ -141,6 +141,12 @@ public:
 
 	}
 
+	void CastAttributeCircle()
+	{
+
+
+	}
+
 
 
 };
