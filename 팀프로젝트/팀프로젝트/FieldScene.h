@@ -81,25 +81,17 @@ public:
 
 		if (INPUT->IsMouseDown(MOUSE_LEFT))
 		{
-			if (MATH->IsCollided(m_cursor, Vector(634, 10), Vector(690, 63)))
+			if (MATH->IsCollided(m_cursor, Vector(634, 10), Vector(690, 63))) //포션
 			{
 
 				CurrentHp += UI->EatPotion();
 				UI->SetNotRun(true);
 			}
 
-			else if (MATH->IsCollided(m_cursor, Vector(710, 10), Vector(766, 63)))
+			else if (MATH->IsCollided(m_cursor, Vector(710, 10), Vector(766, 63))) // 설정
 			{
-				if (UI->SettingDraw())
-				{
-					UI->SetSettingDraw(false);
-				}
-
-				else
-				{
-					UI->SetSettingDraw(true);
-					UI->SetNotRun(true);
-				}
+				UI->SetSettingDraw(true);
+				UI->SetNotRun(true);
 			}
 
 			else if (UI->SettingDraw())
@@ -114,6 +106,11 @@ public:
 					UI->SetKey(MOUSE);
 				}
 
+				else if (MATH->IsCollided(m_cursor, Vector(590, 144), Vector(632, 187)))
+				{
+					UI->SetSettingDraw(false);
+				}
+
 				else if (MATH->IsCollided(m_cursor, Vector(494, 344), Vector(532, 385)))
 				{
 					PostQuitMessage(0);
@@ -121,10 +118,11 @@ public:
 
 			}
 
-			else
-			{
-				UI->SetNotRun(false);
-			}
+		}
+
+		if (UI->SettingDraw() == false)
+		{
+			UI->SetNotRun(false);
 		}
 		//if (INPUT->IsKeyPress(VK_LEFT)) CurrentHp -= 8;
 		//if (INPUT->IsKeyPress(VK_RIGHT)) CurrentHp += 8;
