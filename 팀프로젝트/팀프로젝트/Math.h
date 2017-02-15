@@ -3,6 +3,7 @@
 #include <cmath>
 
 #define MATH				Math::Instance()
+#define TIMER               Timer::Instance()
 #define EPSILON				0.01f
 #define PI					3.141592f
 #define ANGLE_TO_RADIAN		0.0174533f
@@ -132,10 +133,55 @@ struct Triangle
 	}
 };
 
+class Timer
+{
+	int pattern;
+	int timeChecker;
+	int prevTime;
+	bool isTimerOn;
+public:
+	Timer()
+	{
+		pattern = 0;
+		prevTime = 0;
+		timeChecker = 0;
+		isTimerOn = false;
+	}
+
+	void Update(float deltaTime)
+	{
+		
+	}
+	bool CheckTime(int time)
+	{
+			pattern = (int)timeGetTime() / 1000 % 60 % 2;
+
+			if (prevTime != pattern)
+			{
+				timeChecker += 1;
+				prevTime = pattern;
+			}
+
+			std::cout << "시작아이디 : " << time << " 패턴 값 : " << pattern << " 타임체커기 : " << timeChecker << std::endl;
+			if (time <= timeChecker)
+			{
+				timeChecker = 0;
+				isTimerOn = false;
+				return true;
+			}
+		return false;
+	}
+
+	
+
+
+};
+
 
 
 class Math : public Singleton<Math>
 {
+	
 	
 
 public:

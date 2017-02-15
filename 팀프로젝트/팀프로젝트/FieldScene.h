@@ -3,6 +3,7 @@
 #include "RenderManager.h"
 #include "ObjectManager.h"
 #include "UIManager.h"
+#include "SoundManager.h"
 #include "Common.h"
 
 
@@ -24,9 +25,9 @@ public:
 		//RENDER->CreateCamera(CAM_MAP, 2000, 3000, 3000, 1000);
 
 		RENDER->LoadImageFile(TEXT("BossCastle"), TEXT("Image/Boss.png"));
-		//SOUND->LoadFile("IntroBgm", "Sound/Intro.wav", true);
-		//SOUND->LoadFile("Boss1Bgm", "Sound/Boss1.wav", true);
-		//SOUND->LoadFile("Explosion1", "Sound/Effect/Explosion1.wav", false);
+		SOUND->LoadFile("IntroBgm", "Sound/Intro.wav", true);
+		SOUND->LoadFile("Boss1Bgm", "Sound/Boss1.wav", true);
+		SOUND->LoadFile("Explosion1", "Sound/Effect/Explosion1.wav", false);
 
 
 		OBJECT->CreatePlayer(Vector(600, 800), 30);
@@ -39,7 +40,7 @@ public:
 	{
 		NEW_OBJECT(m_pBg, Sprite(RENDER->GetImage(TEXT("BossCastle")), 1.0f, 0, 0));
 		m_pBg->SetSize(860 * 2.0f, 1100 * 2.0f);
-		//SOUND->Play("IntroBgm", 0.5f);
+		SOUND->Play("IntroBgm", 0.5f);
 
 		RENDER->GetCamera(CAM_MAIN)->SetScreenRect(0, 0, 800, 600);
 		//RENDER->GetCamera(CAM_MAP)->SetScreenRect(0, 0, 200, 200);

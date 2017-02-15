@@ -4,7 +4,7 @@
 
 class Player : public Character
 {
-	
+	Timer* m_timer;
 	
 
 
@@ -15,6 +15,7 @@ public:
 		m_dir = Vector::Down();
 		m_dirState = DIR_DOWN;
 		m_speed = 150;
+		m_timer = new Timer();
 
 		RENDER->LoadImageFiles(TEXT("Idle_Up"), TEXT("Image/Monster/Player/Idle/Up/Up"), TEXT("png"), 1);
 		RENDER->LoadImageFiles(TEXT("Idle_Down"), TEXT("Image/Monster/Player/Idle/Down/Down"), TEXT("png"), 1);
@@ -41,6 +42,8 @@ public:
 
 	void Draw(Camera* pCamera)
 	{
+		
+
 		if (IsHideToWall())Animation()->Current()->GetSprite()->SetOpacity(0.5f);
 		pCamera->Draw(Animation()->Current()->GetSprite(), Position());
 		//pCamera->DrawCircle(getCircle().center, getCircle().radius, ColorF::Red, 2.0f);
@@ -72,6 +75,7 @@ public:
 		{
 			if(INPUT->IsMouseDown(MOUSE_LEFT)) { m_state = CHARACTER_RUN; }
 		}
+		
 	}
 
 	void RunState(float deltaTime)
@@ -85,7 +89,6 @@ public:
 			case DIR_RIGHT: m_spriteState = RUN_RIGHT; break;
 			case DIR_DOWN: m_spriteState = RUN_DOWN; break;
 		}
-
 		
 		
 		Animation()->Play(m_spriteState);
@@ -106,6 +109,7 @@ public:
 
 				if (!INPUT->IsMouseUp(MOUSE_LEFT))
 				{
+					
 					movedPos += m_dir * m_speed * deltaTime;
 					if (IsGroundCollided())movedPos = GroundPush(movedPos);
 					this->SetPosition(movedPos);

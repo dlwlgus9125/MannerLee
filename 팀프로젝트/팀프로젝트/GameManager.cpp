@@ -3,14 +3,14 @@
 void GameManager::Init()
 {
 	m_frameTime = 1.0f / (float)FPS;
-	m_currentTime = (float)timeGetTime() * 0.001f;
-	m_prevTime = (float)timeGetTime() * 0.001f;
+	m_currentTime = timeGetTime();
+	m_prevTime = timeGetTime();
 
 	WINDOW->RegisterData(TEXT("Main"), CS_HREDRAW | CS_VREDRAW, RGB(255, 255, 255), WndProc);
 	WINDOW->Create(WND_MAIN, TEXT("Main"), TEXT("MainWindow"), 0, 0, VIEW_WIDTH, VIEW_HEIGHT);
 
 	INPUT->Init(WINDOW->GetHandle(WND_MAIN));
-	//SOUND->Init();
+	SOUND->Init();
 	RENDER->Init(WINDOW->GetHandle(WND_MAIN));
 	SCENE->Register(SCENE_FEILD, new FieldScene());
 	SCENE->ChangeScene(SCENE_FEILD);
@@ -19,23 +19,24 @@ void GameManager::Init()
 void GameManager::Release()
 {
 	RENDER->Release();
-	//SOUND->Release();
+	SOUND->Release();
 	INPUT->Release();
 	WINDOW->Destroy(WND_MAIN);
 }
 
 void GameManager::Update()
 {
-	m_currentTime = (float)timeGetTime() * 0.001f;
-	float deltaTime = m_currentTime - m_prevTime;	// 실제 한 프레임 시간
+	m_currentTime = timeGetTime();
+	float deltaTime = (m_currentTime - m_prevTime) * 0.001f;	// 실제 한 프레임 시간
+	
+	//cout << "Current: " << m_currentTime << ", Prev: " << m_prevTime << endl;
 
 	if (deltaTime >= m_frameTime)
 	{
 		m_prevTime = m_currentTime;
-		//SOUND->Update(deltaTime);
+		SOUND->Update(deltaTime);
 		INPUT->Update();
 		SCENE->Update(deltaTime);
-		
 
 		InvalidateRect(WINDOW->GetHandle(WND_MAIN), NULL, false);
 	}
