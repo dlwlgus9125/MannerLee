@@ -19,6 +19,7 @@ class UIManager : public Singleton<UIManager>
 	Sprite* m_UI;
 	Sprite* m_Hp[HP_CT_LENGTH];
 	Sprite* m_CoolTime[HP_CT_LENGTH];
+	Sprite* m_SettingBG;
 	Sprite* m_Setting_0;
 	Sprite* m_Setting_1;
 	KEYSETTING m_Setting;
