@@ -47,7 +47,7 @@ public:
 	virtual Vector GetDir() { return m_dir; }
 	virtual void SetMonsterKind(MONSTER_KIND kind) {}
 	virtual void LoadingMonsterImage() {}
-
+	virtual Magic* GetMagic() { return NULL; }
 	Object(){}
 };
 
@@ -96,7 +96,7 @@ public:
 	void CreateMonster(int id, MONSTER_KIND kind, Vector pos, float colRadius);
 	void DestroyAllMonster();
 
-	void CreateSkill(Object* pCharacter, SKILL_USER id, Vector size);
+	void CreateSkill(Object* pCharacter, SKILL_USER id, Vector size, SKILL_LIST name = SKILL_NONE);
 	void DestroySkill(Object* pSkill);
 	void DestroyAllSkill();
 	
@@ -131,5 +131,6 @@ public:
 	}
 
 	list<Object*> GetPropsList() { return m_propsList; }
+	list<Object*> GetSkillList() { return m_skillList; }
 };
 
