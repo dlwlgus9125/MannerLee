@@ -11,16 +11,12 @@
 class FieldScene : public IScene
 {
 	Sprite* m_pBg;
-	float MaxHp;
-	float CurrentHp;
 	Vector SkillSize;
 	Vector m_cursor;// 커서 위치
 
 public:
 	FieldScene()
 	{
-		MaxHp = 1000.0f;
-		CurrentHp = 800.0f;
 		RENDER->CreateCamera(CAM_MAIN, 860 * 2.0f, 1100 * 2.0f, VIEW_WIDTH, VIEW_HEIGHT);
 		//RENDER->CreateCamera(CAM_MAP, 2000, 3000, 3000, 1000);
 
@@ -70,13 +66,7 @@ public:
 
 	void OnUpdate(float deltaTime)
 	{
-		if (!OBJECT->GetSkillList().empty())
-		{
-			if (MATH->IsCollided(OBJECT->GetProps(OBJ_GROUND)->getCircle(), OBJECT->GetSkill(FIRE_BOLT)->getCircle()))
-			{
-				OBJECT->DestroySkill(OBJECT->GetSkill(FIRE_BOLT));
-			}
-		}
+		
 	
 		m_cursor = INPUT->GetMousePos();
 		OBJECT->Update(deltaTime);
@@ -93,7 +83,7 @@ public:
 			if (MATH->IsCollided(m_cursor, Vector(634, 10), Vector(690, 63))) //포션
 			{
 
-				CurrentHp += UI->EatPotion();
+				OBJECT->GetPlayer()->SetLife(-UI->EatPotion());
 				UI->SetNotRun(true);
 			}
 
@@ -134,8 +124,8 @@ public:
 		{
 			UI->SetNotRun(false);
 		}
-		//if (INPUT->IsKeyPress(VK_LEFT)) CurrentHp -= 8;
-		//if (INPUT->IsKeyPress(VK_RIGHT)) CurrentHp += 8;
+		if (INPUT->IsKeyPress(VK_LEFT)) OBJECT->GetPlayer()->SetLife(10);
+		if (INPUT->IsKeyPress(VK_RIGHT)) OBJECT->GetPlayer()->SetLife(-10);
 
 
 
@@ -156,9 +146,11 @@ public:
 		//	Camera* pMapCamera = RENDER->GetCamera(CAM_MAP);
 		//	pMapCamera->Draw(m_pBg, Vector(0, 0));
 
-		UI->Draw(MaxHp, CurrentHp);
+		UI->Draw(OBJECT->GetPlayer()->MaxLife(), OBJECT->GetPlayer()->GetLife());
 		UI->DrawSetting();
 		pMainCamera->Draw(m_pBg, Vector(0, 0));
 		OBJECT->Draw(pMainCamera);
 	}
+
+
 };

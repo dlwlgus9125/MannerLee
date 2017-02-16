@@ -35,7 +35,10 @@ public:
 		RENDER->LoadImageFiles(TEXT("Run_Left"), TEXT("Image/Monster/Player/Run/Left/Left"), TEXT("png"), 3);
 		RENDER->LoadImageFiles(TEXT("Run_Right"), TEXT("Image/Monster/Player/Run/Right/Right"), TEXT("png"), 3);
 
+		RENDER->LoadImageFiles(TEXT("Attribute_None"), TEXT("Image/Magic/Circle/Normal/Circle_Normal_"), TEXT("png"), 8);
+		RENDER->LoadImageFiles(TEXT("Attribute_Fire"), TEXT("Image/Magic/Circle/Red/Circle_Red_"), TEXT("png"), 8);
 		RENDER->LoadImageFiles(TEXT("Attribute_Water"), TEXT("Image/Magic/Circle/Blue/Circle_Blue_"), TEXT("png"), 8);
+		RENDER->LoadImageFiles(TEXT("Attribute_Electricity"), TEXT("Image/Magic/Circle/Purple/Circle_Purple_"), TEXT("png"), 8);
 	}
 
 	void Update(float deltaTime)
@@ -52,12 +55,11 @@ public:
 		
 		Animation()->Update(deltaTime);
 		m_rotateDir->Update(deltaTime);
+		Animation()->Get(m_attribute)->Update(deltaTime);
 	}
 
 	void Draw(Camera* pCamera)
 	{
-		
-
 		if (IsHideToWall())Animation()->Current()->GetSprite()->SetOpacity(0.5f);
 		pCamera->Draw(Animation()->Current()->GetSprite(), Position());
 		//pCamera->DrawCircle(getCircle().center, getCircle().radius, ColorF::Red, 2.0f);
@@ -66,7 +68,7 @@ public:
 		//Camera* pMapCamera = RENDER->GetCamera(CAM_MAP);
 		//pMapCamera->DrawFilledRect(Collider().LeftTop(), Collider().size);
 
-		if(m_state == CHARACTER_CAST_ATTRIBUTE)pCamera->Draw(Animation()->Get(ATTRIBUTE_WATER)->GetSprite(), Position(), m_rotateDir->GetRotateDir());
+		if(m_state == CHARACTER_CAST_ATTRIBUTE||m_state == CHARACTER_CAST_TYPE)pCamera->Draw(Animation()->Get(m_attribute)->GetSprite(), Position(), m_rotateDir->GetRotateDir());
 	}
 
 	void IdleState()
@@ -91,12 +93,12 @@ public:
 		{
 			if(INPUT->IsMouseDown(MOUSE_LEFT)) { m_state = CHARACTER_RUN; }
 		}
+		if (INPUT->IsMouseDown(MOUSE_RIGHT))OBJECT->CreateSkill(OBJECT->GetPlayer(), USER_PLAYER, FIRE_BOLT);
 		if (INPUT->IsKeyDown('E')) { m_state = CHARACTER_CAST_ATTRIBUTE; }
 	}
 
 	void RunState(float deltaTime)
 	{
-		//cout << "dd" << endl;
 		if (UI->NotRun() == false)
 		{
 			switch (m_dirState)
@@ -160,9 +162,6 @@ public:
 
 	void CastingAttributeState(float deltaTime)
 	{		
-		Animation()->Get(ATTRIBUTE_WATER)->Update(deltaTime);
-
-		cout << "속성 : " << (SKILL_LIST)(m_attribute + m_skillType) << endl;
 		if (INPUT->IsKeyDown('1'))m_prevAttribute = ATTRIBUTE_FIRE;
 		if (INPUT->IsKeyDown('2'))m_prevAttribute = ATTRIBUTE_WATER;
 		if (INPUT->IsKeyDown('3'))m_prevAttribute = ATTRIBUTE_ELECTRICITY;
@@ -184,7 +183,6 @@ public:
 
 	void CastingTypeState(float deltaTime)
 	{
-		cout << "타입 : " << (SKILL_LIST)(m_attribute + m_skillType) << endl;
 		if (INPUT->IsKeyDown('1'))m_prevSkillType = TYPE_BOLT;
 		if (INPUT->IsKeyDown('2'))m_prevSkillType = TYPE_SHIELD;
 		if (INPUT->IsKeyDown('3'))m_prevSkillType = TYPE_WALL;
@@ -205,9 +203,7 @@ public:
 	}
 	void EndCastingState(float deltaTime)
 	{
-		
-		cout << "최종 스킬 : "<<(SKILL_LIST)(m_attribute + m_skillType) << endl;
-		OBJECT->CreateSkill(OBJECT->GetPlayer(), USER_PLAYER, Vector(), (SKILL_LIST)(m_attribute+m_skillType));
+		OBJECT->CreateSkill(OBJECT->GetPlayer(), USER_PLAYER, (SKILL_LIST)(m_attribute+m_skillType));
 		m_attribute = ATTRIBUTE_NONE;
 		m_skillType = TYPE_NONE;
 		m_state = CHARACTER_IDLE;		

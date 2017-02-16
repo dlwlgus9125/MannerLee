@@ -37,6 +37,7 @@ void GameManager::Update()
 		SOUND->Update(deltaTime);
 		INPUT->Update();
 		SCENE->Update(deltaTime);
+		OBJECT->DestroyCompletedSkill();
 
 		InvalidateRect(WINDOW->GetHandle(WND_MAIN), NULL, false);
 	}

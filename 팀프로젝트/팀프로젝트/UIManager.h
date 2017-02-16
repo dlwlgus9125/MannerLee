@@ -31,7 +31,7 @@ public:
 	UIManager();
 	~UIManager();
 
-	void Draw(float MaxHp, float& CurrentHP);
+	void Draw(float MaxHp, float CurrentHP);
 	float EatPotion() {	return POTION; }
 	void DrawSetting();
 

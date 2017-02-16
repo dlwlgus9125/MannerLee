@@ -65,7 +65,7 @@ enum DIR_STATE
 
 enum MONSTER_KIND
 {
-	MONSTER_MINION_RED, MONSTER_BOSS,
+	MONSTER_MINION_RED=11, MONSTER_BOSS,
 };
 
 enum OBJ_TAG
@@ -127,15 +127,15 @@ public:
 	{
 		switch (name)
 		{
-		case FIRE_BOLT:			SetSkillStatus(300, 150, 2, 1, ATTRIBUTE_FIRE, TYPE_BOLT);					break;
+		case FIRE_BOLT:			SetSkillStatus(300, 100, 3, 1, ATTRIBUTE_FIRE, TYPE_BOLT);					break;
 		case FIRE_WALL:			SetSkillStatus(300, 300, 4, 1000, ATTRIBUTE_FIRE, TYPE_WALL);				break;
-		case FIRE_SHIELD:		SetSkillStatus(300, 0, 5, 500, ATTRIBUTE_FIRE, TYPE_SHIELD);				break;
-		case WATER_BOLT:		SetSkillStatus(300, 1000, 2, 1, ATTRIBUTE_WATER, TYPE_BOLT);				break;
+		case FIRE_SHIELD:		SetSkillStatus(300, 1, 5, 500, ATTRIBUTE_FIRE, TYPE_SHIELD);				break;
+		case WATER_BOLT:		SetSkillStatus(300, 150, 2, 1, ATTRIBUTE_WATER, TYPE_BOLT);				break;
 		case WATER_WALL:		SetSkillStatus(300, 300, 4, 1000, ATTRIBUTE_WATER, TYPE_WALL);				break;
-		case WATER_SHIELD:		SetSkillStatus(300, 0, 5, 500, ATTRIBUTE_WATER, TYPE_SHIELD);				break;
-		case ELECTRICITY_BOLT:	SetSkillStatus(300, 1000, 2, 1, ATTRIBUTE_ELECTRICITY, TYPE_BOLT);			break;
+		case WATER_SHIELD:		SetSkillStatus(300, 1, 5, 500, ATTRIBUTE_WATER, TYPE_SHIELD);				break;
+		case ELECTRICITY_BOLT:	SetSkillStatus(300, 150, 2, 1, ATTRIBUTE_ELECTRICITY, TYPE_BOLT);			break;
 		case ELECTRICITY_WALL:	SetSkillStatus(300, 300, 4, 1000, ATTRIBUTE_ELECTRICITY, TYPE_WALL);		break;
-		case ELECTRICITY_SHIELD:SetSkillStatus(300, 0, 5, 500, ATTRIBUTE_ELECTRICITY, TYPE_SHIELD);			break;
+		case ELECTRICITY_SHIELD:SetSkillStatus(300, 1, 5, 500, ATTRIBUTE_ELECTRICITY, TYPE_SHIELD);			break;
 		}
 	}
 	
@@ -151,6 +151,7 @@ public:
 
 	SKILL_LIST GetSkillName() { return m_name; }
 	SKILL_ATTRIBUTE GetAttribute() { return m_attribute; }
+	SKILL_TYPE GetSkillType() { return m_type; }
 
 	float GetDamage() { return m_damage; }
 	float GetSpeed() { return m_speed; }

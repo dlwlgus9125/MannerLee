@@ -17,7 +17,7 @@ protected:
 	int m_id;
 	Vector m_pos;
 	Vector m_dir;
-	Magic* m_Magic;
+	
 public:
 	Object(int id)
 	{
@@ -47,7 +47,12 @@ public:
 	virtual Vector GetDir() { return m_dir; }
 	virtual void SetMonsterKind(MONSTER_KIND kind) {}
 	virtual void LoadingMonsterImage() {}
-	virtual Magic* GetMagic() { return m_Magic; }
+	virtual Magic* GetMagic() { return NULL; }
+	virtual bool GetIsComplete() { return false; }
+	virtual void SetLife(float damage) {}
+	virtual float MaxLife(){return 0.0f;}
+	virtual float GetLife(){return 0.0f;}
+	virtual void SetTimer(float time){}
 	Object(){}
 };
 
@@ -95,6 +100,7 @@ public:
 
 	void CreateMonster(int id, MONSTER_KIND kind, Vector pos, float colRadius);
 	void DestroyAllMonster();
+	void DestroyMonster(Object* pMonster);
 
 	void CreateSkill(Object* pCharacter, SKILL_USER id,SKILL_LIST name = SKILL_NONE);
 	void DestroySkill(Object* pSkill);
@@ -148,8 +154,10 @@ public:
 		}
 		return result;
 	}
-
+	void DestroyCompletedSkill();
 	list<Object*> GetPropsList() { return m_propsList; }
-	list<Object*> GetSkillList() { return m_skillList; }//
+	list<Object*> GetSkillList() { return m_skillList; }
+	
+	
 };
 
