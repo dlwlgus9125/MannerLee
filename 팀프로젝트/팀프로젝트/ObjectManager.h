@@ -150,6 +150,6 @@ public:
 	}
 
 	list<Object*> GetPropsList() { return m_propsList; }
-	list<Object*> GetSkillList() { return m_skillList; }
+	list<Object*> GetSkillList() { return m_skillList; }//
 };
 
