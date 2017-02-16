@@ -49,7 +49,7 @@ UIManager::~UIManager()
 	}
 }
 
-void UIManager::Draw(float MaxHp, float& CurrentHP)
+void UIManager::Draw(float MaxHp, float CurrentHP)
 {
 	float percent_Hp = MaxHp / (float)HP_CT_LENGTH;
 

@@ -64,6 +64,12 @@ void ObjectManager::DestroyAllMonster()
 	m_monsterList.clear();
 }
 
+void ObjectManager::DestroyMonster(Object* pMonster)
+{
+	m_monsterList.remove(pMonster);
+	delete pMonster;
+}
+
 void ObjectManager::CreateProps(int id, Vector pos, Vector size, float angle)
 {
 	NEW_OBJECT(Object* props, Prop(id));
@@ -128,14 +134,13 @@ void ObjectManager::Draw(Camera* pCamera)
 	m_pPlayer->Draw(pCamera);	
 }
 
-void ObjectManager::CreateSkill(Object* pCharacter, SKILL_USER id,SKILL_LIST name=SKILL_NONE)
+void ObjectManager::CreateSkill(Object* pCharacter, SKILL_USER id, SKILL_LIST name)
 {
-	NEW_OBJECT(Object* skill, Skill(pCharacter, id));
+	NEW_OBJECT(Object* skill, Skill(pCharacter, id, name));
 	skill->SetPosition(pCharacter->Position());
 
 	skill->Animation()->Register(FIRE_BOLT, new Animation(TEXT("Fire_Bolt"), 11, 60, true, 0.5f));
-	skill->Animation()->Register(ATTRIBUTE_WATER, new Animation(TEXT("Attribute_Water"), 8, 10, true, 1.0f));
-
+	
 
 	m_skillList.push_back(skill);
 
@@ -145,6 +150,21 @@ void ObjectManager::DestroySkill(Object* pSkill)
 	m_skillList.remove(pSkill);
 	delete pSkill;
 }
+
+void ObjectManager::DestroyCompletedSkill()
+{
+	list<Object*> skillList = OBJECT->GetSkillList();
+
+	FOR_LIST(Object*, skillList)
+	{
+		if ((*it)->GetIsComplete()==true)
+		{
+			delete (*it)->GetMagic();
+			OBJECT->DestroySkill((*it));
+		}
+	}
+}
+
 void ObjectManager::DestroyAllSkill()
 {
 	FOR_LIST(Object*, m_skillList)

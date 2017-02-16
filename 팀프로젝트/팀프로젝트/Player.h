@@ -60,8 +60,6 @@ public:
 
 	void Draw(Camera* pCamera)
 	{
-		
-
 		if (IsHideToWall())Animation()->Current()->GetSprite()->SetOpacity(0.5f);
 		pCamera->Draw(Animation()->Current()->GetSprite(), Position());
 		//pCamera->DrawCircle(getCircle().center, getCircle().radius, ColorF::Red, 2.0f);
@@ -100,7 +98,6 @@ public:
 
 	void RunState(float deltaTime)
 	{
-		//cout << "dd" << endl;
 		if (UI->NotRun() == false)
 		{
 			switch (m_dirState)
@@ -164,8 +161,6 @@ public:
 
 	void CastingAttributeState(float deltaTime)
 	{		
-
-		cout << "속성 : " << (SKILL_LIST)(m_attribute + m_skillType) << endl;
 		if (INPUT->IsKeyDown('1'))m_prevAttribute = ATTRIBUTE_FIRE;
 		if (INPUT->IsKeyDown('2'))m_prevAttribute = ATTRIBUTE_WATER;
 		if (INPUT->IsKeyDown('3'))m_prevAttribute = ATTRIBUTE_ELECTRICITY;
@@ -187,8 +182,6 @@ public:
 
 	void CastingTypeState(float deltaTime)
 	{
-		
-		cout << "타입 : " << (SKILL_LIST)(m_attribute + m_skillType) << endl;
 		if (INPUT->IsKeyDown('1'))m_prevSkillType = TYPE_BOLT;
 		if (INPUT->IsKeyDown('2'))m_prevSkillType = TYPE_SHIELD;
 		if (INPUT->IsKeyDown('3'))m_prevSkillType = TYPE_WALL;
@@ -209,9 +202,7 @@ public:
 	}
 	void EndCastingState(float deltaTime)
 	{
-		
-		cout << "최종 스킬 : "<<(SKILL_LIST)(m_attribute + m_skillType) << endl;
-		OBJECT->CreateSkill(OBJECT->GetPlayer(), USER_PLAYER, Vector(), (SKILL_LIST)(m_attribute+m_skillType));
+		OBJECT->CreateSkill(OBJECT->GetPlayer(), USER_PLAYER, (SKILL_LIST)(m_attribute+m_skillType));
 		m_attribute = ATTRIBUTE_NONE;
 		m_skillType = TYPE_NONE;
 		m_state = CHARACTER_IDLE;		

@@ -8,13 +8,15 @@ class Monster : public Character
 	MONSTER_KIND m_kind;
 	Vector m_standPos;
 	Vector m_standDir;
+	Timer*  m_timer;
 
 public:
 	Monster(int id) : Character(id)
 	{
-		m_sightRange.radius = 100;
+		m_sightRange.radius = 300;
 		m_speed = 100;
 		m_dirState = DIR_DOWN;
+		m_timer = new Timer();
 	}
 
 	void Update(float deltaTime)
@@ -24,9 +26,12 @@ public:
 		{
 		case CHARACTER_IDLE: IdleState(); break;
 		case CHARACTER_RUN: RunState(deltaTime); break;
+		case CHARACTER_CAST_END: CastingState(deltaTime); break;
 		}
 		Get_Dir_state();
 		Animation()->Update(deltaTime);
+		m_timer->Update(deltaTime);
+		
 	}
 
 	void IdleState()
@@ -41,7 +46,7 @@ public:
 		Animation()->Play(m_spriteState);
 		if (MATH->IsCollided(OBJECT->GetPlayer()->getCircle(), m_sightRange))
 		{
-			m_sightRange.radius = 200;
+			m_sightRange.radius = 300;
 			m_state = CHARACTER_RUN;
 		}
 	}
@@ -68,6 +73,18 @@ public:
 
 
 			FowardToTargetPos(OBJECT->GetPlayer()->Position(), deltaTime);
+
+			if (MATH->Distance(OBJECT->GetPlayer()->Position(), m_pos) <= 300.0f)
+			{
+				//m_state = CHARACTER_CAST_END;
+
+				
+				if (MATH->Distance(OBJECT->GetPlayer()->Position(), m_pos) <= 300.0f&&m_timer->CheckTime(2))
+				{
+					OBJECT->CreateSkill(this, USER_MINION, FIRE_BOLT);
+				}
+			}
+
 		}
 		else
 		{
@@ -77,7 +94,7 @@ public:
 			if (MATH->SqrDistance(m_standPos, m_pos) <= 10.0f)
 			{
 				m_dir = m_standDir;
-				m_sightRange.radius = 100;
+				m_sightRange.radius = 300;
 				m_state = CHARACTER_IDLE;
 			}
 
@@ -85,6 +102,18 @@ public:
 					if (SOUND->FindChannel("Boss1Bgm") != NULL)SOUND->Stop("Boss1Bgm");
 
 		}
+	}
+
+
+	void CastingState(float deltaTime)
+	{
+		//Animation()->Play(m_spriteState);
+
+		if (MATH->Distance(OBJECT->GetPlayer()->Position(), m_pos) <= 300.0f)
+		{
+			OBJECT->CreateSkill(this, USER_MINION, FIRE_BOLT);
+		}
+
 	}
 
 	void Draw(Camera* pCamera)
