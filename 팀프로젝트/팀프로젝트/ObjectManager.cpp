@@ -123,15 +123,14 @@ void ObjectManager::Draw(Camera* pCamera)
 	m_pPlayer->Draw(pCamera);	
 }
 
-void ObjectManager::CreateSkill(Object* pCharacter, SKILL_USER id, Vector size, SKILL_LIST name = SKILL_NONE)
+void ObjectManager::CreateSkill(Object* pCharacter, SKILL_USER id, SKILL_LIST name)
 {
 	NEW_OBJECT(Object* skill, Skill(pCharacter, id,name));
 	skill->SetPosition(skill->Position());
-	skill->SetSkillCollider(skill->Position(), skill->GetDir(), size);
 	skill->Animation()->Register(FIRE_BOLT, new Animation(TEXT("Fire_Bolt"), 11, 60, true, 0.5f));
 	skill->Animation()->Register(ATTRIBUTE_WATER, new Animation(TEXT("Attribute_Water"), 8, 10, true, 1.0f));
 
-
+	
 	m_skillList.push_back(skill);
 
 }
@@ -144,6 +143,7 @@ void ObjectManager::DestroyAllSkill()
 {
 	FOR_LIST(Object*, m_skillList)
 	{
+		delete (*it)->GetMagic();
 		DELETE_OBJECT((*it));
 	}
 	m_skillList.clear();

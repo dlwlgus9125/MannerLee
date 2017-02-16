@@ -43,7 +43,7 @@ public:
 
 class Skill : public Object
 {
-	Magic* m_Magic;
+	
 	SKILL_STATE		m_skillState;
 	SKILL_USER		m_skillUser;
 	
@@ -57,11 +57,11 @@ public:
 		m_Magic = new Magic(name);
 		m_skillUser = id;
 		m_pcharacter = pCharacter;
-		m_dir = (pCharacter->Position() - INPUT->GetMousePos()).Normalize();
+		m_dir = pCharacter->GetDir();
 		m_pos = pCharacter->Position();
 		switch (name)
 		{
-		case FIRE_BOLT:		case WATER_BOLT:	case ELECTRICITY_BOLT:		m_skillState = STATE_BOLT;		break;
+		case FIRE_BOLT:	m_skillState = STATE_BOLT;		case WATER_BOLT:	case ELECTRICITY_BOLT:			break;
 		case FIRE_WALL:		case WATER_WALL:	case ELECTRICITY_WALL:		m_skillState = STATE_WALL;		break;
 		case FIRE_SHIELD:	case WATER_SHIELD:	case ELECTRICITY_SHIELD:	m_skillState = STATE_SHIELD;	break;
 		}
@@ -73,7 +73,11 @@ public:
 
 		ExtraTime = 1;
 	}
-
+	~Skill()
+	{
+		delete m_Magic;
+		OBJECT->DestroySkill(this);
+	}
 
 
 	void Update(float deltaTime)
@@ -146,7 +150,7 @@ public:
 		Animation()->Play(m_Magic->GetSkillName());
 		//cout << "¼ø¼­ 5" << m_sustainmentTime<< endl;
 		m_pos += m_dir*deltaTime*m_Magic->GetSpeed();
-
+		this->SetCollider(m_pos, 100);
 		if (IsGroundCollided())m_Magic->SetTIme(0);
 		if (IsMonsterCollided()||IsPlayerCollided())
 		{
@@ -156,7 +160,8 @@ public:
 		{
 			ColliedWithSkill(isSkillCollided());
 		}
-		if (m_Magic->GetTime() <= 0)m_skillState = STATE_VANISH;
+	//	if (m_Magic->GetTime() <= 0)m_skillState = STATE_VANISH;
+
 	}
 
 	void WallState(float deltaTime)
@@ -164,7 +169,7 @@ public:
 		Animation()->Play(m_Magic->GetSkillName());
 		
 		Vector movedPos= m_pcharacter->Position() + m_dir*m_Magic->GetSpeed();;
-		
+		this->SetCollider(m_pos, 200);
 		if (IsGroundCollided())
 		{
 			if (IsGroundCollided())movedPos = GroundPush(movedPos);
@@ -196,7 +201,7 @@ public:
 	{
 		Animation()->Play(m_Magic->GetSkillName());
 		SetPosition(m_pcharacter->Position());
-
+		this->SetCollider(m_pos, 100);
 		if (isSkillCollided() != NULL)
 		{
 			ColliedWithSkill(isSkillCollided());
@@ -245,13 +250,13 @@ public:
 			{
 				if (MATH->IsCollided(this->getCircle(), (*it)->Collider()))
 				{
-					(*it)->SetLife(-this->m_Magic->GetDamage());
+					//(*it)->SetLife(-this->m_Magic->GetDamage());
 				}
 			}
 		}
 		else if (m_skillUser != USER_PLAYER)
 		{
-			OBJECT->GetPlayer()->SetLife(-this->m_Magic->GetDamage());
+			//OBJECT->GetPlayer()->SetLife(-this->m_Magic->GetDamage());
 		}
 	}
 
@@ -263,13 +268,12 @@ public:
 
 		m_Magic->SetLife(-B->GetMagic()->GetDamage());
 
-
-		if (m_Magic->GetLife() < 0)
+		if (m_Magic->GetLife() <= 0)
 		{
 			m_Magic->SetTIme(0);
 		}
 
-		if (B->GetMagic()->GetLife() < 0)
+		if (B->GetMagic()->GetLife() <= 0)
 		{
 			B->GetMagic()->SetTIme(0);
 		}

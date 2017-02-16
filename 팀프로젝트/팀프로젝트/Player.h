@@ -62,7 +62,7 @@ public:
 		case DIR_RIGHT: m_spriteState = IDLE_RIGHT; break;
 		case DIR_DOWN: m_spriteState = IDLE_DOWN; break;
 		}
-
+		if(INPUT->IsKeyPress('1'))OBJECT->CreateSkill(OBJECT->GetPlayer(), USER_PLAYER, FIRE_BOLT);
 		Animation()->Play(m_spriteState);
 		if (UI->Setting() == KEYBOARD)
 		{
@@ -80,6 +80,7 @@ public:
 
 	void RunState(float deltaTime)
 	{
+		if (INPUT->IsKeyDown('1'))OBJECT->CreateSkill(OBJECT->GetPlayer(), USER_PLAYER, FIRE_BOLT);
 		if (UI->NotRun() == false)
 		{
 			switch (m_dirState)

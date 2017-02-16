@@ -128,7 +128,7 @@ public:
 	{
 		switch (name)
 		{
-		case FIRE_BOLT:			SetSkillStatus(300, 1000, 2, 1, ATTRIBUTE_FIRE, TYPE_BOLT);					break;
+		case FIRE_BOLT:			SetSkillStatus(300, 150, 2, 1, ATTRIBUTE_FIRE, TYPE_BOLT);					break;
 		case FIRE_WALL:			SetSkillStatus(300, 300, 4, 1000, ATTRIBUTE_FIRE, TYPE_WALL);				break;
 		case FIRE_SHIELD:		SetSkillStatus(300, 0, 5, 500, ATTRIBUTE_FIRE, TYPE_SHIELD);				break;
 		case WATER_BOLT:		SetSkillStatus(300, 1000, 2, 1, ATTRIBUTE_WATER, TYPE_BOLT);				break;
