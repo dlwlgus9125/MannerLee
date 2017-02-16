@@ -21,10 +21,10 @@ void ObjectManager::CreatePlayer(Vector pos, float colRadius)
 	m_pPlayer->Animation()->Register(RUN_RIGHT, new Animation(TEXT("Run_Right"), 3, 5, true, 2.0f));
 	m_pPlayer->Animation()->Register(RUN_DOWN, new Animation(TEXT("Run_Down"), 3, 5, true, 2.0f));
 
-	//m_pPlayer->Animation()->Register(ATTRIBUTE_NONE, new Animation(TEXT("Attribute_None"), 8, 10, true, 1.0f));
-	//m_pPlayer->Animation()->Register(ATTRIBUTE_FIRE, new Animation(TEXT("Attribute_Fire"), 8, 10, true, 1.0f));
-	m_pPlayer->Animation()->Register(ATTRIBUTE_WATER, new Animation(TEXT("Attribute_Water"), 8, 10, true, 1.0f));
-	//m_pPlayer->Animation()->Register(ATTRIBUTE_ELECTRICITY, new Animation(TEXT("Attribute_Electricity"), 8, 10, true, 1.0f));
+	m_pPlayer->Animation()->Register(ATTRIBUTE_NONE, new Animation(TEXT("Attribute_None"), 8, 10, true, 0.7f));
+	m_pPlayer->Animation()->Register(ATTRIBUTE_FIRE, new Animation(TEXT("Attribute_Fire"), 8, 10, true, 0.7f));
+	m_pPlayer->Animation()->Register(ATTRIBUTE_WATER, new Animation(TEXT("Attribute_Water"), 8, 10, true, 0.7f));
+	m_pPlayer->Animation()->Register(ATTRIBUTE_ELECTRICITY, new Animation(TEXT("Attribute_Electricity"), 8, 10, true, 0.7f));
 
 }
 

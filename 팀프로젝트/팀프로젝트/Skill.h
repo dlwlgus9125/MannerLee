@@ -77,7 +77,6 @@ public:
 		m_Second = timeGetTime() / 1000 % 60;
 		m_rotateDir = new RotateDir();
 
-		RENDER->LoadImageFiles(TEXT("Fire_Bolt"), TEXT("Image/Magic/Fire/Bolt/Bolt"), TEXT("png"), 11);
 		
 
 	}
@@ -156,18 +155,17 @@ public:
 
 	void Update(float deltaTime)
 	{
-		Animation()->Update(deltaTime);
 		switch (m_skillState)
 		{
 		case STATE_IDLE:		IdleState();				break;
 		
 		}
 		m_rotateDir->Update(deltaTime);
-		Animation()->Get(ATTRIBUTE_WATER)->Update(deltaTime);
 		
 		cout << "success" << endl;
 
 	}
+
 
 	void Draw(Camera* pCamera)
 	{
@@ -178,12 +176,6 @@ public:
 		{
 			switch (m_skillState)
 			{
-				
-			case STATE_ATTRIBUTE:	pCamera->Draw(Animation()->Get(ATTRIBUTE_WATER)->GetSprite(), m_pcharacter->Position(), rotateDir); break;
-			case STATE_TYPE:		pCamera->Draw(Animation()->Get(ATTRIBUTE_WATER)->GetSprite(), m_pcharacter->Position(), rotateDir); break;
-			case STATE_BOLT:		pCamera->Draw(Animation()->Get(ATTRIBUTE_WATER)->GetSprite(), m_pcharacter->Position(), rotateDir); break;
-			case STATE_WALL:		pCamera->Draw(Animation()->Get(ATTRIBUTE_WATER)->GetSprite(), m_pcharacter->Position(), rotateDir); break;
-			case STATE_SHIELD:		pCamera->Draw(Animation()->Get(ATTRIBUTE_WATER)->GetSprite(), m_pcharacter->Position(), rotateDir); break;
 			case MONSTER_ATTACK:	pCamera->DrawFillCircle(m_pcharacter->Position(), 30, ColorF::Yellow);			break;
 			}
 		}
@@ -192,7 +184,7 @@ public:
 		switch (m_skillname)
 		{
 		case SKILL_NONE:													break;
-		case FIRE_BOLT:		pCamera->Draw(Animation()->Current()->GetSprite(), m_pos, m_dir);	break;
+		case FIRE_BOLT:			break;
 		case FIRE_WALL:					pCamera->DrawFillCircle(m_pos, 100, ColorF::Blue);	break;
 		case FIRE_SHIELD:				pCamera->DrawCircle(m_pos, 150, ColorF::Yellow, 2);	break;
 		case WATER_BOLT:													break;
@@ -346,7 +338,6 @@ public:
 	void BoltState(float deltaTime)
 	{
 		cout << "여기 잇음" << endl;
-		Animation()->Play(FIRE_BOLT);
 		//cout << "순서 5" << m_sustainmentTime<< endl;
 		m_pos += m_dir*deltaTime*m_speed;
 		SetsustainmentTime(60 * deltaTime);

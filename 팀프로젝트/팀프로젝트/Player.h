@@ -35,7 +35,10 @@ public:
 		RENDER->LoadImageFiles(TEXT("Run_Left"), TEXT("Image/Monster/Player/Run/Left/Left"), TEXT("png"), 3);
 		RENDER->LoadImageFiles(TEXT("Run_Right"), TEXT("Image/Monster/Player/Run/Right/Right"), TEXT("png"), 3);
 
+		RENDER->LoadImageFiles(TEXT("Attribute_None"), TEXT("Image/Magic/Circle/Normal/Circle_Normal_"), TEXT("png"), 8);
+		RENDER->LoadImageFiles(TEXT("Attribute_Fire"), TEXT("Image/Magic/Circle/Red/Circle_Red_"), TEXT("png"), 8);
 		RENDER->LoadImageFiles(TEXT("Attribute_Water"), TEXT("Image/Magic/Circle/Blue/Circle_Blue_"), TEXT("png"), 8);
+		RENDER->LoadImageFiles(TEXT("Attribute_Electricity"), TEXT("Image/Magic/Circle/Purple/Circle_Purple_"), TEXT("png"), 8);
 	}
 
 	void Update(float deltaTime)
@@ -52,6 +55,7 @@ public:
 		
 		Animation()->Update(deltaTime);
 		m_rotateDir->Update(deltaTime);
+		Animation()->Get(m_attribute)->Update(deltaTime);
 	}
 
 	void Draw(Camera* pCamera)
@@ -66,7 +70,7 @@ public:
 		//Camera* pMapCamera = RENDER->GetCamera(CAM_MAP);
 		//pMapCamera->DrawFilledRect(Collider().LeftTop(), Collider().size);
 
-		if(m_state == CHARACTER_CAST_ATTRIBUTE)pCamera->Draw(Animation()->Get(ATTRIBUTE_WATER)->GetSprite(), Position(), m_rotateDir->GetRotateDir());
+		if(m_state == CHARACTER_CAST_ATTRIBUTE||m_state == CHARACTER_CAST_TYPE)pCamera->Draw(Animation()->Get(m_attribute)->GetSprite(), Position(), m_rotateDir->GetRotateDir());
 	}
 
 	void IdleState()
@@ -160,7 +164,6 @@ public:
 
 	void CastingAttributeState(float deltaTime)
 	{		
-		Animation()->Get(ATTRIBUTE_WATER)->Update(deltaTime);
 
 		cout << "속성 : " << (SKILL_LIST)(m_attribute + m_skillType) << endl;
 		if (INPUT->IsKeyDown('1'))m_prevAttribute = ATTRIBUTE_FIRE;
@@ -184,6 +187,7 @@ public:
 
 	void CastingTypeState(float deltaTime)
 	{
+		
 		cout << "타입 : " << (SKILL_LIST)(m_attribute + m_skillType) << endl;
 		if (INPUT->IsKeyDown('1'))m_prevSkillType = TYPE_BOLT;
 		if (INPUT->IsKeyDown('2'))m_prevSkillType = TYPE_SHIELD;
