@@ -21,6 +21,11 @@ void ObjectManager::CreatePlayer(Vector pos, float colRadius)
 	m_pPlayer->Animation()->Register(RUN_RIGHT, new Animation(TEXT("Run_Right"), 3, 5, true, 2.0f));
 	m_pPlayer->Animation()->Register(RUN_DOWN, new Animation(TEXT("Run_Down"), 3, 5, true, 2.0f));
 
+	//m_pPlayer->Animation()->Register(ATTRIBUTE_NONE, new Animation(TEXT("Attribute_None"), 8, 10, true, 1.0f));
+	//m_pPlayer->Animation()->Register(ATTRIBUTE_FIRE, new Animation(TEXT("Attribute_Fire"), 8, 10, true, 1.0f));
+	m_pPlayer->Animation()->Register(ATTRIBUTE_WATER, new Animation(TEXT("Attribute_Water"), 8, 10, true, 1.0f));
+	//m_pPlayer->Animation()->Register(ATTRIBUTE_ELECTRICITY, new Animation(TEXT("Attribute_Electricity"), 8, 10, true, 1.0f));
+
 }
 
 void ObjectManager::DestroyPlayer()
@@ -123,14 +128,15 @@ void ObjectManager::Draw(Camera* pCamera)
 	m_pPlayer->Draw(pCamera);	
 }
 
-void ObjectManager::CreateSkill(Object* pCharacter, SKILL_USER id, SKILL_LIST name)
+void ObjectManager::CreateSkill(Object* pCharacter, SKILL_USER id,SKILL_LIST name=SKILL_NONE)
 {
-	NEW_OBJECT(Object* skill, Skill(pCharacter, id,name));
-	skill->SetPosition(skill->Position());
+	NEW_OBJECT(Object* skill, Skill(pCharacter, id));
+	skill->SetPosition(pCharacter->Position());
+
 	skill->Animation()->Register(FIRE_BOLT, new Animation(TEXT("Fire_Bolt"), 11, 60, true, 0.5f));
 	skill->Animation()->Register(ATTRIBUTE_WATER, new Animation(TEXT("Attribute_Water"), 8, 10, true, 1.0f));
 
-	
+
 	m_skillList.push_back(skill);
 
 }

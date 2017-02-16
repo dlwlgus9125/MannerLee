@@ -31,7 +31,7 @@ public:
 
 
 		OBJECT->CreatePlayer(Vector(600, 800), 30);
-	
+		//OBJECT->CreateSkill(OBJECT->GetPlayer(), USER_PLAYER, Vector());
 
 		OBJECT->CreateMonster(OBJ_MONSTER, MONSTER_MINION_RED, Vector(600, 600), 30);
 		

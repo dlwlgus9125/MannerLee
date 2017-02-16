@@ -5,8 +5,11 @@
 class Player : public Character
 {
 	Timer* m_timer;
-	
-
+	SKILL_ATTRIBUTE m_attribute;
+	SKILL_ATTRIBUTE m_prevAttribute ;
+	SKILL_TYPE      m_skillType;
+	SKILL_TYPE      m_prevSkillType;
+	RotateDir*       m_rotateDir;
 
 public:
 	Player(int id) : Character(id)
@@ -16,6 +19,11 @@ public:
 		m_dirState = DIR_DOWN;
 		m_speed = 150;
 		m_timer = new Timer();
+		m_attribute = ATTRIBUTE_NONE;
+		m_prevAttribute = ATTRIBUTE_NONE;
+		m_skillType = TYPE_NONE;
+		m_prevSkillType = TYPE_NONE;
+		m_rotateDir = new RotateDir();
 
 		RENDER->LoadImageFiles(TEXT("Idle_Up"), TEXT("Image/Monster/Player/Idle/Up/Up"), TEXT("png"), 1);
 		RENDER->LoadImageFiles(TEXT("Idle_Down"), TEXT("Image/Monster/Player/Idle/Down/Down"), TEXT("png"), 1);
@@ -26,6 +34,8 @@ public:
 		RENDER->LoadImageFiles(TEXT("Run_Down"), TEXT("Image/Monster/Player/Run/Down/Down"), TEXT("png"), 3);
 		RENDER->LoadImageFiles(TEXT("Run_Left"), TEXT("Image/Monster/Player/Run/Left/Left"), TEXT("png"), 3);
 		RENDER->LoadImageFiles(TEXT("Run_Right"), TEXT("Image/Monster/Player/Run/Right/Right"), TEXT("png"), 3);
+
+		RENDER->LoadImageFiles(TEXT("Attribute_Water"), TEXT("Image/Magic/Circle/Blue/Circle_Blue_"), TEXT("png"), 8);
 	}
 
 	void Update(float deltaTime)
@@ -34,10 +44,14 @@ public:
 		{
 		case CHARACTER_IDLE: IdleState(); break;
 		case CHARACTER_RUN: RunState(deltaTime); break;
+		case CHARACTER_CAST_ATTRIBUTE: CastingAttributeState(deltaTime); break;
+		case CHARACTER_CAST_TYPE: CastingTypeState(deltaTime); break;
+		case CHARACTER_CAST_END: EndCastingState(deltaTime); break;
 		}
 		Get_Dir_state();
 		
 		Animation()->Update(deltaTime);
+		m_rotateDir->Update(deltaTime);
 	}
 
 	void Draw(Camera* pCamera)
@@ -51,6 +65,8 @@ public:
 		pCamera->DrawLine(Position() + 15.0f, Position() + 15.0f + m_dir * 30, ColorF::Blue, 3);
 		//Camera* pMapCamera = RENDER->GetCamera(CAM_MAP);
 		//pMapCamera->DrawFilledRect(Collider().LeftTop(), Collider().size);
+
+		if(m_state == CHARACTER_CAST_ATTRIBUTE)pCamera->Draw(Animation()->Get(ATTRIBUTE_WATER)->GetSprite(), Position(), m_rotateDir->GetRotateDir());
 	}
 
 	void IdleState()
@@ -62,7 +78,7 @@ public:
 		case DIR_RIGHT: m_spriteState = IDLE_RIGHT; break;
 		case DIR_DOWN: m_spriteState = IDLE_DOWN; break;
 		}
-		if(INPUT->IsKeyPress('1'))OBJECT->CreateSkill(OBJECT->GetPlayer(), USER_PLAYER, FIRE_BOLT);
+
 		Animation()->Play(m_spriteState);
 		if (UI->Setting() == KEYBOARD)
 		{
@@ -75,12 +91,12 @@ public:
 		{
 			if(INPUT->IsMouseDown(MOUSE_LEFT)) { m_state = CHARACTER_RUN; }
 		}
-		
+		if (INPUT->IsKeyDown('E')) { m_state = CHARACTER_CAST_ATTRIBUTE; }
 	}
 
 	void RunState(float deltaTime)
 	{
-		if (INPUT->IsKeyDown('1'))OBJECT->CreateSkill(OBJECT->GetPlayer(), USER_PLAYER, FIRE_BOLT);
+		//cout << "dd" << endl;
 		if (UI->NotRun() == false)
 		{
 			switch (m_dirState)
@@ -139,9 +155,63 @@ public:
 					m_state = CHARACTER_IDLE;
 			}
 		}
-
+		if (INPUT->IsKeyDown('E')) { m_state = CHARACTER_CAST_ATTRIBUTE; }
 	}
 
+	void CastingAttributeState(float deltaTime)
+	{		
+		Animation()->Get(ATTRIBUTE_WATER)->Update(deltaTime);
 
+		cout << "속성 : " << (SKILL_LIST)(m_attribute + m_skillType) << endl;
+		if (INPUT->IsKeyDown('1'))m_prevAttribute = ATTRIBUTE_FIRE;
+		if (INPUT->IsKeyDown('2'))m_prevAttribute = ATTRIBUTE_WATER;
+		if (INPUT->IsKeyDown('3'))m_prevAttribute = ATTRIBUTE_ELECTRICITY;
+
+		if (INPUT->IsKeyDown('E')&&m_prevAttribute!=ATTRIBUTE_NONE) 
+		{ 
+			m_attribute = m_prevAttribute;
+			m_prevAttribute = ATTRIBUTE_NONE;
+			m_state = CHARACTER_CAST_TYPE;
+		}
+		
+		if (INPUT->IsKeyDown(VK_TAB)) 
+		{
+			m_attribute = ATTRIBUTE_NONE;
+			m_prevAttribute = ATTRIBUTE_NONE;
+			m_state = CHARACTER_IDLE; 
+		}
+	}
+
+	void CastingTypeState(float deltaTime)
+	{
+		cout << "타입 : " << (SKILL_LIST)(m_attribute + m_skillType) << endl;
+		if (INPUT->IsKeyDown('1'))m_prevSkillType = TYPE_BOLT;
+		if (INPUT->IsKeyDown('2'))m_prevSkillType = TYPE_SHIELD;
+		if (INPUT->IsKeyDown('3'))m_prevSkillType = TYPE_WALL;
+
+		if (INPUT->IsKeyDown('E') && m_prevSkillType != TYPE_NONE)
+		{
+			m_skillType = m_prevSkillType;
+			m_prevSkillType = TYPE_NONE;
+			m_state = CHARACTER_CAST_END;
+		}
+
+		if (INPUT->IsKeyDown(VK_TAB))
+		{
+			m_attribute = ATTRIBUTE_NONE;
+			m_prevSkillType = TYPE_NONE;
+			m_state = CHARACTER_IDLE;
+		}
+	}
+	void EndCastingState(float deltaTime)
+	{
+		
+		cout << "최종 스킬 : "<<(SKILL_LIST)(m_attribute + m_skillType) << endl;
+		OBJECT->CreateSkill(OBJECT->GetPlayer(), USER_PLAYER, Vector(), (SKILL_LIST)(m_attribute+m_skillType));
+		m_attribute = ATTRIBUTE_NONE;
+		m_skillType = TYPE_NONE;
+		m_state = CHARACTER_IDLE;		
+	}
+	
 
 };
