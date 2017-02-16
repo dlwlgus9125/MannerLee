@@ -34,6 +34,7 @@ public:
 		//OBJECT->CreateSkill(OBJECT->GetPlayer(), USER_PLAYER, Vector());
 
 		OBJECT->CreateMonster(OBJ_MONSTER, MONSTER_MINION_RED, Vector(600, 600), 30);
+		
 	}
 
 	void OnEnter()
@@ -69,6 +70,14 @@ public:
 
 	void OnUpdate(float deltaTime)
 	{
+		if (!OBJECT->GetSkillList().empty())
+		{
+			if (MATH->IsCollided(OBJECT->GetProps(OBJ_GROUND)->getCircle(), OBJECT->GetSkill(FIRE_BOLT)->getCircle()))
+			{
+				OBJECT->DestroySkill(OBJECT->GetSkill(FIRE_BOLT));
+			}
+		}
+	
 		m_cursor = INPUT->GetMousePos();
 		OBJECT->Update(deltaTime);
 		RENDER->GetCamera(CAM_MAIN)->SetCenterPos(OBJECT->GetPlayer()->Position());
@@ -117,6 +126,7 @@ public:
 				}
 
 			}
+		
 
 		}
 
