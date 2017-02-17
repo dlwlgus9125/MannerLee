@@ -3,7 +3,7 @@
 #include "RenderManager.h"
 #include "Math.h"
 #include "InputManager.h"
-
+#include "UIManager.h"
 #define SKILL 
 
 //단위벡터 회전
@@ -52,21 +52,30 @@ class Skill : public Object
 
 	Circle m_Circle;
 	Magic* m_Magic;
-	int ExtraTime;
+	int m_Timer;
 	bool m_isComplete;
 public:
 	Skill(Object* pCharacter, SKILL_USER id, SKILL_LIST name) : Object(id)
 	{
+		
+		
 		m_Magic = new Magic(name);
+		m_Timer = m_Magic->GetTime()*60;
 		m_skillUser = id;
 		m_pcharacter = pCharacter;
-		m_dir = pCharacter->GetDir();
 		m_pos = pCharacter->Position();
+		m_dir = m_pcharacter->GetDir();
+		Vector targetPos = RENDER->GetCamera(CAM_MAIN)->ScreenToWorldPos(INPUT->GetMousePos());
+		if (id == USER_PLAYER&&UI->Setting()==MOUSE)
+		{
+			m_dir = (targetPos - m_pos).Normalize();
+		}
+		
 		m_isComplete = false;
 		switch (name)
 		{
 		case FIRE_BOLT:      case WATER_BOLT:   case ELECTRICITY_BOLT:      m_skillState = STATE_BOLT;      break;
-		case FIRE_WALL:      case WATER_WALL:   case ELECTRICITY_WALL:      m_skillState = STATE_WALL;      break;
+		case FIRE_WALL:      case WATER_WALL:   case ELECTRICITY_WALL:		m_pos = targetPos;   m_skillState = STATE_WALL;      break;
 		case FIRE_SHIELD:   case WATER_SHIELD:   case ELECTRICITY_SHIELD:   m_skillState = STATE_SHIELD;   break;
 		}
 
@@ -75,7 +84,6 @@ public:
 		RENDER->LoadImageFiles(TEXT("Fire_Bolt"), TEXT("Image/Magic/Fire/Bolt/Bolt"), TEXT("png"), 11);
 		RENDER->LoadImageFiles(TEXT("Attribute_Water"), TEXT("Image/Magic/Circle/Blue/Circle_Blue_"), TEXT("png"), 8);
 		SOUND->LoadFile("Explosion1", "Sound/Effect/Explosion1.wav", false);
-		ExtraTime = 1;
 	}
 
 
@@ -92,11 +100,12 @@ public:
 		case MONSTER_ATTACK:   MonsterAttack(deltaTime);   break;
 		}
 		m_rotateDir->Update(deltaTime);
-		SetSkllTimer(deltaTime);
+		SetTimer();
 	}
 
 	void Draw(Camera* pCamera)
 	{
+		
 
 		ColorF color = ColorF::GhostWhite;
 		Vector rotateDir = m_rotateDir->GetRotateDir();
@@ -107,9 +116,9 @@ public:
 		{
 		case SKILL_NONE:                                       break;
 		case FIRE_BOLT:               pCamera->Draw(Animation()->Current()->GetSprite(), m_pos, m_dir);  
-			pCamera->DrawCircle(m_Circle.center, m_Circle.radius, ColorF::Red, 2.0f); break;
-		case FIRE_WALL:               pCamera->DrawFillCircle(m_pos, 100, ColorF::Blue);   break;
-		case FIRE_SHIELD:            pCamera->DrawCircle(m_pos, 150, ColorF::Yellow, 2);   break;
+										pCamera->DrawCircle(m_Circle.center, m_Circle.radius, ColorF::Red, 2.0f); break;
+		case FIRE_WALL:               pCamera->DrawFillCircle(m_pos, 300, ColorF::Blue);   break;
+		case FIRE_SHIELD:            pCamera->DrawCircle(m_pos, 100, ColorF::Yellow, 2);   break;
 		case WATER_BOLT:                                       break;
 		case WATER_WALL:                                       break;
 		case WATER_SHIELD:                                       break;
@@ -121,33 +130,35 @@ public:
 
 	}
 
-	void AttributeMatch(Magic* B)
+	void AttributeMatch(Object* MagicB)
 	{
+		Magic* B = MagicB->GetMagic();
+
 		switch (m_Magic->GetAttribute())
 		{
 		case ATTRIBUTE_FIRE:
-			if (B->GetAttribute() == ATTRIBUTE_WATER)         B->SetDamage(0);
-			else if (B->GetAttribute() == ATTRIBUTE_ELECTRICITY)this->m_Magic->SetDamage(0);   break;
+			if (B->GetAttribute() == ATTRIBUTE_WATER)        MagicB->SetTimer(-1000);
+			else if (B->GetAttribute() == ATTRIBUTE_ELECTRICITY)this->SetTimer(-1000);   break;
 		case ATTRIBUTE_WATER:
-			if (B->GetAttribute() == ATTRIBUTE_FIRE)         B->SetDamage(0);
-			else if (B->GetAttribute() == ATTRIBUTE_ELECTRICITY)this->m_Magic->SetDamage(0);   break;
+			if (B->GetAttribute() == ATTRIBUTE_FIRE)        MagicB->SetTimer(-1000);
+			else if (B->GetAttribute() == ATTRIBUTE_ELECTRICITY)this->SetTimer(-1000);   break;
 		case ATTRIBUTE_ELECTRICITY:
-			if (B->GetAttribute() == ATTRIBUTE_WATER)         B->SetDamage(0);
-			else if (B->GetAttribute() == ATTRIBUTE_FIRE)this->m_Magic->SetDamage(0);   break;
+			if (B->GetAttribute() == ATTRIBUTE_WATER)         MagicB->SetTimer(-1000);
+			else if (B->GetAttribute() == ATTRIBUTE_FIRE)this->SetTimer(-1000);   break;
 		}
 	}
 	void BoltState(float deltaTime)
 	{
 		Animation()->Play(m_Magic->GetSkillName());
 		m_pos += m_dir*deltaTime*m_Magic->GetSpeed();
-		this->SetCollider(m_pos, 100);
+		this->SetCollider(m_pos, 10);
 		if (IsGroundCollided())
 		{
 			RENDER->GetCamera(CAM_MAIN)->SetIsWaveTrue();
 			m_isComplete = true;
 			m_Magic->SetTIme(0);
 		}
-		if (IsMonsterCollided() ||IsPlayerCollided())
+		if (IsMonsterCollided()||IsPlayerCollided())
 		{
 			RENDER->GetCamera(CAM_MAIN)->SetIsWaveTrue();
 			ColliedWithCharacter();
@@ -157,20 +168,18 @@ public:
 		{
 			ColliedWithSkill(isSkillCollided());
 		}
-		//   if (m_Magic->GetTime() <= 0)m_skillState = STATE_VANISH;
+		if(m_Timer<=0) m_isComplete = true;
 
 	}
 
 	void WallState(float deltaTime)
 	{
-		Animation()->Play(m_Magic->GetSkillName());
-
-		Vector movedPos = m_pcharacter->Position() + m_dir*m_Magic->GetSpeed();;
-		this->SetCollider(m_pos, 200);
-		if (IsGroundCollided())m_pos = GroundPush(movedPos);
+		//Animation()->Play(m_Magic->GetSkillName());
 		
+		
+		if (m_Timer <= 0) m_isComplete = true;
 
-		else m_pos = m_pcharacter->Position() + m_dir*m_Magic->GetSpeed();
+		this->SetCollider(m_pos, 20);
 
 		if (IsMonsterCollided() || IsPlayerCollided())
 		{
@@ -182,49 +191,35 @@ public:
 			ColliedWithSkill(isSkillCollided());
 		}
 
-		if (m_Magic->GetTime() <= 0)
+		if (IsGroundCollided())
 		{
-			delete m_Magic;
-			OBJECT->DestroySkill(this);
-		}
 
+		}
+		
 
 	}
 
 	void ShieldState(float deltaTime)
 	{
-		Animation()->Play(m_Magic->GetSkillName());
-		this->SetPosition(m_pcharacter->Position());
+		//Animation()->Play(m_Magic->GetSkillName());
+		m_pos = m_pcharacter->Position();
 		this->SetCollider(m_pos, 100);
 		if (isSkillCollided() != NULL)
 		{
 			ColliedWithSkill(isSkillCollided());
 		}
 
-		if (m_Magic->GetTime() <= 0)
-		{
-			delete m_Magic;
-			OBJECT->DestroySkill(this);
-		}
 
+		if (m_Timer <= 0) m_isComplete = true;
 
-	}
-
-	void SetExtratime(float time)
-	{
-		this->ExtraTime -= time;
 	}
 
 	void VanishState(float deltaTime)
 	{
 		Animation()->Play(m_Magic->GetSkillName());
 
-		SetExtratime(deltaTime);
-		if (ExtraTime < 0)
-		{
-			delete m_Magic;
-			OBJECT->DestroySkill(this);
-		}
+	
+		
 	}
 
 	void MonsterAttack(float delTatime)
@@ -260,25 +255,31 @@ public:
 	void ColliedWithSkill(Object* B)
 	{
 
-		AttributeMatch(B->GetMagic());
+		AttributeMatch(B);
 
 
 		m_Magic->SetLife(-B->GetMagic()->GetDamage());
+		B->GetMagic()->SetLife(m_Magic->GetDamage());
+
+		if (m_Magic->GetSkillType() == TYPE_SHIELD&&B->GetMagic()->GetSkillType() == TYPE_BOLT)
+		{
+			B->GetMagic()->SetLife(-100);
+		}
 
 		if (m_Magic->GetLife() <= 0)
 		{
-			m_Magic->SetTIme(0);
+			this->SetTimer(-100);
 		}
 
 		if (B->GetMagic()->GetLife() <= 0)
 		{
-			B->GetMagic()->SetTIme(0);
+			B->SetTimer(-100);
 		}
 	}
 
 	void SetSkllTimer(float deltatime)
 	{
-		this->m_Magic->SetTimer(-deltatime * 60);
+		this->m_Magic->SetTimer(deltatime);
 	}
 
 	bool IsGroundCollided()
@@ -361,6 +362,8 @@ public:
 	{
 		m_Circle = Circle(center, radius);
 	}
-
-	
+	void SetTimer(float num = 1)
+	{
+		m_Timer -= num;
+	}
 };

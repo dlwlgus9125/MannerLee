@@ -109,6 +109,7 @@ public:
 		{
 			if (INPUT->IsMouseDown(MOUSE_LEFT)) { m_state = CHARACTER_RUN; }
 		}
+		if (INPUT->IsMouseDown(MOUSE_RIGHT))OBJECT->CreateSkill(OBJECT->GetPlayer(), USER_PLAYER, FIRE_BOLT);
 		if (INPUT->IsKeyDown('E')) { m_state = CHARACTER_CAST_ATTRIBUTE; }
 	}
 

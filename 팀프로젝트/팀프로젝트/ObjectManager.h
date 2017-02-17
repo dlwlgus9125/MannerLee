@@ -52,6 +52,7 @@ public:
 	virtual void SetLife(float damage) {}
 	virtual float MaxLife(){return 0.0f;}
 	virtual float GetLife(){return 0.0f;}
+	virtual void SetTimer(float time){}
 	Object(){}
 };
 
