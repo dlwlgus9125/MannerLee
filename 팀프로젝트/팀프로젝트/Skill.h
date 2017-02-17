@@ -75,7 +75,7 @@ public:
 		switch (name)
 		{
 		case FIRE_BOLT:      case WATER_BOLT:   case ELECTRICITY_BOLT:      m_skillState = STATE_BOLT;      break;
-		case FIRE_WALL:      case WATER_WALL:   case ELECTRICITY_WALL:   m_pos = targetPos;   m_skillState = STATE_WALL;      break;
+		case FIRE_WALL:      case WATER_WALL:   case ELECTRICITY_WALL:		m_pos = targetPos;   m_skillState = STATE_WALL;      break;
 		case FIRE_SHIELD:   case WATER_SHIELD:   case ELECTRICITY_SHIELD:   m_skillState = STATE_SHIELD;   break;
 		}
 
@@ -117,9 +117,9 @@ public:
 		{
 		case SKILL_NONE:                                       break;
 		case FIRE_BOLT:               pCamera->Draw(Animation()->Current()->GetSprite(), m_pos, m_dir);  
-			pCamera->DrawCircle(m_Circle.center, m_Circle.radius, ColorF::Red, 2.0f); break;
+										pCamera->DrawCircle(m_Circle.center, m_Circle.radius, ColorF::Red, 2.0f); break;
 		case FIRE_WALL:               pCamera->DrawFillCircle(m_pos, 300, ColorF::Blue);   break;
-		case FIRE_SHIELD:            pCamera->DrawCircle(m_pos, 300, ColorF::Yellow, 2);   break;
+		case FIRE_SHIELD:            pCamera->DrawCircle(m_pos, 100, ColorF::Yellow, 2);   break;
 		case WATER_BOLT:                                       break;
 		case WATER_WALL:                                       break;
 		case WATER_SHIELD:                                       break;
@@ -152,7 +152,7 @@ public:
 	{
 		Animation()->Play(m_Magic->GetSkillName());
 		m_pos += m_dir*deltaTime*m_Magic->GetSpeed();
-		this->SetCollider(m_pos, 20);
+		this->SetCollider(m_pos, 10);
 		if (IsGroundCollided())
 		{
 			m_isComplete = true;
@@ -190,7 +190,10 @@ public:
 			ColliedWithSkill(isSkillCollided());
 		}
 
-		if (IsGroundCollided());
+		if (IsGroundCollided())
+		{
+
+		}
 		
 
 	}
@@ -199,7 +202,7 @@ public:
 	{
 		//Animation()->Play(m_Magic->GetSkillName());
 		m_pos = m_pcharacter->Position();
-		this->SetCollider(m_pos, 500);
+		this->SetCollider(m_pos, 100);
 		if (isSkillCollided() != NULL)
 		{
 			ColliedWithSkill(isSkillCollided());
