@@ -22,7 +22,7 @@ public:
 		m_state = CHARACTER_IDLE;
 		m_dir = (Vector::Down()+Vector::Right()).Normalize();
 		m_speed = 300;
-		m_life = 800;
+		
 		m_maxLife = 1000;
 
 	}

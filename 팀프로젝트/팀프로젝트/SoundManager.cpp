@@ -99,3 +99,15 @@ Channel*  SoundManager::FindChannel(string key)
 	}
 	return NULL;
 }
+
+Channel*  SoundManager::FindNullChannel()
+{
+	list<Channel*>::iterator it;
+	for (it = m_channels.begin(); it != m_channels.end(); it++)
+	{
+		Sound* pCurrentSound;
+		(*it)->getCurrentSound(&pCurrentSound);
+		if (pCurrentSound == NULL) return (*it);
+	}
+	return NULL;
+}

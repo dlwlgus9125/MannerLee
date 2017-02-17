@@ -74,7 +74,7 @@ public:
 
 		RENDER->LoadImageFiles(TEXT("Fire_Bolt"), TEXT("Image/Magic/Fire/Bolt/Bolt"), TEXT("png"), 11);
 		RENDER->LoadImageFiles(TEXT("Attribute_Water"), TEXT("Image/Magic/Circle/Blue/Circle_Blue_"), TEXT("png"), 8);
-
+		SOUND->LoadFile("Explosion1", "Sound/Effect/Explosion1.wav", false);
 		ExtraTime = 1;
 	}
 
@@ -143,11 +143,13 @@ public:
 		this->SetCollider(m_pos, 100);
 		if (IsGroundCollided())
 		{
+			RENDER->GetCamera(CAM_MAIN)->SetIsWaveTrue();
 			m_isComplete = true;
 			m_Magic->SetTIme(0);
 		}
 		if (IsMonsterCollided() ||IsPlayerCollided())
 		{
+			RENDER->GetCamera(CAM_MAIN)->SetIsWaveTrue();
 			ColliedWithCharacter();
 			m_isComplete = true;			
 		}
@@ -243,12 +245,14 @@ public:
 				if (MATH->IsCollided(this->getCircle(), (*it)->getCircle()))
 				{
 					cout << "Ãæµ¹" << endl;
+					SOUND->Play("Explosion1", 2.0f);
 					(*it)->SetLife(-this->m_Magic->GetDamage());
 				}
 			}
 		}
 		else if (m_skillUser != USER_PLAYER)
 		{
+			//SOUND->Play("Explosion1", 2.0f);
 			OBJECT->GetPlayer()->SetLife(this->m_Magic->GetDamage());
 		}
 	}
@@ -284,6 +288,7 @@ public:
 		{
 			if (MATH->IsCollided(this->getCircle(), (*it)->Collider()))
 			{
+				SOUND->Play("Explosion1", 2.0f);
 				return true;
 			}
 		}
@@ -299,6 +304,7 @@ public:
 			{
 				if (MATH->IsCollided(this->getCircle(), (*it)->getCircle()))
 				{
+					SOUND->Play("Explosion1", 2.0f);
 					OBJECT->DestroyMonster((*it));
 					return true;
 				}
@@ -313,6 +319,7 @@ public:
 		{
 			if (MATH->IsCollided(this->getCircle(), OBJECT->GetPlayer()->getCircle()))
 			{
+				SOUND->Play("Explosion1", 2.0f);
 				return true;
 			}
 		}
@@ -355,4 +362,5 @@ public:
 		m_Circle = Circle(center, radius);
 	}
 
+	
 };
