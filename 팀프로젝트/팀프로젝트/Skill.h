@@ -66,7 +66,7 @@ public:
 		m_pos = pCharacter->Position();
 		m_dir = m_pcharacter->GetDir();
 		Vector targetPos = RENDER->GetCamera(CAM_MAIN)->ScreenToWorldPos(INPUT->GetMousePos());
-		if (id == USER_PLAYER&&UI->Setting()==MOUSE)
+		if (id == USER_PLAYER)
 		{
 			m_dir = (targetPos - m_pos).Normalize();
 		}
@@ -149,7 +149,7 @@ public:
 	}
 	void BoltState(float deltaTime)
 	{
-		Animation()->Play(m_Magic->GetSkillName());
+		//Animation()->Play(m_Magic->GetSkillName());
 		m_pos += m_dir*deltaTime*m_Magic->GetSpeed();
 		this->SetCollider(m_pos, 10);
 		if (IsGroundCollided())

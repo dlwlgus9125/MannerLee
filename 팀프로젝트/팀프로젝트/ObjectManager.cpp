@@ -21,11 +21,24 @@ void ObjectManager::CreatePlayer(Vector pos, float colRadius)
 	m_pPlayer->Animation()->Register(RUN_RIGHT, new Animation(TEXT("Run_Right"), 3, 5, true, 2.0f));
 	m_pPlayer->Animation()->Register(RUN_DOWN, new Animation(TEXT("Run_Down"), 3, 5, true, 2.0f));
 
-	m_pPlayer->Animation()->Register(ATTRIBUTE_NONE, new Animation(TEXT("Attribute_None"), 8, 10, true, 0.7f));
-	m_pPlayer->Animation()->Register(ATTRIBUTE_FIRE, new Animation(TEXT("Attribute_Fire"), 8, 10, true, 0.7f));
-	m_pPlayer->Animation()->Register(ATTRIBUTE_WATER, new Animation(TEXT("Attribute_Water"), 8, 10, true, 0.7f));
-	m_pPlayer->Animation()->Register(ATTRIBUTE_ELECTRICITY, new Animation(TEXT("Attribute_Electricity"), 8, 10, true, 0.7f));
+	m_pPlayer->Animation()->Register(ATTRIBUTE_NONE, new Animation(TEXT("Attribute_None"), 8, 10, true, 0.3f));
+	m_pPlayer->Animation()->Register(ATTRIBUTE_FIRE, new Animation(TEXT("Attribute_Fire"), 8, 10, true, 0.3f));
+	m_pPlayer->Animation()->Register(ATTRIBUTE_WATER, new Animation(TEXT("Attribute_Water"), 8, 10, true, 0.3f));
+	m_pPlayer->Animation()->Register(ATTRIBUTE_ELECTRICITY, new Animation(TEXT("Attribute_Electricity"), 8, 10, true, 0.3f));
 
+	m_pPlayer->Animation()->Register(RUNE_FIRE, new Animation(TEXT("Rune_Fire"), 7, 10, true, 0.3f));
+	m_pPlayer->Animation()->Register(RUNE_ICE, new Animation(TEXT("Rune_Ice"), 7, 10, true, 0.3f));
+	m_pPlayer->Animation()->Register(RUNE_ELECTRICITY, new Animation(TEXT("Rune_Electricity"), 7, 10, true, 0.3f));
+	m_pPlayer->Animation()->Register(RUNE_BOLT, new Animation(TEXT("Rune_Bolt"), 7, 10, true, 0.3f));
+	m_pPlayer->Animation()->Register(RUNE_SHIELD, new Animation(TEXT("Rune_Shield"), 7, 10, true, 0.3f));
+	m_pPlayer->Animation()->Register(RUNE_WALL, new Animation(TEXT("Rune_Wall"), 7, 10, true, 0.3f));
+
+	m_pPlayer->Animation()->Register(CORRECT_FIRE, new Animation(TEXT("Correct_Fire"), 1, 10, true, 0.3f));
+	m_pPlayer->Animation()->Register(CORRECT_ICE, new Animation(TEXT("Correct_Ice"), 1, 10, true, 0.3f));
+	m_pPlayer->Animation()->Register(CORRECT_ELECTRICITY, new Animation(TEXT("Correct_Electricity"), 1, 10, true, 0.3f));
+	m_pPlayer->Animation()->Register(CORRECT_BOLT, new Animation(TEXT("Correct_Bolt"), 1, 10, true, 0.3f));
+	m_pPlayer->Animation()->Register(CORRECT_SHIELD, new Animation(TEXT("Correct_Shield"), 1, 10, true, 0.3f));
+	m_pPlayer->Animation()->Register(CORRECT_WALL, new Animation(TEXT("Correct_Wall"), 1, 10, true, 0.3f));
 }
 
 void ObjectManager::DestroyPlayer()

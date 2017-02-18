@@ -245,7 +245,7 @@ public:
 
 		m_waveTimer += pattern;
 		
-		if (m_waveTimer >= 3)
+		if (m_waveTimer >= 4)
 		{
 			
 			m_isWave = false;
