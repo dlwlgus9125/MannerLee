@@ -80,7 +80,14 @@ public:
 				
 				if (MATH->Distance(OBJECT->GetPlayer()->Position(), m_pos) <= 300.0f&&m_timer->CheckTime(2))
 				{
-					OBJECT->CreateSkill(this, USER_MINION, FIRE_BOLT);
+					SKILL_LIST name;
+					switch (m_kind)
+					{
+					case MONSTER_MINION_RED: name = FIRE_BOLT; break;
+					case MONSTER_MINION_BLUE: name = WATER_BOLT; break;
+					case MONSTER_MINION_YELLOW: name = ELECTRICITY_BOLT; break;
+					}
+					OBJECT->CreateSkill(this, USER_MINION, name);
 				}
 			}
 

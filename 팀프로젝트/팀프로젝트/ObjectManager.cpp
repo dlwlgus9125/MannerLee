@@ -55,7 +55,6 @@ void ObjectManager::CreateMonster(int id, MONSTER_KIND kind, Vector pos, float c
 	monster->SetStandPosition();
 	monster->SetMonsterKind(kind);
 
-	TCHAR Address[200] = {};
 	TCHAR Kind[100] = {};
 	TCHAR Directory[100] = {};
 	
@@ -65,24 +64,26 @@ void ObjectManager::CreateMonster(int id, MONSTER_KIND kind, Vector pos, float c
 	case MONSTER_MINION_BLUE:wsprintf(Kind, TEXT("WaterMinion")); break;
 
 	}
-	wsprintf(Directory, TEXT("%sMinion_Idle_Up_"), Kind);
+	wsprintf(Directory, TEXT("%s/Minion_Idle_Up"), Kind);
 	monster->Animation()->Register(MINION_IDLE_UP +kind, new Animation(Directory, 1, 10, true, 2.0f));
-	wsprintf(Directory, TEXT("%Minion_Idle_Left"), Kind);
+	wsprintf(Directory, TEXT("%s/Minion_Idle_Left"), Kind);
 	monster->Animation()->Register(MINION_IDLE_LEFT + kind, new Animation(Directory, 1, 10, true, 2.0f));
-	wsprintf(Directory, TEXT("%Minion_Idle_Right"), Kind);
+	wsprintf(Directory, TEXT("%s/Minion_Idle_Right"), Kind);
 	monster->Animation()->Register(MINION_IDLE_RIGHT + kind, new Animation(Directory, 1, 10, true, 2.0f));
-	wsprintf(Directory, TEXT("%Minion_Idle_Down"), Kind);
+	wsprintf(Directory, TEXT("%s/Minion_Idle_Down"), Kind);
 	monster->Animation()->Register(MINION_IDLE_DOWN + kind, new Animation(Directory, 1, 10, true, 2.0f));
 
-	wsprintf(Directory, TEXT("%Minion_Run_Up"), Kind);
+	wsprintf(Directory, TEXT("%s/Minion_Run_Up"), Kind);
 	monster->Animation()->Register(MINION_RUN_UP + kind, new Animation(Directory, 3, 5, true, 2.0f));
-	wsprintf(Directory, TEXT("%Minion_Run_Left"), Kind);
+	wsprintf(Directory, TEXT("%s/Minion_Run_Left"), Kind);
 	monster->Animation()->Register(MINION_RUN_LEFT + kind, new Animation(Directory, 3, 5, true, 2.0f));
-	wsprintf(Directory, TEXT("%Minion_Run_Right"), Kind);
+	wsprintf(Directory, TEXT("%s/Minion_Run_Right"), Kind);
 	monster->Animation()->Register(MINION_RUN_RIGHT + kind, new Animation(Directory, 3, 5, true, 2.0f));
-	wsprintf(Directory, TEXT("%Minion_Run_Down"), Kind);
+	wsprintf(Directory, TEXT("%s/Minion_Run_Down"), Kind);
 	monster->Animation()->Register(MINION_RUN_DOWN + kind, new Animation(Directory, 3, 5, true, 2.0f));
 
+	
+	
 	m_monsterList.push_back(monster);
 }
 
@@ -227,36 +228,36 @@ void ObjectManager::LoadingMonsterImage()
 	TCHAR Directory[100] = {};
 	for (int i = 1; i < 3; i++)
 	{
-		if (i == 1)wsprintf(Kind, TEXT("FireMinion")); break;
-		if (i == 2)wsprintf(Kind, TEXT("WaterMinion")); break;
+		if (i == 1)wsprintf(Kind, TEXT("FireMinion")); 
+		if (i == 2)wsprintf(Kind, TEXT("WaterMinion")); 
 
 
 
 		wsprintf(Address, TEXT("Image/Monster/%s/Idle/Up/Up"), Kind);
-		wsprintf(Directory, TEXT("%sMinion_Idle_Up_"), Kind);
+		wsprintf(Directory, TEXT("%s/Minion_Idle_Up"), Kind);
 		RENDER->LoadImageFiles(Directory, Address, TEXT("png"), 1);
 		wsprintf(Address, TEXT("Image/Monster/%s/Idle/Down/Down"), Kind);
-		wsprintf(Directory, TEXT("%sMinion_Idle_Down"), Kind);
+		wsprintf(Directory, TEXT("%s/Minion_Idle_Down"), Kind);
 		RENDER->LoadImageFiles(Directory, Address, TEXT("png"), 1);
 		wsprintf(Address, TEXT("Image/Monster/%s/Idle/Left/Left"), Kind);
-		wsprintf(Directory, TEXT("%sMinion_Idle_Down"), Kind);
+		wsprintf(Directory, TEXT("%s/Minion_Idle_Left"), Kind);
 		RENDER->LoadImageFiles(Directory, Address, TEXT("png"), 1);
 		wsprintf(Address, TEXT("Image/Monster/%s/Idle/Right/Right"), Kind);
-		wsprintf(Directory, TEXT("%Minion_Idle_Right"), Kind);
+		wsprintf(Directory, TEXT("%s/Minion_Idle_Right"), Kind);
 		RENDER->LoadImageFiles(Directory, Address, TEXT("png"), 1);
 
 
 		wsprintf(Address, TEXT("Image/Monster/%s/Run/Up/Up"), Kind);
-		wsprintf(Directory, TEXT("%Minion_Run_Up"), Kind);
+		wsprintf(Directory, TEXT("%s/Minion_Run_Up"), Kind);
 		RENDER->LoadImageFiles(Directory, Address, TEXT("png"), 3);
 		wsprintf(Address, TEXT("Image/Monster/%s/Run/Down/Down"), Kind);
-		wsprintf(Directory, TEXT("%Minion_Run_Down"), Kind);
+		wsprintf(Directory, TEXT("%s/Minion_Run_Down"), Kind);
 		RENDER->LoadImageFiles(Directory, Address, TEXT("png"), 3);
 		wsprintf(Address, TEXT("Image/Monster/%s/Run/Left/Left"), Kind);
-		wsprintf(Directory, TEXT("%Minion_Run_Left"), Kind);
+		wsprintf(Directory, TEXT("%s/Minion_Run_Left"), Kind);
 		RENDER->LoadImageFiles(Directory, Address, TEXT("png"), 3);
 		wsprintf(Address, TEXT("Image/Monster/%s/Run/Right/Right"), Kind);
-		wsprintf(Directory, TEXT("%Minion_Run_Right"), Kind);
+		wsprintf(Directory, TEXT("%s/Minion_Run_Right"), Kind);
 		RENDER->LoadImageFiles(Directory, Address, TEXT("png"), 3);
 
 	}
