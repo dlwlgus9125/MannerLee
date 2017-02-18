@@ -40,6 +40,8 @@ public:
 		m_RuneRight = RUNE_NONE;
 		m_correct = CORRECT_NONE;
 
+		OBJECT->LoadingMonsterImage();
+
 		RENDER->LoadImageFiles(TEXT("Idle_Up"), TEXT("Image/Monster/Player/Idle/Up/Up"), TEXT("png"), 1);
 		RENDER->LoadImageFiles(TEXT("Idle_Down"), TEXT("Image/Monster/Player/Idle/Down/Down"), TEXT("png"), 1);
 		RENDER->LoadImageFiles(TEXT("Idle_Left"), TEXT("Image/Monster/Player/Idle/Left/Left"), TEXT("png"), 1);
@@ -68,7 +70,6 @@ public:
 		RENDER->LoadImageFiles(TEXT("Correct_Bolt"), TEXT("Image/Magic/CorrectType/Bolt"), TEXT("png"), 1);
 		RENDER->LoadImageFiles(TEXT("Correct_Shield"), TEXT("Image/Magic/CorrectType/Shield"), TEXT("png"), 1);
 		RENDER->LoadImageFiles(TEXT("Correct_Wall"), TEXT("Image/Magic/CorrectType/Wall"), TEXT("png"), 1);
-
 		SOUND->LoadFile("Death", "Sound/Effect/Death.wav", false);
 
 		SOUND->LoadFile("FireCast", "Sound/Cast/FireCast.wav", false);
@@ -103,6 +104,8 @@ public:
 
 	void Draw(Camera* pCamera)
 	{
+		
+		
 		if (IsHideToWall())Animation()->Current()->GetSprite()->SetOpacity(0.5f);
 		pCamera->Draw(Animation()->Current()->GetSprite(), Position());
 		//pCamera->DrawCircle(getCircle().center, getCircle().radius, ColorF::Red, 2.0f);
@@ -113,12 +116,12 @@ public:
 
 		if (m_state == CHARACTER_CAST_ATTRIBUTE || m_state == CHARACTER_CAST_TYPE || m_state == CHARACTER_CAST_END)
 		{
-			pCamera->Draw(Animation()->Get(m_attribute)->GetSprite(), RENDER->GetCamera(CAM_MAIN)->ScreenToWorldPos(INPUT->GetMousePos()), m_rotateDir->GetRotateDir());
-			pCamera->Draw(Animation()->Get(RUNE_FIRE)->GetSprite(), Position() + (m_rotateDir->GetRotateDir()*65.0f), Vector::Right(), 0.5f);
+			pCamera->Draw(Animation()->Get(m_attribute)->GetSprite(), Position(), m_rotateDir->GetRotateDir());
+			pCamera->Draw(Animation()->Get(RUNE_FIRE)->GetSprite(), Position() + (m_rotateDir->GetRotateDir()*90.0f), Vector::Right(), 0.5f);
 		}
-		if (m_state == CHARACTER_CAST_TYPE || m_state == CHARACTER_CAST_END)pCamera->Draw(Animation()->Get(RUNE_BOLT)->GetSprite(), Position() + (m_rotateDir->GetRotateDir()*-65.0f), Vector::Right(), 0.5f);
+		if (m_state == CHARACTER_CAST_TYPE || m_state == CHARACTER_CAST_END)pCamera->Draw(Animation()->Get(RUNE_BOLT)->GetSprite(), Position() + (m_rotateDir->GetRotateDir()*-90.0f), Vector::Right(), 0.5f);
 
-		if (m_correct != CORRECT_NONE)pCamera->Draw(Animation()->Get(m_correct)->GetSprite(), Position() + Vector(0, -100), Vector::Right(), 0.001f);
+		if (m_correct != CORRECT_NONE&&m_state!=CHARACTER_IDLE)pCamera->Draw(Animation()->Get(m_correct)->GetSprite(), Position() + Vector(0, -100), Vector::Right(), 0.5f);
 
 		//pCamera->Draw(Animation()->Get(RUNE_FIRE)->GetSprite(), Position() + ((Vector(m_rotateDir->GetRotateDir().y, -m_rotateDir->GetRotateDir().x))*65.0f));
 		//pCamera->Draw(Animation()->Get(RUNE_FIRE)->GetSprite(), Position() + ((Vector(m_rotateDir->GetRotateDir().y, -m_rotateDir->GetRotateDir().x))*-65.0f));
@@ -147,7 +150,7 @@ public:
 			if (INPUT->IsMouseDown(MOUSE_RIGHT)) { m_state = CHARACTER_RUN; }
 		}
 		//if (INPUT->IsMouseDown(MOUSE_LEFT))OBJECT->CreateSkill(OBJECT->GetPlayer(), USER_PLAYER, FIRE_BOLT);
-		if (INPUT->IsKeyDown('1') || INPUT->IsKeyDown('2') || INPUT->IsKeyDown('3')) { m_state = CHARACTER_CAST_ATTRIBUTE; m_correct = CORRECT_FIRE;
+		if (INPUT->IsKeyDown('1') || INPUT->IsKeyDown('2') || INPUT->IsKeyDown('3')) { m_state = CHARACTER_CAST_ATTRIBUTE; m_correct = CORRECT_ICE;
 		}
 	}
 
@@ -270,14 +273,11 @@ public:
 				else
 				{
 					m_dir = (m_targetPos - movedPos).Normalize();
-					//cout << m_targetPos.x << ", " << m_targetPos.y << endl;
-					cout << m_dir.x << ", " << m_dir.y << endl;
 					movedPos += m_dir * m_speed * deltaTime;
 
 				}
 				if (IsGroundCollided())movedPos = GroundPush(movedPos);
 				if (MATH->SqrDistance(m_targetPos, movedPos) >= 30.0f)this->SetPosition(movedPos);
-
 			}
 
 			else
@@ -294,7 +294,7 @@ public:
 				this->SetPosition(movedPos);
 			}
 
-			if (MATH->SqrDistance(prevPos, movedPos) == 0)
+			if (MATH->SqrDistance(prevPos, movedPos) >= 30)
 			{
 				m_state = CHARACTER_IDLE;
 			}

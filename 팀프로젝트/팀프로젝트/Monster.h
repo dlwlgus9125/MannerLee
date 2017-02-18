@@ -21,7 +21,6 @@ public:
 
 	void Update(float deltaTime)
 	{
-		LoadingMonsterImage();
 		switch (m_state)
 		{
 		case CHARACTER_IDLE: IdleState(); break;
@@ -38,10 +37,10 @@ public:
 	{
 		switch (m_dirState)
 		{
-		case DIR_UP: m_spriteState = MINION_IDLE_UP; break;
-		case DIR_LEFT: m_spriteState = MINION_IDLE_LEFT; break;
-		case DIR_RIGHT: m_spriteState = MINION_IDLE_RIGHT; break;
-		case DIR_DOWN: m_spriteState = MINION_IDLE_DOWN; break;
+		case DIR_UP: m_spriteState = MINION_IDLE_UP + m_kind; break;
+		case DIR_LEFT: m_spriteState = MINION_IDLE_LEFT + m_kind; break;
+		case DIR_RIGHT: m_spriteState = MINION_IDLE_RIGHT + m_kind; break;
+		case DIR_DOWN: m_spriteState = MINION_IDLE_DOWN + m_kind; break;
 		}
 		Animation()->Play(m_spriteState);
 		if (MATH->IsCollided(OBJECT->GetPlayer()->getCircle(), m_sightRange))
@@ -56,10 +55,10 @@ public:
 
 		switch (m_dirState)
 		{
-		case DIR_UP: m_spriteState = MINION_RUN_UP; break;
-		case DIR_LEFT: m_spriteState = MINION_RUN_LEFT; break;
-		case DIR_RIGHT: m_spriteState = MINION_RUN_RIGHT; break;
-		case DIR_DOWN: m_spriteState = MINION_RUN_DOWN; break;
+		case DIR_UP: m_spriteState = MINION_RUN_UP + m_kind; break;
+		case DIR_LEFT: m_spriteState = MINION_RUN_LEFT + m_kind; break;
+		case DIR_RIGHT: m_spriteState = MINION_RUN_RIGHT + m_kind; break;
+		case DIR_DOWN: m_spriteState = MINION_RUN_DOWN + m_kind; break;
 		}
 
 
@@ -68,8 +67,8 @@ public:
 		if (MATH->IsCollided(OBJECT->GetPlayer()->getCircle(), m_sightRange))
 		{
 
-			//if (SOUND->FindChannel("IntroBgm") != NULL)SOUND->Pause("IntroBgm");
-			//if (SOUND->FindChannel("Boss1Bgm") == NULL) { SOUND->Play("Boss1Bgm", 1.0f); }
+			if (SOUND->FindChannel("IntroBgm") != NULL)SOUND->Pause("IntroBgm");
+			if (SOUND->FindChannel("Boss1Bgm") == NULL) { SOUND->Play("Boss1Bgm", 1.0f); }
 
 
 			FowardToTargetPos(OBJECT->GetPlayer()->Position(), deltaTime);
@@ -98,8 +97,8 @@ public:
 				m_state = CHARACTER_IDLE;
 			}
 
-					//if (SOUND->FindChannel("IntroBgm") != NULL)SOUND->Resume("IntroBgm");
-					//if (SOUND->FindChannel("Boss1Bgm") != NULL)SOUND->Stop("Boss1Bgm");
+					if (SOUND->FindChannel("IntroBgm") != NULL)SOUND->Resume("IntroBgm");
+					if (SOUND->FindChannel("Boss1Bgm") != NULL)SOUND->Stop("Boss1Bgm");
 
 		}
 	}
@@ -149,39 +148,5 @@ public:
 		m_kind = kind;
 	}
 
-	void LoadingMonsterImage()
-	{
-		TCHAR Address[200] = {};
-		TCHAR Kind[100] = {};
-		switch (m_kind)
-		{
-		case MONSTER_MINION_RED:wsprintf(Kind, TEXT("FireMinion")); break;
 
-		}
-
-
-		wsprintf(Address, TEXT("Image/Monster/%s/Idle/Up/Up"), Kind);
-		RENDER->LoadImageFiles(TEXT("Minion_Idle_Up"), Address, TEXT("png"), 1);
-		wsprintf(Address, TEXT("Image/Monster/%s/Idle/Down/Down"), Kind);
-		RENDER->LoadImageFiles(TEXT("Minion_Idle_Down"), Address, TEXT("png"), 1);
-		wsprintf(Address, TEXT("Image/Monster/%s/Idle/Left/Left"), Kind);
-		RENDER->LoadImageFiles(TEXT("Minion_Idle_Left"), Address, TEXT("png"), 1);
-		wsprintf(Address, TEXT("Image/Monster/%s/Idle/Right/Right"), Kind);
-		RENDER->LoadImageFiles(TEXT("Minion_Idle_Right"), Address, TEXT("png"), 1);
-
-		wsprintf(Address, TEXT("Image/Monster/%s/Run/Up/Up"), Kind);
-		RENDER->LoadImageFiles(TEXT("Minion_Run_Up"), Address, TEXT("png"), 3);
-		wsprintf(Address, TEXT("Image/Monster/%s/Run/Down/Down"), Kind);
-		RENDER->LoadImageFiles(TEXT("Minion_Run_Down"), Address, TEXT("png"), 3);
-		wsprintf(Address, TEXT("Image/Monster/%s/Run/Left/Left"), Kind);
-		RENDER->LoadImageFiles(TEXT("Minion_Run_Left"), Address, TEXT("png"), 3);
-		wsprintf(Address, TEXT("Image/Monster/%s/Run/Right/Right"), Kind);
-		RENDER->LoadImageFiles(TEXT("Minion_Run_Right"), Address, TEXT("png"), 3);
-
-
-
-
-
-
-	}
 };

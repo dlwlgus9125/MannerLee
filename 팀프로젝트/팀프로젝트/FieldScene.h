@@ -23,12 +23,12 @@ public:
 		SOUND->LoadFile("IntroBgm", "Sound/Intro.wav", true);
 		SOUND->LoadFile("Boss1Bgm", "Sound/Boss1.wav", true);
 		SOUND->LoadFile("PotionEffect", "Sound/Effect/PotionSound.wav", false);
-
+		
 
 		OBJECT->CreatePlayer(Vector(600, 800), 30);
 		//OBJECT->CreateSkill(OBJECT->GetPlayer(), USER_PLAYER, Vector());
 
-		OBJECT->CreateMonster(OBJ_MONSTER, MONSTER_MINION_RED, Vector(600, 600), 30);
+		OBJECT->CreateMonster(OBJ_MONSTER, MONSTER_MINION_BLUE, Vector(600, 600), 30);
 		
 	}
 
@@ -36,7 +36,7 @@ public:
 	{
 		NEW_OBJECT(m_pBg, Sprite(RENDER->GetImage(TEXT("BossCastle")), 2.0f, 0, 0));
 		//m_pBg->SetSize(860 * 2.0f, 1100 * 2.0f);
-		//SOUND->Play("IntroBgm", 0.5f);
+		SOUND->Play("IntroBgm", 0.5f);
 		//RENDER->GetCamera(CAM_MAP)->SetScreenRect(0, 0, 200, 200);
 
 		OBJECT->CreateProps(OBJ_GROUND, Vector(320, 370)*1.33f, Vector(100, 670)*1.33f);
@@ -63,11 +63,10 @@ public:
 
 	void OnUpdate(float deltaTime)
 	{
-		
-	
 		m_cursor = INPUT->GetMousePos();
 		OBJECT->Update(deltaTime);
 		RENDER->GetCamera(CAM_MAIN)->SetCenterPos(OBJECT->GetPlayer()->Position());
+		
 	
 		if (INPUT->IsKeyDown(VK_TAB))RENDER->GetCamera(CAM_MAIN)->SetIsWaveTrue();
 		if (RENDER->GetCamera(CAM_MAIN)->GetIsWave())
@@ -133,7 +132,7 @@ public:
 
 	void OnExit()
 	{
-		/*SOUND->Stop("IntroBgm");*/
+		SOUND->Stop("IntroBgm");
 		OBJECT->DestroyAllProps();
 		DELETE_OBJECT(m_pBg);
 	}
