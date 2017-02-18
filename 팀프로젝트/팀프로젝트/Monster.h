@@ -68,8 +68,8 @@ public:
 		if (MATH->IsCollided(OBJECT->GetPlayer()->getCircle(), m_sightRange))
 		{
 
-			if (SOUND->FindChannel("IntroBgm") != NULL)SOUND->Pause("IntroBgm");
-			if (SOUND->FindChannel("Boss1Bgm") == NULL) { SOUND->Play("Boss1Bgm", 1.0f); }
+			//if (SOUND->FindChannel("IntroBgm") != NULL)SOUND->Pause("IntroBgm");
+			//if (SOUND->FindChannel("Boss1Bgm") == NULL) { SOUND->Play("Boss1Bgm", 1.0f); }
 
 
 			FowardToTargetPos(OBJECT->GetPlayer()->Position(), deltaTime);
@@ -98,8 +98,8 @@ public:
 				m_state = CHARACTER_IDLE;
 			}
 
-					if (SOUND->FindChannel("IntroBgm") != NULL)SOUND->Resume("IntroBgm");
-					if (SOUND->FindChannel("Boss1Bgm") != NULL)SOUND->Stop("Boss1Bgm");
+					//if (SOUND->FindChannel("IntroBgm") != NULL)SOUND->Resume("IntroBgm");
+					//if (SOUND->FindChannel("Boss1Bgm") != NULL)SOUND->Stop("Boss1Bgm");
 
 		}
 	}

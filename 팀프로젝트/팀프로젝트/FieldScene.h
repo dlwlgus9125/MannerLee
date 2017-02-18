@@ -7,7 +7,6 @@
 #include "Common.h"
 
 
-
 class FieldScene : public IScene
 {
 	Sprite* m_pBg;
@@ -35,11 +34,9 @@ public:
 
 	void OnEnter()
 	{
-		NEW_OBJECT(m_pBg, Sprite(RENDER->GetImage(TEXT("BossCastle")), 1.0f, 0, 0));
-		m_pBg->SetSize(860 * 2.0f, 1100 * 2.0f);
-		SOUND->Play("IntroBgm", 0.5f);
-
-		RENDER->GetCamera(CAM_MAIN)->SetScreenRect(0, 0, 800, 600);
+		NEW_OBJECT(m_pBg, Sprite(RENDER->GetImage(TEXT("BossCastle")), 2.0f, 0, 0));
+		//m_pBg->SetSize(860 * 2.0f, 1100 * 2.0f);
+		//SOUND->Play("IntroBgm", 0.5f);
 		//RENDER->GetCamera(CAM_MAP)->SetScreenRect(0, 0, 200, 200);
 
 		OBJECT->CreateProps(OBJ_GROUND, Vector(320, 370)*1.33f, Vector(100, 670)*1.33f);

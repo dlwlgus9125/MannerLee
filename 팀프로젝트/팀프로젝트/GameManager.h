@@ -7,6 +7,8 @@
 #include "SoundManager.h"
 #include "SceneManager.h"
 #include "FieldScene.h"
+#include "TestScene.h"
+#include "DungeonScene.h"
 
 
 #define GAME GameManager::Instance()
@@ -28,6 +30,7 @@ public:
 
 	static LRESULT CALLBACK GameManager::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	{
+
 		switch (msg)
 		{
 		case WM_PAINT:

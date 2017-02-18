@@ -88,6 +88,7 @@ void ObjectManager::CreateProps(int id, Vector pos, Vector size, float angle)
 	NEW_OBJECT(Object* props, Prop(id));
 	props->SetPosition(pos);
 	props->SetCollider(size, angle);
+
 	m_propsList.push_back(props);
 }
 

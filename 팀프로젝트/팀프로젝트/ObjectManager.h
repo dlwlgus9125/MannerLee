@@ -79,10 +79,12 @@ public:
 		m_collider.SetAngle(angle);
 	}
 
+
 	void Draw(Camera* pCamera) 
 	{
 		if(this->ID()==OBJ_GROUND)pCamera->DrawRect(m_collider.LeftTop(), Vector(m_collider.size.x, m_collider.size.y), ColorF::Red, 2);
 		if (this->ID() == OBJ_HIDE)pCamera->DrawRect(m_collider.LeftTop(), Vector(m_collider.size.x, m_collider.size.y), ColorF::Blue, 2);
+
 	}
 
 };
