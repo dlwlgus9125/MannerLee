@@ -46,11 +46,11 @@
     <Filter Include="소스 파일\Manager\Object\Character">
       <UniqueIdentifier>{084084e3-81f2-4a78-830c-b488769b5fb1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\Manager\UI">
-      <UniqueIdentifier>{05b62d21-ebfd-46eb-9cf6-2c3735b2542b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="소스 파일\Manager\Sound">
       <UniqueIdentifier>{59743ab9-6ad5-43aa-a2a5-a195c394f62a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Manager\UI">
+      <UniqueIdentifier>{05b62d21-ebfd-46eb-9cf6-2c3735b2542b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -139,6 +139,12 @@
     </ClInclude>
     <ClInclude Include="SoundManager.h">
       <Filter>소스 파일\Manager\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="DungeonScene.h">
+      <Filter>소스 파일\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="TestScene.h">
+      <Filter>소스 파일\Scene</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -206,6 +206,21 @@ public:
 	{
 		m_screenRect = RectF(x, y, x + width, y + height);
 	}
+
+	void Init(ID2D1BitmapRenderTarget* pBitmapTarget, float sizeX, float sizeY)
+	{
+		m_pBitmapTarget = pBitmapTarget;
+		m_pBitmapTarget->BeginDraw();
+		m_pBitmapTarget->Clear(ColorF(0, 0, 0, 0));
+		m_pBitmapTarget->EndDraw();
+		m_size = Vector(sizeX, sizeY);
+		m_opacity = 1.0f;
+		m_isWave = false;
+		m_wavePower = 20;
+		SetCenterPos(Vector(0, 0));
+		SetScreenRect(0.0f, 0.0f, sizeX, sizeY);
+	}
+
 	void SetCenterPos(Vector center)
 	{
 		
@@ -397,6 +412,13 @@ public:
 		m_pRenderTarget->CreateCompatibleRenderTarget(D2D1::SizeF(maxSizeX, maxSizeY), &pCameraTarget);
 		m_cameras[tag] = new Camera(pCameraTarget, sizeX, sizeY);
 		return m_cameras[tag];
+	}
+
+	void SetChange(int tag, float maxSizeX, float maxSizeY, float sizeX, float sizeY)
+	{
+		ID2D1BitmapRenderTarget* pCameraTarget = NULL;
+		m_pRenderTarget->CreateCompatibleRenderTarget(D2D1::SizeF(maxSizeX, maxSizeY), &pCameraTarget);
+		GetCamera(tag)->Init(pCameraTarget, sizeX, sizeY);
 	}
 
 	Camera* GetCamera(int tag)
