@@ -22,8 +22,8 @@ public:
 		m_state = CHARACTER_IDLE;
 		m_dir = (Vector::Down()+Vector::Right()).Normalize();
 		m_speed = 300;
-		m_life = 1000;
-		m_maxLife = m_life;
+		
+		m_maxLife = 1000;
 
 	}
 
@@ -40,6 +40,7 @@ public:
 	void SetLife(float damage)
 	{
 		m_life -= damage;
+		MATH->Clamp(m_life, 0.0f, m_maxLife);
 	}
 
 	void SetCharacterCollider(float radius) 
@@ -48,6 +49,7 @@ public:
 		m_circle.radius = radius;
 	}
 	Circle getCircle() { return m_circle; }
+
 	virtual void SetPosition(Vector pos) 
 	{ 
 		this->m_pos = pos;
@@ -114,9 +116,12 @@ public:
 		m_dir = Vector::Zero();
 
 		m_dir = (targetPos - movedPos).Normalize();
-		movedPos += m_dir * m_speed * deltaTime;
-		if (IsGroundCollided())movedPos = GroundPush(movedPos);
-		this->SetPosition(movedPos);
+		if (MATH->Distance(targetPos, movedPos) >= 200.0f)
+		{
+			movedPos += m_dir * m_speed * deltaTime;
+			if (IsGroundCollided())movedPos = GroundPush(movedPos);
+			this->SetPosition(movedPos);
+		}
 	}
 	void Get_Dir_state()
 	{

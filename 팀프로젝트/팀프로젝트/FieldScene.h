@@ -10,25 +10,26 @@
 class FieldScene : public IScene
 {
 	Sprite* m_pBg;
-	float MaxHp;
-	float CurrentHp;
 	Vector SkillSize;
 	Vector m_cursor;// 커서 위치
 
 public:
 	FieldScene()
 	{
-		MaxHp = 1000.0f;
-		CurrentHp = 800.0f;
-		
-		RENDER->SetChange(CAM_MAIN, 860 * 2.0f, 1100 * 2.0f, VIEW_WIDTH, VIEW_HEIGHT);
+		RENDER->CreateCamera(CAM_MAIN, 860 * 2.0f, 1100 * 2.0f, VIEW_WIDTH, VIEW_HEIGHT);
+		//RENDER->CreateCamera(CAM_MAP, 2000, 3000, 3000, 1000);
+
 		RENDER->LoadImageFile(TEXT("BossCastle"), TEXT("Image/Boss.png"));
-		//SOUND->LoadFile("IntroBgm", "Sound/Intro.wav", true);
-		//SOUND->LoadFile("Boss1Bgm", "Sound/Boss1.wav", true);
-		//SOUND->LoadFile("Explosion1", "Sound/Effect/Explosion1.wav", false);
+		SOUND->LoadFile("IntroBgm", "Sound/Intro.wav", true);
+		SOUND->LoadFile("Boss1Bgm", "Sound/Boss1.wav", true);
+		SOUND->LoadFile("PotionEffect", "Sound/Effect/PotionSound.wav", false);
+
+
+		OBJECT->CreatePlayer(Vector(600, 800), 30);
 		//OBJECT->CreateSkill(OBJECT->GetPlayer(), USER_PLAYER, Vector());
 
 		OBJECT->CreateMonster(OBJ_MONSTER, MONSTER_MINION_RED, Vector(600, 600), 30);
+		
 	}
 
 	void OnEnter()
@@ -62,6 +63,8 @@ public:
 
 	void OnUpdate(float deltaTime)
 	{
+		
+	
 		m_cursor = INPUT->GetMousePos();
 		OBJECT->Update(deltaTime);
 		RENDER->GetCamera(CAM_MAIN)->SetCenterPos(OBJECT->GetPlayer()->Position());
@@ -76,8 +79,9 @@ public:
 		{
 			if (MATH->IsCollided(m_cursor, Vector(634, 10), Vector(690, 63))) //포션
 			{
-
-				CurrentHp += UI->EatPotion();
+				cout << "test" << endl;
+				SOUND->Play("PotionEffect", 1.0f);
+				OBJECT->GetPlayer()->SetLife(-UI->EatPotion());
 				UI->SetNotRun(true);
 			}
 
@@ -110,6 +114,7 @@ public:
 				}
 
 			}
+		
 
 		}
 
@@ -117,8 +122,8 @@ public:
 		{
 			UI->SetNotRun(false);
 		}
-		//if (INPUT->IsKeyPress(VK_LEFT)) CurrentHp -= 8;
-		//if (INPUT->IsKeyPress(VK_RIGHT)) CurrentHp += 8;
+		if (INPUT->IsKeyPress(VK_LEFT)) OBJECT->GetPlayer()->SetLife(10);
+		if (INPUT->IsKeyPress(VK_RIGHT)) OBJECT->GetPlayer()->SetLife(-10);
 
 
 
@@ -139,9 +144,11 @@ public:
 		//	Camera* pMapCamera = RENDER->GetCamera(CAM_MAP);
 		//	pMapCamera->Draw(m_pBg, Vector(0, 0));
 
-		UI->Draw(MaxHp, CurrentHp);
+		UI->Draw(OBJECT->GetPlayer()->MaxLife(), OBJECT->GetPlayer()->GetLife());
 		UI->DrawSetting();
 		pMainCamera->Draw(m_pBg, Vector(0, 0));
 		OBJECT->Draw(pMainCamera);
 	}
+
+
 };

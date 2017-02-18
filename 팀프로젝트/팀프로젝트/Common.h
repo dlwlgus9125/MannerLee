@@ -42,7 +42,7 @@ enum SCENE_TAG
 enum CHARACTER_STATE
 {
 	CHARACTER_NONE, CHARACTER_IDLE, CHARACTER_RUN,  
-	CHARACTER_HIT, CHARACTER_CAST_ATTRIBUTE, CHARACTER_CAST_TYPE, CHARACTER_CAST_END,
+	CHARACTER_HIT, CHARACTER_CAST_ATTRIBUTE, CHARACTER_CAST_TYPE, CHARACTER_CAST_END, CHARACTER_DEATH, 
 };
 
 enum SPRITE_STATE
@@ -65,7 +65,7 @@ enum DIR_STATE
 
 enum MONSTER_KIND
 {
-	MONSTER_MINION_RED, MONSTER_BOSS,
+	MONSTER_MINION_RED=11, MONSTER_BOSS,
 };
 
 enum OBJ_TAG
@@ -94,10 +94,72 @@ enum SKILL_LIST
 
 enum SKILL_STATE
 {
-	STATE_ATTRIBUTE ,STATE_TYPE, STATE_BOLT,STATE_WALL,STATE_SHIELD, MONSTER_ATTACK, STATE_START, STATE_IDLE,
+	STATE_ATTRIBUTE ,STATE_TYPE, STATE_BOLT,STATE_WALL,STATE_SHIELD, MONSTER_ATTACK, STATE_START, STATE_IDLE,STATE_VANISH,
 };
 
 enum SKILL_USER
 {
 	USER_PLAYER, USER_MINION,
+};
+
+class Magic
+{
+	SKILL_LIST m_name;
+
+	float m_damage;
+	float m_speed;
+	float m_time;
+	float m_life;
+
+	SKILL_TYPE m_type;
+	SKILL_ATTRIBUTE m_attribute;
+
+
+
+public:
+	Magic(SKILL_LIST name)
+	{
+		m_name = name;
+		SetSkillStatus(name);
+	}
+
+	void SetSkillStatus(SKILL_LIST name)
+	{
+		switch (name)
+		{
+		case FIRE_BOLT:			SetSkillStatus(300, 100, 3, 1, ATTRIBUTE_FIRE, TYPE_BOLT);					break;
+		case FIRE_WALL:			SetSkillStatus(300, 300, 4, 1000, ATTRIBUTE_FIRE, TYPE_WALL);				break;
+		case FIRE_SHIELD:		SetSkillStatus(300, 1, 5, 500, ATTRIBUTE_FIRE, TYPE_SHIELD);				break;
+		case WATER_BOLT:		SetSkillStatus(300, 150, 2, 1, ATTRIBUTE_WATER, TYPE_BOLT);				break;
+		case WATER_WALL:		SetSkillStatus(300, 300, 4, 1000, ATTRIBUTE_WATER, TYPE_WALL);				break;
+		case WATER_SHIELD:		SetSkillStatus(300, 1, 5, 500, ATTRIBUTE_WATER, TYPE_SHIELD);				break;
+		case ELECTRICITY_BOLT:	SetSkillStatus(300, 150, 2, 1, ATTRIBUTE_ELECTRICITY, TYPE_BOLT);			break;
+		case ELECTRICITY_WALL:	SetSkillStatus(300, 300, 4, 1000, ATTRIBUTE_ELECTRICITY, TYPE_WALL);		break;
+		case ELECTRICITY_SHIELD:SetSkillStatus(300, 1, 5, 500, ATTRIBUTE_ELECTRICITY, TYPE_SHIELD);			break;
+		}
+	}
+	
+	void SetSkillStatus(float damage,float speed,float time,float life,SKILL_ATTRIBUTE attribute,SKILL_TYPE type)
+	{
+		this->m_damage = damage;
+		this->m_speed = speed;
+		this->m_time = time;
+		this->m_life = life;
+		this->m_attribute = attribute;
+		this->m_type = type;
+	}
+
+	SKILL_LIST GetSkillName() { return m_name; }
+	SKILL_ATTRIBUTE GetAttribute() { return m_attribute; }
+	SKILL_TYPE GetSkillType() { return m_type; }
+
+	float GetDamage() { return m_damage; }
+	float GetSpeed() { return m_speed; }
+	float GetTime() { return m_time; }
+	float GetLife() { return m_life; }
+
+	void SetDamage(float damage) { m_damage = damage; }
+	void SetLife(float life) { m_life += life; }
+	void SetTIme(float time) { m_time = time; }
+	void SetTimer(float time) { m_time += time; }
 };

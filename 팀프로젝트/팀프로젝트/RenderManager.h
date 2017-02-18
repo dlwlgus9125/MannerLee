@@ -177,7 +177,7 @@ class Camera
 	bool m_isWave;
 	int  m_wavePower;
 	int m_waveTimer;
-
+	int m_sound;
 public:
 	Camera(ID2D1BitmapRenderTarget* pBitmapTarget, float sizeX, float sizeY)
 	{
@@ -191,6 +191,8 @@ public:
 		m_wavePower = 20;
 		SetCenterPos(Vector(0, 0));
 		SetScreenRect(0.0f, 0.0f, sizeX, sizeY);
+		m_waveTimer = 0;
+		m_sound = 0;
 	}
 
 	Vector GetPos() { return m_center; }
@@ -233,21 +235,32 @@ public:
 
 	void ShakingCamera(int wavePower)
 	{
-		/*if (SOUND->FindChannel("Explosion1") == NULL) { SOUND->Play("Explosion1",2.0f); }*/
-		int pattern = (int)timeGetTime() / 5 % 30 % 2;
-		int waveCount1 = (int)timeGetTime() / 5 % 30 % 7;
+		TCHAR Explosion[100] = {};
+		TCHAR nextExplosion[100] = {};
+		
+		
+		string str;
+		string nextStr;
+		wstring wStr ;
+
+		
+		
+		
+		int pattern = timeGetTime() / 1000 % 60 % 2;
+		int waveCount1 = timeGetTime() / 5 % 30 % 7;
 		int waveCount2 = 7 - waveCount1;
-		cout << m_waveTimer << endl;
+		
 		
 		float wave1 = sin(waveCount1*1.0f) * powf(1.0f, waveCount1);
 		float wave2 = sin(waveCount2*1.0f) * powf(0.5f, waveCount2);
 		
 		if (pattern == 0)SetCenterPos(Vector(m_center.x + wave1 * wavePower, m_center.y + wave2 * wavePower));
 		if (pattern == 1)SetCenterPos(Vector(m_center.x + wave2 * wavePower, m_center.y + wave1 * wavePower));
-
+		
 
 		m_waveTimer += pattern;
-		if (m_waveTimer >= 10)
+		
+		if (m_waveTimer >= 3)
 		{
 			
 			m_isWave = false;

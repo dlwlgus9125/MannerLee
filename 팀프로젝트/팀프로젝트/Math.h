@@ -162,7 +162,6 @@ public:
 				prevTime = pattern;
 			}
 
-			std::cout << "시작아이디 : " << time << " 패턴 값 : " << pattern << " 타임체커기 : " << timeChecker << std::endl;
 			if (time <= timeChecker)
 			{
 				timeChecker = 0;

@@ -10,7 +10,7 @@
 //
 //
 //#define SOUND SoundManager::Instance()
-//#define SOUND_MAX_CHANNEL 10
+//#define SOUND_MAX_CHANNEL 20
 //
 //
 //class SoundManager : public Singleton<SoundManager>
@@ -38,6 +38,6 @@
 //
 //	void Resume(string key);
 //
-//
+//	Channel* FindNullChannel();
 //	Channel* FindChannel(string key);
 //};
