@@ -22,15 +22,28 @@ public:
 		RENDER->LoadImageFiles(TEXT("Eye_Blue"), TEXT("Image/Monster/Boss/BossBlueEyes/BlueEye"), TEXT("png"), 7);
 		RENDER->LoadImageFiles(TEXT("Eye_Red"), TEXT("Image/Monster/Boss/BossRedEyes/RedEye"), TEXT("png"), 7);
 		RENDER->LoadImageFiles(TEXT("Eye_Yellow"), TEXT("Image/Monster/Boss/BossYellowEyes/YellowEye"), TEXT("png"), 7);
+		RENDER->LoadImageFiles(TEXT("BossCircle_Blue"), TEXT("Image/Monster/Boss/BossBlueEyes/BlueEye"), TEXT("png"), 1);
+		RENDER->LoadImageFiles(TEXT("BossCircle_Red"), TEXT("Image/Monster/Boss/BossRedEyes/RedEye"), TEXT("png"), 1);
+		RENDER->LoadImageFiles(TEXT("BossCircle_Yellow"), TEXT("Image/Monster/Boss/BossYellowEyes/YellowEye"), TEXT("png"), 1);
 		m_dir = Vector::Down();
 		m_maxLife = 10000;
 
-		/*for (int i = 0; i < 5; i++)
+		/*for (int i = 0; i < 4; i++)
 		{
 			NEW_OBJECT(Object* m_pBossCircle, Boss(id));
-			m_pBossCircle->SetPosition(pos);
+			Vector circlePos = {};
+			switch (i)
+			{
+			case 0: circlePos = Vector(700, 450);
+			case 1: circlePos = Vector(570, 570);
+			case 2: circlePos = Vector(1050, 450);
+			case 3: circlePos = Vector(1150, 570);
+			}
 
 
+			m_pBossCircle->SetPosition(circlePos);
+
+			m_BossCircle.push_back(m_pBossCircle);
 		}*/
 
 
