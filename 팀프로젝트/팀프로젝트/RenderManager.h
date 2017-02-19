@@ -506,11 +506,12 @@ public:
 		return m_images[key];
 	}
 
-	void Draw(Sprite* pSprite, float x, float y)
+	void Draw(Sprite* pSprite, float x, float y, float opasity = 1.0f)
 	{
 		if (pSprite != NULL)
 		{
 			pSprite->SetPosition(x, y);
+			pSprite->SetOpacity(opasity);
 			m_queSprite.push(pSprite);
 		}
 	}

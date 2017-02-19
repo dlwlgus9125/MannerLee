@@ -69,7 +69,11 @@ public:
 	virtual void LoadingMonsterImage() {}
 	virtual EYE_STATE GetEyeState() { return EYE_GREEN; }
 	virtual MONSTER_KIND GetMonsterKind() { return (MONSTER_KIND)0; }
-
+	virtual void setIscome(bool ischeck) { }
+	virtual bool isComeBossMap() { return false;; }
+	virtual float getFadeOut() { return 0.0f; }
+	virtual void SetHavePotion(int have) { }
+	virtual int  getHavePotion() { return 0; }
 	bool IsGroundCollided()
 	{
 		list<Object*> groundList = OBJECT->GetPropsList(OBJ_GROUND);

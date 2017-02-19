@@ -19,7 +19,13 @@ class Player : public Character
 
 	Vector          m_targetPos;
 	int             m_circleGage;
-	float             m_checkGage;
+	float           m_checkGage;
+	int             m_havePotion;
+
+	bool m_isComeBossMap;
+
+public:
+	
 public:
 	Player(int id) : Character(id)
 	{
@@ -38,10 +44,11 @@ public:
 		m_targetPos = m_pos;
 		m_circleGage = 1;
 		m_checkGage = 1.0f;
+		m_havePotion = 0;
 		m_Rune = RUNE_NONE;
 		m_RuneType = RUNE_NONE;
 		m_correct = CORRECT_NONE;
-
+		m_isComeBossMap = false;
 		OBJECT->LoadingMonsterImage();
 
 		RENDER->LoadImageFiles(TEXT("Idle_Up"), TEXT("Image/Monster/Player/Idle/Up/Up"), TEXT("png"), 1);
@@ -113,7 +120,7 @@ public:
 
 		float opacity = 1.0f;
 		if (IsHideToWall())opacity = 0.5f;
-		pCamera->Draw(Animation()->Current()->GetSprite(), Position(), Vector::Right(), opacity);
+		pCamera->Draw(Animation()->Current()->GetSprite(), Position(), Vector::Right(), opacity - OBJECT->GetMonster(OBJ_BOSS)->getFadeOut());
 		//pCamera->DrawCircle(getCircle().center, getCircle().radius, ColorF::Red, 2.0f);
 		//pCamera->DrawFillCircle(Position(), 30, ColorF::Red);
 		pCamera->DrawLine(Position() + 15.0f, Position() + 15.0f + m_dir * 30, ColorF::Blue, 3);
@@ -295,9 +302,9 @@ public:
 
 			switch ((SKILL_LIST)(m_attribute + m_skillType))
 			{
-			case FIRE_BOLT: SOUND->Play("FireBoltShot", 2.0f);
-			case WATER_BOLT: SOUND->Play("WaterBoltShot", 2.0f);
-			case ELECTRICITY_BOLT: SOUND->Play("ElectBoltShot", 2.0f);
+			case FIRE_BOLT: SOUND->Play("FireBoltShot", 2.0f); break;
+			case WATER_BOLT: SOUND->Play("WaterBoltShot", 2.0f); break;
+			case ELECTRICITY_BOLT: SOUND->Play("ElectBoltShot", 2.0f); break;
 			}
 
 
@@ -315,7 +322,7 @@ public:
 	void  DeathState(float deltaTime)
 	{
 		RENDER->GetCamera(CAM_MAIN)->DrawFilledRect(RENDER->GetCamera(CAM_MAIN)->GetLeftTop(), Vector(800, 600));
-		//if (SOUND->FindChannel("Death") == NULL)SOUND->Play("Death", 2.0f);
+		
 	}
 
 	void Move(float deltaTime)
@@ -384,4 +391,9 @@ public:
 
 
 	}
+	void setIscome(bool ischeck) { m_isComeBossMap = ischeck; }
+	bool isComeBossMap() { return m_isComeBossMap; }
+
+	void SetHavePotion(int have) { m_havePotion += have; m_havePotion=MATH->Clamp(m_havePotion, 0, 9); }
+	int  getHavePotion() { return m_havePotion; }
 };

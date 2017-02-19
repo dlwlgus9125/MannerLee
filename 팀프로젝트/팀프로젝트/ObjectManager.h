@@ -57,6 +57,11 @@ public:
 	virtual void SetTimer(float time){}
 	virtual void SetIsComplete(){}
 	virtual EYE_STATE GetEyeState() { return EYE_GREEN; }
+	virtual void setIscome(bool ischeck) { }
+	virtual bool isComeBossMap() { return false;; }
+	virtual float getFadeOut() { return 0.0f; }
+	virtual void SetHavePotion(int have) {  }
+	virtual int  getHavePotion() { return 0; }
 	Object(){}
 };
 
@@ -88,7 +93,7 @@ public:
 	{
 		if(this->ID()==OBJ_GROUND)pCamera->DrawRect(m_collider.LeftTop(), Vector(m_collider.size.x, m_collider.size.y), ColorF::Red, 2);
 		if (this->ID() == OBJ_HIDE)pCamera->DrawRect(m_collider.LeftTop(), Vector(m_collider.size.x, m_collider.size.y), ColorF::Blue, 2);
-
+		if(this->ID()==OBJ_CHECKER)pCamera->DrawRect(m_collider.LeftTop(), Vector(m_collider.size.x, m_collider.size.y), ColorF::Green, 2);
 	}
 
 };
@@ -125,6 +130,15 @@ public:
 	Object* GetPlayer() { return m_pPlayer; }
 
 	list<Object*> GetMonsterList() { return m_monsterList; }
+
+	Object* GetMonster(int id)
+	{
+		FOR_LIST(Object*, m_monsterList)
+		{
+			if ((*it)->ID() == id) return (*it);
+		}
+		return NULL;
+	}
 
 	Object* GetProps(int id)
 	{

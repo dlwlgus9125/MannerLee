@@ -40,6 +40,8 @@ public:
 			if (MATH->IsCollided(m_cursor, Vector(465, 245), Vector(714, 316)))
 			{
 				NEW_OBJECT(m_Button, Sprite(RENDER->GetImage(TEXT("PLAY")), 1.0f, 0, 0));
+
+			
 				SCENE->ChangeScene(SCENE_DUNGEON);
 			}
 

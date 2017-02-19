@@ -23,9 +23,10 @@ public:
 		SOUND->LoadFile("IntroBgm", "Sound/Intro.wav", true);
 		SOUND->LoadFile("WarBgm", "Sound/WarBgm.wav", true);
 		SOUND->LoadFile("PotionEffect", "Sound/Effect/PotionSound.wav", false);
+		SOUND->LoadFile("BossVoice", "Sound/Effect/BossVoice.wav", false);
 		
-		OBJECT->CreateBoss(OBJ_BOSS, Vector(885, 400), 50);
-		OBJECT->CreatePlayer(Vector(600, 800), 30);
+		
+		OBJECT->CreatePlayer(Vector(600, 1000), 30);
 		//OBJECT->CreateSkill(OBJECT->GetPlayer(), USER_PLAYER, Vector());
 
 	/*	OBJECT->CreateMonster(OBJ_MONSTER, MONSTER_MINION_BLUE, Vector(600, 600), 30);
@@ -39,6 +40,7 @@ public:
 	{
 		NEW_OBJECT(m_pBg, Sprite(RENDER->GetImage(TEXT("BossCastle")), 2.0f, 0, 0));
 		//m_pBg->SetSize(860 * 2.0f, 1100 * 2.0f);
+		OBJECT->CreateBoss(OBJ_BOSS, Vector(885, 400), 50);
 		SOUND->Play("IntroBgm", 0.5f);
 		//RENDER->GetCamera(CAM_MAP)->SetScreenRect(0, 0, 200, 200);
 
@@ -61,11 +63,22 @@ public:
 		OBJECT->CreateProps(OBJ_HIDE, Vector(900, 840)*1.33f, Vector(10, 10)*1.33f);
 		OBJECT->CreateProps(OBJ_HIDE, Vector(970, 840)*1.33f, Vector(10, 10)*1.33f);
 		OBJECT->CreateProps(OBJ_HIDE, Vector(1045, 840)*1.33f, Vector(10, 10)*1.33f);
+
+		OBJECT->CreateProps(OBJ_CHECKER, Vector(885, 840), Vector(800,50));
 		//OBJECT->CreateProps(OBJ_GROUND, Vector(750, 1150), Vector(190, 230));
 	}
 
 	void OnUpdate(float deltaTime)
 	{
+		
+		if (MATH->IsCollided(OBJECT->GetPlayer()->getCircle(), OBJECT->GetProps(OBJ_CHECKER)->Collider())&&OBJECT->GetPlayer()->isComeBossMap() == false)
+		{
+			if (SOUND->FindChannel("BossVoice") == NULL&&OBJECT->GetPlayer()->isComeBossMap() == false)SOUND->Play("BossVoice", 2.0f);
+			OBJECT->GetPlayer()->setIscome(true);
+			cout << OBJECT->GetPlayer()->isComeBossMap() << endl;
+			OBJECT->CreateProps(OBJ_GROUND, Vector(885, 950), Vector(800, 50));
+		}
+		
 		m_cursor = INPUT->GetMousePos();
 		OBJECT->Update(deltaTime);
 		RENDER->GetCamera(CAM_MAIN)->SetCenterPos(OBJECT->GetPlayer()->Position());

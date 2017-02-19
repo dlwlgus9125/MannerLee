@@ -118,9 +118,9 @@ public:
 
 		switch (m_Magic->GetSkillType())
 		{
-		case TYPE_BOLT:               pCamera->Draw(Animation()->Current()->GetSprite(), m_pos, m_dir); 
+		case TYPE_BOLT:               pCamera->Draw(Animation()->Current()->GetSprite(), m_pos, m_dir, 1.0f-OBJECT->GetMonster(OBJ_BOSS)->getFadeOut());
 			                          pCamera->DrawCircle(m_Circle.center, m_Circle.radius, ColorF::Red, 2.0f); break;
-		default:pCamera->Draw(Animation()->Current()->GetSprite(), Position()); break;
+		default:pCamera->Draw(Animation()->Current()->GetSprite(), Position(), Vector::Right(), 1.0f-OBJECT->GetMonster(OBJ_BOSS)->getFadeOut()); break;
 		}
 
 
@@ -253,7 +253,7 @@ public:
 				if (MATH->IsCollided(this->getCircle(), (*it)->getCircle()))
 				{
 					cout << "Ãæµ¹" << endl;
-					(*it)->SetLife(-this->m_Magic->GetDamage());
+					(*it)->SetLife(this->m_Magic->GetDamage());
 				}
 			}
 		}
@@ -306,8 +306,12 @@ public:
 				if (MATH->IsCollided(this->getCircle(), (*it)->getCircle()) && checker == true)
 				{
 					if((*it)->ID()==OBJ_MONSTER)SOUND->Play("MonsterHit", 2.0f);
-					if ((*it)->ID()== OBJ_BOSS)SOUND->Play("BossHit", 2.0f);
-					if((*it)->GetLife()<=0&&(*it)->ID()!=OBJ_BOSS)OBJECT->DestroyMonster((*it));
+					if ((*it)->ID()== OBJ_BOSS&& (*it)->GetEyeState() != EYE_DEATH)SOUND->Play("BossHit", 2.0f);
+					if ((*it)->GetLife() <= 0 && (*it)->ID() != OBJ_BOSS)
+					{
+						OBJECT->CreateProps(OBJ_POTION, (*it)->Position(), Vector(10, 10));
+						OBJECT->DestroyMonster((*it));
+					}
 					return true;
 				}
 			}

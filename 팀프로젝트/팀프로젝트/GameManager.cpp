@@ -18,6 +18,7 @@ void GameManager::Init()
 	SCENE->Register(SCENE_DUNGEON, new DungeonScene());
 	SCENE->Register(SCENE_FEILD, new FieldScene());
 	SCENE->Register(SCENE_TEST, new TestScene());
+	SCENE->Register(SCENE_DEAD, new DeadScene());
 	SCENE->ChangeScene(SCENE_FEILD);
 
 	RENDER->LoadImageFiles(TEXT("Danger"), TEXT("Image/Danger"), TEXT("png"), 1);
@@ -87,9 +88,9 @@ void GameManager::Update()
 void GameManager::Render(HDC hdc)
 {
 	
-	RENDER->Render(hdc);
-	SCENE->Draw();
 	
+	SCENE->Draw();
+	RENDER->Render(hdc);
 }
 
 

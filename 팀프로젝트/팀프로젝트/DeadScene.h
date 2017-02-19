@@ -24,6 +24,7 @@ public:
 
 	void OnEnter()
 	{
+		if (SOUND->FindChannel("Death") == NULL)SOUND->Play("Death", 2.0f);
 	}
 
 	void OnUpdate(float deltaTime)

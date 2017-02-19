@@ -23,14 +23,16 @@ public:
 		RENDER->LoadImageFile(TEXT("Dungeon"), TEXT("Image/Map/Castle.png"));
 
 
-		OBJECT->CreatePlayer(Vector(620, 2000), 30);
+		
 		//OBJECT->CreateSkill(OBJECT->GetPlayer(), USER_PLAYER, Vector());
 
-		OBJECT->CreateMonster(OBJ_MONSTER, MONSTER_MINION_RED, Vector(620, 2000), 30);
+		
 	}
 
 	void OnEnter()
 	{
+		OBJECT->CreatePlayer(Vector(620, 2000), 30);
+		//OBJECT->CreateMonster(OBJ_MONSTER, MONSTER_MINION_RED, Vector(620, 2000), 30);
 		NEW_OBJECT(m_DungeonBg, Sprite(RENDER->GetImage(TEXT("Dungeon")), 1.0f, 0, 0));
 		m_DungeonBg->SetSize(1200, 3129);
 		if(SOUND->FindChannel("IntroBgm")==NULL)SOUND->Play("IntroBgm", 0.5f);
@@ -91,6 +93,7 @@ public:
 
 	void OnUpdate(float deltaTime)
 	{
+		
 		m_cursor = INPUT->GetMousePos();
 		OBJECT->Update(deltaTime);
 		RENDER->GetCamera(CAM_MAIN)->SetCenterPos(OBJECT->GetPlayer()->Position());
