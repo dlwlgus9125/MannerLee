@@ -212,10 +212,10 @@ public:
 			ColliedWithSkill(isSkillCollided());
 		}
 
-		if (IsGroundCollided() != false)
+		if (IsGroundCollided()!=false)
 		{
-
-
+			
+			
 		}
 
 
@@ -263,13 +263,38 @@ public:
 				{
 					if (this->GetMagic()->GetSkillType() == TYPE_WALL)
 					{
-						if (m_Timer == 240) { (*it)->SetLife(-this->m_Magic->GetDamage()); cout << "面倒" << endl; }
-						if (m_Timer == 180) { (*it)->SetLife(-this->m_Magic->GetDamage()); cout << "面倒" << endl; }
-						if (m_Timer == 120) { (*it)->SetLife(-this->m_Magic->GetDamage()); cout << "面倒" << endl; }
-						if (m_Timer == 60) { (*it)->SetLife(-this->m_Magic->GetDamage()); cout << "面倒" << endl; }
-						if (m_Timer == 1) { (*it)->SetLife(-this->m_Magic->GetDamage()); cout << "面倒" << endl; }
+						if (m_Timer == 240)
+						{ 
+							(*it)->SetLife(-this->m_Magic->GetDamage());
+							if ((*it)->GetLife() <= 0 && (*it)->ID() != OBJ_BOSS)OBJECT->DestroyMonster((*it));
+						}
+						if (m_Timer == 180)	
+						{ 
+							(*it)->SetLife(-this->m_Magic->GetDamage());
+							if ((*it)->GetLife() <= 0 && (*it)->ID() != OBJ_BOSS)OBJECT->DestroyMonster((*it));
+						}
+						if (m_Timer == 120)
+						{
+							(*it)->SetLife(-this->m_Magic->GetDamage());
+							if ((*it)->GetLife() <= 0 && (*it)->ID() != OBJ_BOSS)OBJECT->DestroyMonster((*it));
+						}
+						if (m_Timer == 60)	
+						{
+							
+							if ((*it)->GetLife() <= 0 && (*it)->ID() != OBJ_BOSS)OBJECT->DestroyMonster((*it));
+							(*it)->SetLife(-this->m_Magic->GetDamage());
+						}
+						if (m_Timer == 1)
+						{ 
+							if ((*it)->GetLife() <= 0 && (*it)->ID() != OBJ_BOSS)OBJECT->DestroyMonster((*it));
+							(*it)->SetLife(-this->m_Magic->GetDamage());
+						}
 					}
-					if (this->GetMagic()->GetSkillType() == TYPE_BOLT) { (*it)->SetLife(-this->m_Magic->GetDamage()); }
+					if (this->GetMagic()->GetSkillType() == TYPE_BOLT) 
+					{
+						if ((*it)->GetLife() <= 0 && (*it)->ID() != OBJ_BOSS)OBJECT->DestroyMonster((*it));
+						(*it)->SetLife(-this->m_Magic->GetDamage());
+					}
 				}
 			}
 		}
