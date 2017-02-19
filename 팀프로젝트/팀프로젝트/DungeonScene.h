@@ -31,13 +31,13 @@ public:
 
 	void OnEnter()
 	{
-		OBJECT->CreatePlayer(Vector(620, 2000), 30);
-		OBJECT->CreateMonster(OBJ_MONSTER, MONSTER_MINION_RED, Vector(500, 1500), 30);
+		OBJECT->CreatePlayer(Vector(620, 2200), 30);
+		/*OBJECT->CreateMonster(OBJ_MONSTER, MONSTER_MINION_RED, Vector(500, 1500), 30);
 		OBJECT->CreateMonster(OBJ_MONSTER, MONSTER_MINION_RED, Vector(730, 1500), 30);
 		OBJECT->CreateMonster(OBJ_MONSTER, MONSTER_MINION_YELLOW, Vector(500, 1250), 30);
 		OBJECT->CreateMonster(OBJ_MONSTER, MONSTER_MINION_YELLOW, Vector(730, 1250), 30);
 		OBJECT->CreateMonster(OBJ_MONSTER, MONSTER_MINION_BLUE, Vector(750, 800), 30);
-		OBJECT->CreateMonster(OBJ_MONSTER, MONSTER_MINION_BLUE, Vector(500, 800), 30);
+		OBJECT->CreateMonster(OBJ_MONSTER, MONSTER_MINION_BLUE, Vector(500, 800), 30);*/
 		NEW_OBJECT(m_DungeonBg, Sprite(RENDER->GetImage(TEXT("Dungeon")), 1.0f, 0, 0));
 		m_DungeonBg->SetSize(1200, 3129);
 		if (SOUND->FindChannel("IntroBgm") != NULL)SOUND->Stop("IntroBgm");
@@ -85,8 +85,9 @@ public:
 		OBJECT->CreateProps(OBJ_GROUND, Vector(311, 892), Vector(-50, -104));
 		OBJECT->CreateProps(OBJ_GROUND, Vector(313, 1354), Vector(-56, -105));
 		OBJECT->CreateProps(OBJ_GROUND, Vector(341, 2488), Vector(-47, -102));
+		OBJECT->CreateProps(OBJ_GROUND, Vector(880, 200), Vector(400, 100));
 
-
+		OBJECT->CreateProps(OBJ_GATE, Vector(880, 200), Vector(50, 100));
 		OBJECT->CreateProps(OBJ_HIDE, Vector(880, 658), Vector(-42, -301));
 		OBJECT->CreateProps(OBJ_HIDE, Vector(628, 2119), Vector(-133, -117));
 		OBJECT->CreateProps(OBJ_HIDE, Vector(623, 2115), Vector(-64, -57));
@@ -99,15 +100,19 @@ public:
 
 	void OnUpdate(float deltaTime)
 	{
-		cout << RENDER->GetCamera(CAM_MAIN)->ScreenToWorldPos(INPUT->GetMousePos()).x<<", "<< RENDER->GetCamera(CAM_MAIN)->ScreenToWorldPos(INPUT->GetMousePos()).y << endl;
+		//cout << RENDER->GetCamera(CAM_MAIN)->ScreenToWorldPos(INPUT->GetMousePos()).x<<", " << RENDER->GetCamera(CAM_MAIN)->ScreenToWorldPos(INPUT->GetMousePos()).y<< endl;
 		m_cursor = INPUT->GetMousePos();
 		OBJECT->Update(deltaTime);
 		RENDER->GetCamera(CAM_MAIN)->SetCenterPos(OBJECT->GetPlayer()->Position());
 
 		if (INPUT->IsKeyDown(VK_TAB))RENDER->GetCamera(CAM_MAIN)->SetIsWaveTrue();
-		if (RENDER->GetCamera(CAM_MAIN)->GetIsWave())
+		
+
+
+		if (MATH->IsCollided(OBJECT->GetPlayer()->getCircle(), OBJECT->GetProps(OBJ_GATE)->Collider()) )
 		{
-			RENDER->GetCamera(CAM_MAIN)->ShakingCamera(5);
+			if (SOUND->FindChannel("Stair") == NULL)SOUND->Play("Stair", 1.0f);
+			SCENE->ChangeScene(SCENE_FEILD);
 		}
 
 		if (INPUT->IsMouseDown(MOUSE_LEFT))

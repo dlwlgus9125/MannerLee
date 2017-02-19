@@ -15,7 +15,7 @@ class RotateDir
 	Vector m_dir;
 	float m_angle;
 	float m_rotateSpeed;
-	
+
 
 public:
 	RotateDir()
@@ -57,42 +57,42 @@ class Skill : public Object
 	int m_Timer;
 	bool  m_isComplete;
 	bool  m_isPlayerHit;
-	
+
 public:
-	Skill(Object* pCharacter, SKILL_USER id, SKILL_LIST name,int gage) : Object(id)
+	Skill(Object* pCharacter, SKILL_USER id, SKILL_LIST name, int gage) : Object(id)
 	{
-		
-		
+
+
 		m_Magic = new Magic(name);
-		m_Timer = m_Magic->GetTime()*60;
+		m_Timer = m_Magic->GetTime() * 60;
 		m_skillUser = id;
 		m_pcharacter = pCharacter;
-		
-	
-		
+
+
+
 		Vector targetPos = RENDER->GetCamera(CAM_MAIN)->ScreenToWorldPos(INPUT->GetMousePos());
-	
-	
+
+
 		m_pos = pCharacter->Position();
 		if (gage == 2)m_pos = m_pos + Vector(20, 20);
 		if (gage == 3)m_pos = m_pos - Vector(20, 20);
-		m_dir = m_pcharacter->GetDir();		
+		m_dir = m_pcharacter->GetDir();
 		if (id == USER_PLAYER)
 		{
 			m_dir = (targetPos - m_pos).Normalize();
 		}
 
-		
+
 
 		m_isComplete = false;
 		m_isPlayerHit = false;
 		switch (name)
 		{
 		case FIRE_BOLT:      case WATER_BOLT:   case ELECTRICITY_BOLT:      m_skillState = STATE_BOLT;      break;
-		case FIRE_WALL:      case WATER_WALL:   case ELECTRICITY_WALL:	
-			if (gage == 3)m_pos = targetPos+Vector(10, 20);
-			if (gage == 2)m_pos = targetPos-Vector(20, 10);
-			if(gage==1)m_pos = targetPos; m_skillState = STATE_WALL;
+		case FIRE_WALL:      case WATER_WALL:   case ELECTRICITY_WALL:
+			if (gage == 3)m_pos = targetPos + Vector(10, 20);
+			if (gage == 2)m_pos = targetPos - Vector(20, 10);
+			if (gage == 1)m_pos = targetPos; m_skillState = STATE_WALL;
 			break;
 
 		case FIRE_SHIELD:   case WATER_SHIELD:   case ELECTRICITY_SHIELD:   m_skillState = STATE_SHIELD;   break;
@@ -110,7 +110,7 @@ public:
 	void Update(float deltaTime)
 	{
 		Animation()->Update(deltaTime);
-		
+
 		switch (m_skillState)
 		{
 		case STATE_BOLT:      BoltState(deltaTime);      break;
@@ -125,18 +125,17 @@ public:
 
 	void Draw(Camera* pCamera)
 	{
-		if(m_isPlayerHit)pCamera->Draw(Animation()->Get(100)->GetSprite(), pCamera->GetLeftTop(), Vector::Right(), 0.3f);
+		if (m_isPlayerHit)pCamera->Draw(Animation()->Get(100)->GetSprite(), pCamera->GetLeftTop(), Vector::Right(), 0.3f);
 		ColorF color = ColorF::GhostWhite;
 		Vector rotateDir = m_rotateDir->GetRotateDir();
 
 		//cout << "스킬이름::"<<m_skillname << endl;
-		float opacity = 1.0f;
-		if (OBJECT->GetMonster(OBJ_BOSS) != NULL)opacity = 1.0f - OBJECT->GetMonster(OBJ_BOSS)->getFadeOut();
+
 		switch (m_Magic->GetSkillType())
 		{
-		case TYPE_BOLT:               pCamera->Draw(Animation()->Current()->GetSprite(), m_pos, m_dir, opacity);
-			                          pCamera->DrawCircle(m_Circle.center, m_Circle.radius, ColorF::Red, 2.0f); break;
-		default:pCamera->Draw(Animation()->Current()->GetSprite(), Position(), Vector::Right(), opacity); break;
+		case TYPE_BOLT:               pCamera->Draw(Animation()->Current()->GetSprite(), m_pos, m_dir);
+			pCamera->DrawCircle(m_Circle.center, m_Circle.radius, ColorF::Red, 2.0f); break;
+		default:pCamera->Draw(Animation()->Current()->GetSprite(), Position()); break;
 		}
 
 
@@ -156,15 +155,15 @@ public:
 			switch (m_Magic->GetAttribute())
 			{
 			case ATTRIBUTE_FIRE:
-				 if (B->GetAttribute() == ATTRIBUTE_WATER)m_isComplete = true; break;
+				if (B->GetAttribute() == ATTRIBUTE_WATER)m_isComplete = true; break;
 			case ATTRIBUTE_WATER:
 				if (B->GetAttribute() == ATTRIBUTE_ELECTRICITY)m_isComplete = true; break;
 			case ATTRIBUTE_ELECTRICITY:
-				 if (B->GetAttribute() == ATTRIBUTE_FIRE)m_isComplete = true; break;
-		
+				if (B->GetAttribute() == ATTRIBUTE_FIRE)m_isComplete = true; break;
+
+			}
 		}
-		}
-		
+
 	}
 	void BoltState(float deltaTime)
 	{
@@ -177,7 +176,7 @@ public:
 			SetTimer(60);
 			m_skillState = STATE_EXPLOSION;
 		}
-		if (IsMonsterCollided()||IsPlayerCollided())
+		if (IsMonsterCollided() || IsPlayerCollided())
 		{
 
 			SoundCorrecter();
@@ -189,7 +188,7 @@ public:
 		{
 			ColliedWithSkill(isSkillCollided());
 		}
-		if(m_Timer<0) m_isComplete = true;
+		if (m_Timer<0) m_isComplete = true;
 
 	}
 
@@ -197,7 +196,8 @@ public:
 	{
 		Animation()->Play(m_Magic->GetSkillName());
 		SoundCorrecter();
-		
+
+
 		if (m_Timer <= 0) m_isComplete = true;
 
 		this->SetCollider(m_pos, 20);
@@ -212,23 +212,24 @@ public:
 			ColliedWithSkill(isSkillCollided());
 		}
 
-		if (IsGroundCollided())
+		if (IsGroundCollided() != false)
 		{
-			GroundPush(m_pos);
+
+
 		}
-		
+
 
 	}
 
 	void ShieldState(float deltaTime)
-	{	
+	{
 		if (OBJECT->GetShieldList().size()>1)
 		{
 			OBJECT->GetShieldList().front()->SetIsComplete();
 		}
 		Animation()->Play(m_Magic->GetSkillName());
 		SoundCorrecter();///
-	
+
 		m_pos = m_pcharacter->Position();
 		this->SetCollider(m_pos, 40);
 		if (isSkillCollided() != NULL)
@@ -247,7 +248,7 @@ public:
 		if (m_Magic->GetAttribute() == ATTRIBUTE_WATER)Animation()->Play(WATER_EXPLOSION);
 		if (m_Magic->GetAttribute() == ATTRIBUTE_ELECTRICITY)Animation()->Play(ELECTRICITY_EXPLOSION);
 		RENDER->GetCamera(CAM_MAIN)->SetIsWaveTrue();
-		cout << m_Timer << endl;
+
 		if (m_Timer <= 0) m_isComplete = true;
 	}
 
@@ -260,14 +261,21 @@ public:
 			{
 				if (MATH->IsCollided(this->getCircle(), (*it)->getCircle()))
 				{
-					cout << "충돌" << endl;
-					(*it)->SetLife(this->m_Magic->GetDamage());
+					if (this->GetMagic()->GetSkillType() == TYPE_WALL)
+					{
+						if (m_Timer == 240) { (*it)->SetLife(-this->m_Magic->GetDamage()); cout << "충돌" << endl; }
+						if (m_Timer == 180) { (*it)->SetLife(-this->m_Magic->GetDamage()); cout << "충돌" << endl; }
+						if (m_Timer == 120) { (*it)->SetLife(-this->m_Magic->GetDamage()); cout << "충돌" << endl; }
+						if (m_Timer == 60) { (*it)->SetLife(-this->m_Magic->GetDamage()); cout << "충돌" << endl; }
+						if (m_Timer == 1) { (*it)->SetLife(-this->m_Magic->GetDamage()); cout << "충돌" << endl; }
+					}
+					if (this->GetMagic()->GetSkillType() == TYPE_BOLT) { (*it)->SetLife(-this->m_Magic->GetDamage()); }
 				}
 			}
 		}
 		else if (m_skillUser != USER_PLAYER)
 		{
-			SOUND->Play("Hit", 2.0f);
+			
 			m_isPlayerHit = true;
 			OBJECT->GetPlayer()->SetLife(this->m_Magic->GetDamage());
 		}
@@ -298,28 +306,11 @@ public:
 			list<Object*> monsterList = OBJECT->GetMonsterList();
 			FOR_LIST(Object*, monsterList)
 			{
-				bool checker = true;
-				if ((*it)->ID() == OBJ_MONSTER)
+				if (MATH->IsCollided(this->getCircle(), (*it)->getCircle()))
 				{
-					if ((*it)->GetMonsterKind() == MONSTER_MINION_RED&&this->GetMagic()->GetAttribute() == ATTRIBUTE_FIRE)checker = false;
-					if ((*it)->GetMonsterKind() == MONSTER_MINION_BLUE&&this->GetMagic()->GetAttribute() == ATTRIBUTE_WATER)checker = false;
-					if ((*it)->GetMonsterKind() == MONSTER_MINION_YELLOW&&this->GetMagic()->GetAttribute() == ATTRIBUTE_ELECTRICITY)checker = false;
-				}
-				else if (((*it)->ID()== OBJ_BOSS))
-				{
-					if ((*it)->GetEyeState() == EYE_RED&&this->GetMagic()->GetAttribute() == ATTRIBUTE_FIRE)checker = false;
-					if ((*it)->GetEyeState() == EYE_BLUE&&this->GetMagic()->GetAttribute() == ATTRIBUTE_WATER)checker = false;
-					if ((*it)->GetEyeState() == EYE_YELLOW&&this->GetMagic()->GetAttribute() == ATTRIBUTE_ELECTRICITY)checker = false;
-				}
-				if (MATH->IsCollided(this->getCircle(), (*it)->getCircle()) && checker == true)
-				{
-					if((*it)->ID()==OBJ_MONSTER)SOUND->Play("MonsterHit", 2.0f);
-					if ((*it)->ID()== OBJ_BOSS&& (*it)->GetEyeState() != EYE_DEATH)SOUND->Play("BossHit", 2.0f);
-					if ((*it)->GetLife() <= 0 && (*it)->ID() != OBJ_BOSS)
-					{
-						OBJECT->CreateProps(OBJ_POTION, (*it)->Position(), Vector(10, 10));
-						OBJECT->DestroyMonster((*it));
-					}
+					/*if ((*it)->ID() == OBJ_MONSTER)SOUND->Play("MonsterHit", 2.0f);
+					if ((*it)->ID() == OBJ_BOSS)SOUND->Play("BossHit", 2.0f);*/
+					if ((*it)->GetLife() <= 0 && (*it)->ID() != OBJ_BOSS)OBJECT->DestroyMonster((*it));
 					return true;
 				}
 			}
@@ -346,7 +337,7 @@ public:
 		{
 			if (MATH->IsCollided(this->getCircle(), (*it)->getCircle()))
 			{
-				if((*it)->ID()!=this->ID())return (*it);
+				if ((*it)->ID() != this->ID())return (*it);
 			}
 		}
 		return NULL;
@@ -392,15 +383,15 @@ public:
 	{
 		switch (m_Magic->GetSkillName())
 		{
-		case FIRE_BOLT:          SOUND->Play("Explosion_Fire",0.5f); break;
-		case WATER_BOLT:         SOUND->Play("Explosion_Water",0.5f); break;
-		case ELECTRICITY_BOLT:   SOUND->Play("Explosion_Electricity",0.5f); break;
-		case FIRE_SHIELD:        if (SOUND->FindChannel("Shield_Fire") == NULL)SOUND->Play("Shield_Fire",0.5f); break;
-		case WATER_SHIELD:       if (SOUND->FindChannel("Shield_Water") == NULL)SOUND->Play("Shield_Water",0.5f); break;
-		case ELECTRICITY_SHIELD: if (SOUND->FindChannel("Shield_Electricity") == NULL)SOUND->Play("Shield_Electricity",0.5f); break;
-		case FIRE_WALL:        if (SOUND->FindChannel("Wall_Fire") == NULL)SOUND->Play("Wall_Fire",0.5f); break;
-		case WATER_WALL:       if (SOUND->FindChannel("Wall_Water") == NULL)SOUND->Play("Wall_Water",0.5f); break;
-		case ELECTRICITY_WALL: if (SOUND->FindChannel("Wall_Electricity") == NULL)SOUND->Play("Wall_Electricity",0.5f); break;
+		case FIRE_BOLT:          SOUND->Play("Explosion_Fire", 0.5f); break;
+		case WATER_BOLT:         SOUND->Play("Explosion_Water", 0.5f); break;
+		case ELECTRICITY_BOLT:   SOUND->Play("Explosion_Electricity", 0.5f); break;
+		case FIRE_SHIELD:        if (SOUND->FindChannel("Shield_Fire") == NULL)SOUND->Play("Shield_Fire", 0.5f); break;
+		case WATER_SHIELD:       if (SOUND->FindChannel("Shield_Water") == NULL)SOUND->Play("Shield_Water", 0.5f); break;
+		case ELECTRICITY_SHIELD: if (SOUND->FindChannel("Shield_Electricity") == NULL)SOUND->Play("Shield_Electricity", 0.5f); break;
+		case FIRE_WALL:        if (SOUND->FindChannel("Wall_Fire") == NULL)SOUND->Play("Wall_Fire", 0.5f); break;
+		case WATER_WALL:       if (SOUND->FindChannel("Wall_Water") == NULL)SOUND->Play("Wall_Water", 0.5f); break;
+		case ELECTRICITY_WALL: if (SOUND->FindChannel("Wall_Electricity") == NULL)SOUND->Play("Wall_Electricity", 0.5f); break;
 		}
 	}
 
@@ -425,7 +416,7 @@ public:
 	}
 	int ID() { return m_skillUser; }
 
-	
+
 };
 //FIRE_BOLT = 11, FIRE_SHIELD = 12, FIRE_WALL = 13, FIRE_EXPLOSION,
 //WATER_BOLT = 21, WATER_SHIELD = 22, WATER_WALL = 23, WATER_EXPLOSION,

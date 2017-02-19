@@ -24,7 +24,7 @@ public:
 		m_speed = 300;
 
 		m_maxLife = 1000;
-
+		m_life = m_maxLife;
 	}
 
 	float MaxLife()
@@ -39,6 +39,10 @@ public:
 
 	void SetLife(float damage)
 	{
+		if (m_id == OBJ_MONSTER)SOUND->Play("MonsterHit", 2.0f);
+		if (m_id == OBJ_BOSS && this->GetEyeState() != EYE_DEATH)SOUND->Play("BossHit", 2.0f);
+		if (m_id == OBJ_PLAYER)SOUND->Play("Hit", 2.0f);
+		cout << "test" << endl;
 		m_life -= damage;
 		MATH->Clamp(m_life, 0.0f, m_maxLife);
 	}

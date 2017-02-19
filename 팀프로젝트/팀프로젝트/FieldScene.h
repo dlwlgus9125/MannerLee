@@ -23,22 +23,19 @@ public:
 		
 		
 		
-		OBJECT->CreatePlayer(Vector(600, 1000), 30);
-		//OBJECT->CreateSkill(OBJECT->GetPlayer(), USER_PLAYER, Vector());
-
-	/*	OBJECT->CreateMonster(OBJ_MONSTER, MONSTER_MINION_BLUE, Vector(600, 600), 30);
-		OBJECT->CreateMonster(OBJ_MONSTER, MONSTER_MINION_BLUE, Vector(650, 600), 30);
-		OBJECT->CreateMonster(OBJ_MONSTER, MONSTER_MINION_BLUE, Vector(700, 600), 30);*/
 
 		
 	}
 
 	void OnEnter()
 	{
+		OBJECT->GetPlayer()->SetPosition(Vector(500, 1650));
+		OBJECT->GetPlayer()->SetDir(Vector::Up());
 		NEW_OBJECT(m_pBg, Sprite(RENDER->GetImage(TEXT("BossCastle")), 2.0f, 0, 0));
 		//m_pBg->SetSize(860 * 2.0f, 1100 * 2.0f);
 		OBJECT->CreateBoss(OBJ_BOSS, Vector(885, 400), 50);
-		SOUND->Play("IntroBgm", 0.5f);
+
+		
 		//RENDER->GetCamera(CAM_MAP)->SetScreenRect(0, 0, 200, 200);
 
 		OBJECT->CreateProps(OBJ_GROUND, Vector(320, 370)*1.33f, Vector(100, 670)*1.33f);
@@ -67,10 +64,13 @@ public:
 
 	void OnUpdate(float deltaTime)
 	{
-		
+		cout << RENDER->GetCamera(CAM_MAIN)->ScreenToWorldPos(INPUT->GetMousePos()).x << ", " << RENDER->GetCamera(CAM_MAIN)->ScreenToWorldPos(INPUT->GetMousePos()).y << endl;
 		if (MATH->IsCollided(OBJECT->GetPlayer()->getCircle(), OBJECT->GetProps(OBJ_CHECKER)->Collider())&&OBJECT->GetPlayer()->isComeBossMap() == false)
 		{
 			if (SOUND->FindChannel("BossVoice") == NULL&&OBJECT->GetPlayer()->isComeBossMap() == false)SOUND->Play("BossVoice", 2.0f);
+			if (SOUND->FindChannel("DungeonBgm") != NULL)SOUND->Stop("DungeonBgm");
+			if (SOUND->FindChannel("BossBgm") == NULL)SOUND->Play("BossBgm", 0.5f);
+			
 			OBJECT->GetPlayer()->setIscome(true);
 			cout << OBJECT->GetPlayer()->isComeBossMap() << endl;
 			OBJECT->CreateProps(OBJ_GROUND, Vector(885, 950), Vector(800, 50));
