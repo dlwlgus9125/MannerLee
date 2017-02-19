@@ -391,6 +391,16 @@ public:
 
 
 	}
+
+	int GetGage()
+	{
+		return m_circleGage;
+	}
+
+	void Setgage(int num)
+	{
+		m_circleGage = num;
+	}
 	void setIscome(bool ischeck) { m_isComeBossMap = ischeck; }
 	bool isComeBossMap() { return m_isComeBossMap; }
 

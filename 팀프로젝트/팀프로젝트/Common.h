@@ -36,7 +36,7 @@ enum CAMERA_TAG
 
 enum SCENE_TAG
 {
-	SCENE_NONE, SCENE_FEILD, SCENE_DUNGEON, SCENE_TEST,SCENE_TITLE, SCENE_DEAD
+	SCENE_NONE, SCENE_FEILD, SCENE_DUNGEON, SCENE_TEST
 };
 
 enum CHARACTER_STATE
@@ -110,6 +110,7 @@ enum SKILL_LIST
 	FIRE_BOLT=11,FIRE_SHIELD=12, FIRE_WALL = 13, FIRE_EXPLOSION,
 	WATER_BOLT=21,WATER_SHIELD=22, WATER_WALL=23, WATER_EXPLOSION,
 	ELECTRICITY_BOLT=31,ELECTRICITY_SHIELD=32, ELECTRICITY_WALL=33, ELECTRICITY_EXPLOSION,
+	ETERNAL_FIRE_WALL,
 };
 
 
@@ -148,15 +149,16 @@ public:
 	{
 		switch (name)
 		{
-		case FIRE_BOLT:			SetSkillStatus(0.001f, 100, 3, 1, ATTRIBUTE_FIRE, TYPE_BOLT);					break;
-		case FIRE_WALL:			SetSkillStatus(0.001f, 0, 4, 1000, ATTRIBUTE_FIRE, TYPE_WALL);				break;
+		case FIRE_BOLT:			SetSkillStatus(0.001f, 200, 3, 1, ATTRIBUTE_FIRE, TYPE_BOLT);					break;
+		case FIRE_WALL:			SetSkillStatus(0.001f,0, 4, 1000, ATTRIBUTE_FIRE, TYPE_WALL);				break;
 		case FIRE_SHIELD:		SetSkillStatus(0.001f, 0, 5, 500, ATTRIBUTE_FIRE, TYPE_SHIELD);				break;
-		case WATER_BOLT:		SetSkillStatus(0.001f, 100, 3, 1, ATTRIBUTE_WATER, TYPE_BOLT);				break;
+		case WATER_BOLT:		SetSkillStatus(0.001f, 200, 3, 1, ATTRIBUTE_WATER, TYPE_BOLT);				break;
 		case WATER_WALL:		SetSkillStatus(0.001f, 0, 4, 1000, ATTRIBUTE_WATER, TYPE_WALL);				break;
-		case WATER_SHIELD:		SetSkillStatus(0.001f, 0, 5, 500, ATTRIBUTE_WATER, TYPE_SHIELD);				break;
-		case ELECTRICITY_BOLT:	SetSkillStatus(0.001f, 100, 3, 1, ATTRIBUTE_ELECTRICITY, TYPE_BOLT);			break;
+		case WATER_SHIELD:		SetSkillStatus(0.001f,0, 5, 500, ATTRIBUTE_WATER, TYPE_SHIELD);				break;
+		case ELECTRICITY_BOLT:	SetSkillStatus(0.001f, 200,3, 1, ATTRIBUTE_ELECTRICITY, TYPE_BOLT);		break;
 		case ELECTRICITY_WALL:	SetSkillStatus(0.001f, 0, 4, 1000, ATTRIBUTE_ELECTRICITY, TYPE_WALL);		break;
-		case ELECTRICITY_SHIELD:SetSkillStatus(0.001f, 0, 5, 500, ATTRIBUTE_ELECTRICITY, TYPE_SHIELD);			break;
+		case ELECTRICITY_SHIELD:SetSkillStatus(0.001f,0, 5, 500, ATTRIBUTE_ELECTRICITY, TYPE_SHIELD);		break;
+		case ETERNAL_FIRE_WALL: SetSkillStatus(0, 0, 100000, 0, ATTRIBUTE_NONE, TYPE_WALL);						break;
 		}
 	}
 	
@@ -183,4 +185,5 @@ public:
 	void SetLife(float life) { m_life += life; }
 	void SetTIme(float time) { m_time = time; }
 	void SetTimer(float time) { m_time += time; }
+	void SetSpeed(float speed) { m_speed = speed; }
 };

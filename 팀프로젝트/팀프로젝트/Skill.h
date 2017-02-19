@@ -59,7 +59,7 @@ class Skill : public Object
 	bool  m_isPlayerHit;
 	
 public:
-	Skill(Object* pCharacter, SKILL_USER id, SKILL_LIST name) : Object(id)
+	Skill(Object* pCharacter, SKILL_USER id, SKILL_LIST name,int gage) : Object(id)
 	{
 		
 		
@@ -67,21 +67,37 @@ public:
 		m_Timer = m_Magic->GetTime()*60;
 		m_skillUser = id;
 		m_pcharacter = pCharacter;
-		m_pos = pCharacter->Position();
-		m_dir = m_pcharacter->GetDir();
+		
+	
+		
 		Vector targetPos = RENDER->GetCamera(CAM_MAIN)->ScreenToWorldPos(INPUT->GetMousePos());
+	
+	
+		m_pos = pCharacter->Position();
+		if (gage == 2)m_pos = m_pos + Vector(20, 20);
+		if (gage == 3)m_pos = m_pos - Vector(20, 20);
+		m_dir = m_pcharacter->GetDir();		
 		if (id == USER_PLAYER)
 		{
 			m_dir = (targetPos - m_pos).Normalize();
 		}
+
 		
+
 		m_isComplete = false;
 		m_isPlayerHit = false;
 		switch (name)
 		{
 		case FIRE_BOLT:      case WATER_BOLT:   case ELECTRICITY_BOLT:      m_skillState = STATE_BOLT;      break;
-		case FIRE_WALL:      case WATER_WALL:   case ELECTRICITY_WALL:		m_pos = targetPos;   m_skillState = STATE_WALL;      break;
+		case FIRE_WALL:      case WATER_WALL:   case ELECTRICITY_WALL:	
+			if (gage == 3)m_pos = targetPos+Vector(10, 20);
+			if (gage == 2)m_pos = targetPos-Vector(20, 10);
+			if(gage==1)m_pos = targetPos; m_skillState = STATE_WALL;
+			break;
+
 		case FIRE_SHIELD:   case WATER_SHIELD:   case ELECTRICITY_SHIELD:   m_skillState = STATE_SHIELD;   break;
+		case ETERNAL_FIRE_WALL://m_pos = ; m_skillState=STATE_WALL;
+			break;
 		}
 
 		m_rotateDir = new RotateDir();
@@ -101,7 +117,6 @@ public:
 		case STATE_WALL:      WallState(deltaTime);      break;
 		case STATE_SHIELD:    ShieldState(deltaTime);      break;
 		case STATE_EXPLOSION: ExplosionState(deltaTime);      break;
-		case MONSTER_ATTACK:  MonsterAttack(deltaTime);   break;
 		}
 		StopSoundMachine();
 		m_rotateDir->Update(deltaTime);
@@ -233,14 +248,6 @@ public:
 		RENDER->GetCamera(CAM_MAIN)->SetIsWaveTrue();
 		cout << m_Timer << endl;
 		if (m_Timer <= 0) m_isComplete = true;
-	}
-
-	void MonsterAttack(float delTatime)
-	{
-		//Animation()->Play(m_Magic->GetSkillName());
-		//SetPosition(m_pos + m_dir*m_speed*delTatime);
-		//SetsustainmentTime(360 * delTatime);
-		//if (m_sustainmentTime < 0.001f)m_skillState = STATE_IDLE;
 	}
 
 	void ColliedWithCharacter()
