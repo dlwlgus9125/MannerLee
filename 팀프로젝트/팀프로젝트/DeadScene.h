@@ -18,8 +18,7 @@ public:
 	{
 		RENDER->LoadImageFiles(TEXT("DeadBg"), TEXT("Image/DeadScene/Dead_"), TEXT("png"), 2);
 		m_pBg = new AnimationController();
-		m_pBg->Register(OBJ_DEAD,
-			new Animation(TEXT("DeadBg"), 2, 3, true));
+		m_pBg->Register(OBJ_DEAD,new Animation(TEXT("DeadBg"), 2, 3, true));
 	}
 
 	void OnEnter()

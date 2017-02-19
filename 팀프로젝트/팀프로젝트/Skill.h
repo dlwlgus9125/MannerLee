@@ -197,6 +197,7 @@ public:
 		Animation()->Play(m_Magic->GetSkillName());
 		SoundCorrecter();
 		
+
 		if (m_Timer <= 0) m_isComplete = true;
 
 		this->SetCollider(m_pos, 20);
@@ -211,9 +212,10 @@ public:
 			ColliedWithSkill(isSkillCollided());
 		}
 
-		if (IsGroundCollided())
+		if (IsGroundCollided()!=false)
 		{
-			GroundPush(m_pos);
+			
+			
 		}
 		
 
@@ -246,7 +248,7 @@ public:
 		if (m_Magic->GetAttribute() == ATTRIBUTE_WATER)Animation()->Play(WATER_EXPLOSION);
 		if (m_Magic->GetAttribute() == ATTRIBUTE_ELECTRICITY)Animation()->Play(ELECTRICITY_EXPLOSION);
 		RENDER->GetCamera(CAM_MAIN)->SetIsWaveTrue();
-		cout << m_Timer << endl;
+		
 		if (m_Timer <= 0) m_isComplete = true;
 	}
 
@@ -259,8 +261,51 @@ public:
 			{
 				if (MATH->IsCollided(this->getCircle(), (*it)->getCircle()))
 				{
-					cout << "Ãæµ¹" << endl;
-					(*it)->SetLife(-this->m_Magic->GetDamage());
+					if (this->GetMagic()->GetSkillType() == TYPE_WALL)
+					{
+						if (m_Timer == 240)
+						{ 
+							(*it)->SetLife(-this->m_Magic->GetDamage());
+							if ((*it)->ID() == OBJ_MONSTER)SOUND->Play("MonsterHit", 2.0f);
+							if ((*it)->ID() == OBJ_BOSS)SOUND->Play("BossHit", 2.0f);
+							if ((*it)->GetLife() <= 0 && (*it)->ID() != OBJ_BOSS)OBJECT->DestroyMonster((*it));
+						}
+						if (m_Timer == 180)	
+						{ 
+							(*it)->SetLife(-this->m_Magic->GetDamage());
+							if ((*it)->ID() == OBJ_MONSTER)SOUND->Play("MonsterHit", 2.0f);
+							if ((*it)->ID() == OBJ_BOSS)SOUND->Play("BossHit", 2.0f);
+							if ((*it)->GetLife() <= 0 && (*it)->ID() != OBJ_BOSS)OBJECT->DestroyMonster((*it));
+						}
+						if (m_Timer == 120)
+						{
+							(*it)->SetLife(-this->m_Magic->GetDamage());
+							if ((*it)->ID() == OBJ_MONSTER)SOUND->Play("MonsterHit", 2.0f);
+							if ((*it)->ID() == OBJ_BOSS)SOUND->Play("BossHit", 2.0f);
+							if ((*it)->GetLife() <= 0 && (*it)->ID() != OBJ_BOSS)OBJECT->DestroyMonster((*it));
+						}
+						if (m_Timer == 60)	
+						{
+							if ((*it)->ID() == OBJ_MONSTER)SOUND->Play("MonsterHit", 2.0f);
+							if ((*it)->ID() == OBJ_BOSS)SOUND->Play("BossHit", 2.0f);
+							if ((*it)->GetLife() <= 0 && (*it)->ID() != OBJ_BOSS)OBJECT->DestroyMonster((*it));
+							(*it)->SetLife(-this->m_Magic->GetDamage());
+						}
+						if (m_Timer == 1)
+						{ 
+							if ((*it)->ID() == OBJ_MONSTER)SOUND->Play("MonsterHit", 2.0f);
+							if ((*it)->ID() == OBJ_BOSS)SOUND->Play("BossHit", 2.0f);
+							if ((*it)->GetLife() <= 0 && (*it)->ID() != OBJ_BOSS)OBJECT->DestroyMonster((*it));
+							(*it)->SetLife(-this->m_Magic->GetDamage());
+						}
+					}
+					if (this->GetMagic()->GetSkillType() == TYPE_BOLT) 
+					{
+						if ((*it)->ID() == OBJ_MONSTER)SOUND->Play("MonsterHit", 2.0f);
+						if ((*it)->ID() == OBJ_BOSS)SOUND->Play("BossHit", 2.0f);
+						if ((*it)->GetLife() <= 0 && (*it)->ID() != OBJ_BOSS)OBJECT->DestroyMonster((*it));
+						(*it)->SetLife(-this->m_Magic->GetDamage());
+					}
 				}
 			}
 		}
@@ -299,9 +344,6 @@ public:
 			{
 				if (MATH->IsCollided(this->getCircle(), (*it)->getCircle()))
 				{
-					if((*it)->ID()==OBJ_MONSTER)SOUND->Play("MonsterHit", 2.0f);
-					if ((*it)->ID()== OBJ_BOSS)SOUND->Play("BossHit", 2.0f);
-					if((*it)->GetLife()<=0&&(*it)->ID()!=OBJ_BOSS)OBJECT->DestroyMonster((*it));
 					return true;
 				}
 			}
