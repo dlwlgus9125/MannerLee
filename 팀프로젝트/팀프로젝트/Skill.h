@@ -102,7 +102,7 @@ public:
 
 		m_rotateDir = new RotateDir();
 
-		
+
 	}
 
 

@@ -52,25 +52,23 @@ public:
 		FILE *fp = NULL;
 		m_count = 0;
 		m_Center = { 400.0f, 300.0f };
-		RENDER->SetChange(CAM_MAIN, 860 * 2.0f, 1100 * 2.0f, VIEW_WIDTH, VIEW_HEIGHT);
 	}
 
 	void OnEnter()
 	{
 		fp = fopen("Test.txt", "w");
-		NEW_OBJECT(m_pBg, Sprite(RENDER->GetImage(TEXT("BossCastle")), 2.0f, 0, 0));
+		NEW_OBJECT(m_pBg, Sprite(RENDER->GetImage(TEXT("Title")), 1.0f, 0, 0));
 
-
+		RENDER->SetChange(CAM_MAIN, 860 * 2.0f, 1100 * 2.0f, VIEW_WIDTH, VIEW_HEIGHT);
 		RENDER->GetCamera(CAM_MAIN)->SetScreenRect(0, 0, 800, 600);
-
 
 	}
 
 	void OnUpdate(float deltaTime)
 	{
 
-		m_Center.x = MATH->Clamp(m_Center.x, 400.0f, 800.0f);
-		m_Center.y = MATH->Clamp(m_Center.y, 300.0f, 2900.0f);
+		m_Center.x = MATH->Clamp(m_Center.x, 400.0f, (860 * 2.0f-300));
+		m_Center.y = MATH->Clamp(m_Center.y, 300.0f, (1100 * 2.0f- 300));
 
 		RENDER->GetCamera(CAM_MAIN)->SetCenterPos(m_Center);
 

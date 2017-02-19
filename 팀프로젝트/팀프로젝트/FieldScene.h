@@ -82,7 +82,6 @@ public:
 			if (MATH->IsCollided(m_cursor, Vector(634, 10), Vector(690, 63))) //Æ÷¼Ç
 			{
 				cout << "test" << endl;
-				SOUND->Play("PotionEffect", 1.0f);
 				OBJECT->GetPlayer()->SetLife(-UI->EatPotion());
 				UI->SetNotRun(true);
 			}
