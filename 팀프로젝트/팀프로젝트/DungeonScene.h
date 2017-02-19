@@ -33,7 +33,7 @@ public:
 	{
 		NEW_OBJECT(m_DungeonBg, Sprite(RENDER->GetImage(TEXT("Dungeon")), 1.0f, 0, 0));
 		m_DungeonBg->SetSize(1200, 3129);
-		//SOUND->Play("IntroBgm", 0.5f);
+		if(SOUND->FindChannel("IntroBgm")==NULL)SOUND->Play("IntroBgm", 0.5f);
 
 		OBJECT->CreateProps(OBJ_GROUND, Vector(898, 46), Vector(-339, -63));
 		OBJECT->CreateProps(OBJ_GROUND, Vector(1055, 240), Vector(-45, -318));

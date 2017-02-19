@@ -11,8 +11,12 @@ class Player : public Character
 	SKILL_TYPE      m_prevSkillType;
 	RotateDir*      m_rotateDir;
 	Timer*          m_Timer;
+	RUNE_STATE      m_RuneLeft;
+	RUNE_STATE      m_RuneRight;
 
+	CORRECT_STATE   m_correct;
 
+	Vector          m_targetPos;
 public:
 	Player(int id) : Character(id)
 	{
@@ -28,6 +32,13 @@ public:
 		m_rotateDir = new RotateDir();
 		m_timer = new Timer();
 		m_life = 500;
+		m_targetPos = m_pos;
+
+		m_RuneLeft = RUNE_NONE;
+		m_RuneRight = RUNE_NONE;
+		m_correct = CORRECT_NONE;
+
+		OBJECT->LoadingMonsterImage();
 
 		RENDER->LoadImageFiles(TEXT("Idle_Up"), TEXT("Image/Monster/Player/Idle/Up/Up"), TEXT("png"), 1);
 		RENDER->LoadImageFiles(TEXT("Idle_Down"), TEXT("Image/Monster/Player/Idle/Down/Down"), TEXT("png"), 1);
@@ -44,7 +55,20 @@ public:
 		RENDER->LoadImageFiles(TEXT("Attribute_Water"), TEXT("Image/Magic/Circle/Blue/Circle_Blue_"), TEXT("png"), 8);
 		RENDER->LoadImageFiles(TEXT("Attribute_Electricity"), TEXT("Image/Magic/Circle/Purple/Circle_Purple_"), TEXT("png"), 8);
 
-	/*	SOUND->LoadFile("Death", "Sound/Effect/Death.wav", false);
+		RENDER->LoadImageFiles(TEXT("Rune_Fire"), TEXT("Image/Magic/Rune/Fire/Fire"), TEXT("png"), 7);
+		RENDER->LoadImageFiles(TEXT("Rune_Ice"), TEXT("Image/Magic/Rune/Ice/Ice"), TEXT("png"), 7);
+		RENDER->LoadImageFiles(TEXT("Rune_Electricity"), TEXT("Image/Magic/Rune/Electricity/Electricity"), TEXT("png"), 7);
+		RENDER->LoadImageFiles(TEXT("Rune_Bolt"), TEXT("Image/Magic/Rune/Bolt/Bolt"), TEXT("png"), 7);
+		RENDER->LoadImageFiles(TEXT("Rune_Shield"), TEXT("Image/Magic/Rune/Shield/Shield"), TEXT("png"), 7);
+		RENDER->LoadImageFiles(TEXT("Rune_Wall"), TEXT("Image/Magic/Rune/Wall/Wall"), TEXT("png"), 7);
+
+		RENDER->LoadImageFiles(TEXT("Correct_Fire"), TEXT("Image/Magic/CorrectType/Fire"), TEXT("png"), 1);
+		RENDER->LoadImageFiles(TEXT("Correct_Ice"), TEXT("Image/Magic/CorrectType/Ice"), TEXT("png"), 1);
+		RENDER->LoadImageFiles(TEXT("Correct_Electricity"), TEXT("Image/Magic/CorrectType/Electricity"), TEXT("png"), 1);
+		RENDER->LoadImageFiles(TEXT("Correct_Bolt"), TEXT("Image/Magic/CorrectType/Bolt"), TEXT("png"), 1);
+		RENDER->LoadImageFiles(TEXT("Correct_Shield"), TEXT("Image/Magic/CorrectType/Shield"), TEXT("png"), 1);
+		RENDER->LoadImageFiles(TEXT("Correct_Wall"), TEXT("Image/Magic/CorrectType/Wall"), TEXT("png"), 1);
+		SOUND->LoadFile("Death", "Sound/Effect/Death.wav", false); SOUND->LoadFile("Death", "Sound/Effect/Death.wav", false);
 
 		SOUND->LoadFile("FireCast", "Sound/Cast/FireCast.wav", false);
 		SOUND->LoadFile("IceCast", "Sound/Cast/IceCast.wav", false);
@@ -71,12 +95,15 @@ public:
 		Animation()->Update(deltaTime);
 		m_rotateDir->Update(deltaTime);
 		Animation()->Get(m_attribute)->Update(deltaTime);
+		Animation()->Get(RUNE_FIRE)->Update(deltaTime);
 		m_timer->Update(deltaTime);
 		//if (OBJECT->GetPlayer()->GetLife() <= 0.0f)m_state = CHARACTER_DEATH;
 	}
 
 	void Draw(Camera* pCamera)
 	{
+		
+		
 		if (IsHideToWall())Animation()->Current()->GetSprite()->SetOpacity(0.5f);
 		pCamera->Draw(Animation()->Current()->GetSprite(), Position());
 		//pCamera->DrawCircle(getCircle().center, getCircle().radius, ColorF::Red, 2.0f);
@@ -85,7 +112,17 @@ public:
 		//Camera* pMapCamera = RENDER->GetCamera(CAM_MAP);
 		//pMapCamera->DrawFilledRect(Collider().LeftTop(), Collider().size);
 
-		if (m_state == CHARACTER_CAST_ATTRIBUTE || m_state == CHARACTER_CAST_TYPE)pCamera->Draw(Animation()->Get(m_attribute)->GetSprite(), Position(), m_rotateDir->GetRotateDir());
+		if (m_state == CHARACTER_CAST_ATTRIBUTE || m_state == CHARACTER_CAST_TYPE || m_state == CHARACTER_CAST_END)
+		{
+			pCamera->Draw(Animation()->Get(m_attribute)->GetSprite(), Position(), m_rotateDir->GetRotateDir());
+			pCamera->Draw(Animation()->Get(RUNE_FIRE)->GetSprite(), Position() + (m_rotateDir->GetRotateDir()*90.0f), Vector::Right(), 0.5f);
+		}
+		if (m_state == CHARACTER_CAST_TYPE || m_state == CHARACTER_CAST_END)pCamera->Draw(Animation()->Get(RUNE_BOLT)->GetSprite(), Position() + (m_rotateDir->GetRotateDir()*-90.0f), Vector::Right(), 0.5f);
+
+		if (m_correct != CORRECT_NONE&&m_state!=CHARACTER_IDLE)pCamera->Draw(Animation()->Get(m_correct)->GetSprite(), Position() + Vector(0, -100), Vector::Right(), 0.5f);
+
+		//pCamera->Draw(Animation()->Get(RUNE_FIRE)->GetSprite(), Position() + ((Vector(m_rotateDir->GetRotateDir().y, -m_rotateDir->GetRotateDir().x))*65.0f));
+		//pCamera->Draw(Animation()->Get(RUNE_FIRE)->GetSprite(), Position() + ((Vector(m_rotateDir->GetRotateDir().y, -m_rotateDir->GetRotateDir().x))*-65.0f));
 	}
 
 	void IdleState()
@@ -101,20 +138,103 @@ public:
 		Animation()->Play(m_spriteState);
 		if (UI->Setting() == KEYBOARD)
 		{
-			if (INPUT->IsKeyPress(VK_LEFT)) { m_state = CHARACTER_RUN; }
-			if (INPUT->IsKeyPress(VK_RIGHT)) { m_state = CHARACTER_RUN; }
-			if (INPUT->IsKeyPress(VK_UP)) { m_state = CHARACTER_RUN; }
-			if (INPUT->IsKeyPress(VK_DOWN)) { m_state = CHARACTER_RUN; }
+			if (INPUT->IsKeyPress('W')) { m_state = CHARACTER_RUN; }
+			if (INPUT->IsKeyPress('S')) { m_state = CHARACTER_RUN; }
+			if (INPUT->IsKeyPress('A')) { m_state = CHARACTER_RUN; }
+			if (INPUT->IsKeyPress('D')) { m_state = CHARACTER_RUN; }
 		}
 		else
 		{
-			if (INPUT->IsMouseDown(MOUSE_LEFT)) { m_state = CHARACTER_RUN; }
+			if (INPUT->IsMouseDown(MOUSE_RIGHT)) { m_state = CHARACTER_RUN; }
 		}
-		if (INPUT->IsMouseDown(MOUSE_RIGHT))OBJECT->CreateSkill(OBJECT->GetPlayer(), USER_PLAYER, FIRE_BOLT);
-		if (INPUT->IsKeyDown('E')) { m_state = CHARACTER_CAST_ATTRIBUTE; }
+		//if (INPUT->IsMouseDown(MOUSE_LEFT))OBJECT->CreateSkill(OBJECT->GetPlayer(), USER_PLAYER, FIRE_BOLT);
+		if (INPUT->IsKeyDown('1') || INPUT->IsKeyDown('2') || INPUT->IsKeyDown('3')) { m_state = CHARACTER_CAST_ATTRIBUTE; m_correct = CORRECT_ICE;
+		}
 	}
 
 	void RunState(float deltaTime)
+	{
+		Move(deltaTime);
+		if (INPUT->IsKeyDown('1') || INPUT->IsKeyDown('2') || INPUT->IsKeyDown('3')) { m_state = CHARACTER_CAST_ATTRIBUTE;  m_correct = CORRECT_ICE; m_prevAttribute = ATTRIBUTE_WATER;	}
+	}
+
+	void CastingAttributeState(float deltaTime)
+	{
+		Move(deltaTime);
+		if (INPUT->IsKeyDown('1')) { m_prevAttribute = ATTRIBUTE_WATER; m_correct = CORRECT_ICE; }
+		if (INPUT->IsKeyDown('2')) { m_prevAttribute = ATTRIBUTE_FIRE; m_correct = CORRECT_FIRE; }
+		if (INPUT->IsKeyDown('3')) { m_prevAttribute = ATTRIBUTE_ELECTRICITY; m_correct = CORRECT_ELECTRICITY; }
+
+		if (INPUT->IsMouseUp(MOUSE_LEFT) && m_prevAttribute != ATTRIBUTE_NONE)
+		{
+			m_attribute = m_prevAttribute;
+			m_prevAttribute = ATTRIBUTE_NONE;
+			m_correct = CORRECT_BOLT;
+			m_prevSkillType = TYPE_BOLT;
+			m_state = CHARACTER_CAST_TYPE;
+		}
+
+		if (INPUT->IsKeyDown(VK_TAB))
+		{
+			m_attribute = ATTRIBUTE_NONE;
+			m_prevAttribute = ATTRIBUTE_NONE;
+			m_state = CHARACTER_IDLE;
+		}
+	}
+
+	void CastingTypeState(float deltaTime)
+	{
+		Move(deltaTime);
+		if (INPUT->IsKeyDown('1')) { m_prevSkillType = TYPE_BOLT; m_correct = CORRECT_BOLT; }
+		if (INPUT->IsKeyDown('2')) { m_prevSkillType = TYPE_SHIELD; m_correct = CORRECT_SHIELD; }
+		if (INPUT->IsKeyDown('3')) { m_prevSkillType = TYPE_WALL; m_correct = CORRECT_WALL; }
+
+		if (INPUT->IsMouseUp(MOUSE_LEFT) && m_prevSkillType != TYPE_NONE)
+		{
+			m_skillType = m_prevSkillType;
+			m_prevSkillType = TYPE_NONE;
+			switch (m_attribute)
+			{
+			case ATTRIBUTE_FIRE:SOUND->Play("FireCast", 2.0f); break;
+			case ATTRIBUTE_WATER:SOUND->Play("IceCast", 2.0f); break;
+			case ATTRIBUTE_ELECTRICITY:SOUND->Play("ElectricityCast", 2.0f); break;
+			}
+			m_state = CHARACTER_CAST_END;
+		}
+
+		if (INPUT->IsKeyDown(VK_TAB))
+		{
+			m_attribute = ATTRIBUTE_NONE;
+			m_prevSkillType = TYPE_NONE;
+			m_state = CHARACTER_IDLE;
+		}
+	}
+	void EndCastingState(float deltaTime)
+	{
+		Move(deltaTime);
+		if (SOUND->FindChannel("FireCast") == NULL&&SOUND->FindChannel("IceCast") == NULL&SOUND->FindChannel("ElectricityCast") == NULL)
+		{
+			switch (m_skillType)
+			{
+			case TYPE_BOLT:SOUND->Play("BoltCast", 2.0f); break;
+			case TYPE_SHIELD:SOUND->Play("ShieldCast", 2.0f); break;
+			case TYPE_WALL:SOUND->Play("WallCast", 2.0f); break;
+			}
+			m_correct = CORRECT_NONE;
+			OBJECT->CreateSkill(OBJECT->GetPlayer(), USER_PLAYER, (SKILL_LIST)(m_attribute + m_skillType));
+			m_attribute = ATTRIBUTE_NONE;
+			m_skillType = TYPE_NONE;
+			if (MATH->SqrDistance(m_targetPos, Position()) >= 30.0f)m_state = CHARACTER_RUN;
+		}
+	}
+
+	void  DeathState(float deltaTime)
+	{
+		RENDER->GetCamera(CAM_MAIN)->DrawFilledRect(RENDER->GetCamera(CAM_MAIN)->GetLeftTop(), Vector(800, 600));
+		//if (SOUND->FindChannel("Death") == NULL)SOUND->Play("Death", 2.0f);
+	}
+
+	void Move(float deltaTime)
 	{
 		if (UI->NotRun() == false)
 		{
@@ -133,118 +253,51 @@ public:
 			Vector prevPos = this->Position();
 			Vector movedPos = this->Position();
 
-			m_dir = Vector::Zero();
-
+			//m_dir = Vector::Zero();
+			Vector::Zero();
 
 			if (UI->Setting() == MOUSE)
 			{
-				Vector targetPos = RENDER->GetCamera(CAM_MAIN)->ScreenToWorldPos(INPUT->GetMousePos());
+				//if (MATH->SqrDistance(m_targetPos, movedPos) <= 30.0f)m_state = CHARACTER_IDLE;
 
-				if (MATH->SqrDistance(targetPos, movedPos) <= 30.0f)m_state = CHARACTER_IDLE;
-				m_dir = (targetPos - movedPos).Normalize();
-
-				if (!INPUT->IsMouseUp(MOUSE_LEFT))
+				if (INPUT->IsMouseDown(MOUSE_RIGHT) || INPUT->IsMousePress(MOUSE_RIGHT) || INPUT->IsMouseDrag(MOUSE_RIGHT) || INPUT->IsMouseUp(MOUSE_RIGHT))
 				{
 
+					m_targetPos = RENDER->GetCamera(CAM_MAIN)->ScreenToWorldPos(INPUT->GetMousePos());
+					m_dir = (m_targetPos - movedPos).Normalize();
 					movedPos += m_dir * m_speed * deltaTime;
-					if (IsGroundCollided())movedPos = GroundPush(movedPos);
-					this->SetPosition(movedPos);
 				}
+				else
+				{
+					m_dir = (m_targetPos - movedPos).Normalize();
+					movedPos += m_dir * m_speed * deltaTime;
+
+				}
+				if (IsGroundCollided())movedPos = GroundPush(movedPos);
+				if (MATH->SqrDistance(m_targetPos, movedPos) >= 30.0f)this->SetPosition(movedPos);
 			}
 
 			else
 			{
-				if (INPUT->IsKeyPress(VK_LEFT)) m_dir += Vector::Left();
-				if (INPUT->IsKeyPress(VK_RIGHT)) m_dir += Vector::Right();
-				if (INPUT->IsKeyPress(VK_UP)) m_dir += Vector::Up();
-				if (INPUT->IsKeyPress(VK_DOWN)) m_dir += Vector::Down();
+				if (INPUT->IsKeyPress('W'))   m_dir += Vector::Up();
+				if (INPUT->IsKeyPress('S'))   m_dir += Vector::Down();
+				if (INPUT->IsKeyPress('A'))   m_dir += Vector::Left();
+				if (INPUT->IsKeyPress('D'))   m_dir += Vector::Right();
+
+
 				m_dir = m_dir.Normalize();
 				movedPos += m_dir * m_speed * deltaTime;
+				if (IsGroundCollided())movedPos = GroundPush(movedPos);
 				this->SetPosition(movedPos);
-
-				float x1 = OBJECT->GetPlayer()->Position().x;
-				float y1 = OBJECT->GetPlayer()->Position().y;
-
-				float x2 = RENDER->GetCamera(CAM_MAIN)->GetPos().x;
-				float y2 = RENDER->GetCamera(CAM_MAIN)->GetPos().y;
 			}
 
-			if (MATH->SqrDistance(prevPos, movedPos) == 0)
+			if (MATH->SqrDistance(prevPos, movedPos) >= 30)
 			{
 				m_state = CHARACTER_IDLE;
 			}
 		}
-		if (INPUT->IsKeyDown('E')) { m_state = CHARACTER_CAST_ATTRIBUTE; }
+
+
+
 	}
-
-	void CastingAttributeState(float deltaTime)
-	{
-		if (INPUT->IsKeyDown('1'))m_prevAttribute = ATTRIBUTE_FIRE;
-		if (INPUT->IsKeyDown('2'))m_prevAttribute = ATTRIBUTE_WATER;
-		if (INPUT->IsKeyDown('3'))m_prevAttribute = ATTRIBUTE_ELECTRICITY;
-
-		if (INPUT->IsKeyDown('E') && m_prevAttribute != ATTRIBUTE_NONE)
-		{
-			m_attribute = m_prevAttribute;
-			m_prevAttribute = ATTRIBUTE_NONE;
-			m_state = CHARACTER_CAST_TYPE;
-		}
-
-		if (INPUT->IsKeyDown(VK_TAB))
-		{
-			m_attribute = ATTRIBUTE_NONE;
-			m_prevAttribute = ATTRIBUTE_NONE;
-			m_state = CHARACTER_IDLE;
-		}
-	}
-
-	void CastingTypeState(float deltaTime)
-	{
-		if (INPUT->IsKeyDown('1'))m_prevSkillType = TYPE_BOLT;
-		if (INPUT->IsKeyDown('2'))m_prevSkillType = TYPE_SHIELD;
-		if (INPUT->IsKeyDown('3'))m_prevSkillType = TYPE_WALL;
-
-		if (INPUT->IsKeyDown('E') && m_prevSkillType != TYPE_NONE)
-		{
-			m_skillType = m_prevSkillType;
-			m_prevSkillType = TYPE_NONE;
-			//switch (m_attribute)
-			//{
-			//case ATTRIBUTE_FIRE:SOUND->Play("FireCast", 2.0f); cout << "test" << endl; break;
-			//case ATTRIBUTE_WATER:SOUND->Play("IceCast", 2.0f); break;
-			//case ATTRIBUTE_ELECTRICITY:SOUND->Play("ElectricityCast", 2.0f); break;
-			//}
-			m_state = CHARACTER_CAST_END;
-		}
-
-		if (INPUT->IsKeyDown(VK_TAB))
-		{
-			m_attribute = ATTRIBUTE_NONE;
-			m_prevSkillType = TYPE_NONE;
-			m_state = CHARACTER_IDLE;
-		}
-	}
-	void EndCastingState(float deltaTime)
-	{
-		/*if (SOUND->FindChannel("FireCast") == NULL&&SOUND->FindChannel("IceCast") == NULL&SOUND->FindChannel("ElectricityCast") == NULL)*/
-		{
-			//switch (m_skillType)
-			//{
-			//case TYPE_BOLT:SOUND->Play("BoltCast", 2.0f); break;
-			//case TYPE_SHIELD:SOUND->Play("ShieldCast", 2.0f); break;
-			//case TYPE_WALL:SOUND->Play("WallCast", 2.0f); break;
-			//}
-			OBJECT->CreateSkill(OBJECT->GetPlayer(), USER_PLAYER, (SKILL_LIST)(m_attribute + m_skillType));
-			m_attribute = ATTRIBUTE_NONE;
-			m_skillType = TYPE_NONE;
-			m_state = CHARACTER_IDLE;
-		}
-	}
-
-	void  DeathState(float deltaTime)
-	{
-		RENDER->GetCamera(CAM_MAIN)->DrawFilledRect(RENDER->GetCamera(CAM_MAIN)->GetLeftTop(), Vector(800, 600));
-		//if (SOUND->FindChannel("Death") == NULL)SOUND->Play("Death", 2.0f);
-	}
-
 };

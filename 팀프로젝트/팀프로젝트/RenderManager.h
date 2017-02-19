@@ -116,7 +116,7 @@ class Sprite
 
 public:
 	Sprite(ID2D1Bitmap* pImage, float scale = 1.0f,
-		float anchorX = 0.5f, float anchorY = 0.5f, Vector dir = Vector::Right())
+		float anchorX = 0.5f, float anchorY = 0.5f, Vector dir = Vector::Right(), float opacity = 1.0f)
 	{
 		m_pImage = pImage;
 		m_width = pImage->GetSize().width;
@@ -126,7 +126,7 @@ public:
 		m_anchorY = anchorY;
 		m_dir = dir;
 		m_angle = 360-MATH->ToAngle(m_dir);
-		m_opacity = 1.0f;
+		m_opacity = opacity;
 	}
 
 	void SetPosition(float x, float y) { m_x = x; m_y = y; }
@@ -260,7 +260,7 @@ public:
 
 		m_waveTimer += pattern;
 		
-		if (m_waveTimer >= 3)
+		if (m_waveTimer >= 4)
 		{
 			
 			m_isWave = false;
@@ -295,8 +295,18 @@ public:
 
 		sprite->SetPosition(pos.x, pos.y);
 		sprite->SetDirection(dir);
+		sprite->SetOpacity(opacity);
 		sprite->Render(m_pBitmapTarget);
+		m_pBitmapTarget->EndDraw();
+	}
 
+	void DrawOpacity(Sprite* sprite, Vector pos, Vector dir = Vector::Right(), float opacity = 1.0f)
+	{
+		m_pBitmapTarget->BeginDraw();
+
+		sprite->SetPosition(pos.x, pos.y);
+		sprite->SetDirection(dir);
+		sprite->Render(m_pBitmapTarget);
 		m_pBitmapTarget->EndDraw();
 	}
 

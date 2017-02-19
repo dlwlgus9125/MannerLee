@@ -159,7 +159,7 @@ public:
 	void DestroyCompletedSkill();
 	list<Object*> GetPropsList() { return m_propsList; }
 	list<Object*> GetSkillList() { return m_skillList; }
-	
+	void LoadingMonsterImage();
 	
 };
 

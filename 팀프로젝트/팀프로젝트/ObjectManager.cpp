@@ -21,11 +21,25 @@ void ObjectManager::CreatePlayer(Vector pos, float colRadius)
 	m_pPlayer->Animation()->Register(RUN_RIGHT, new Animation(TEXT("Run_Right"), 3, 5, true, 2.0f));
 	m_pPlayer->Animation()->Register(RUN_DOWN, new Animation(TEXT("Run_Down"), 3, 5, true, 2.0f));
 
-	m_pPlayer->Animation()->Register(ATTRIBUTE_NONE, new Animation(TEXT("Attribute_None"), 8, 10, true, 0.7f));
-	m_pPlayer->Animation()->Register(ATTRIBUTE_FIRE, new Animation(TEXT("Attribute_Fire"), 8, 10, true, 0.7f));
-	m_pPlayer->Animation()->Register(ATTRIBUTE_WATER, new Animation(TEXT("Attribute_Water"), 8, 10, true, 0.7f));
-	m_pPlayer->Animation()->Register(ATTRIBUTE_ELECTRICITY, new Animation(TEXT("Attribute_Electricity"), 8, 10, true, 0.7f));
+	m_pPlayer->Animation()->Register(ATTRIBUTE_NONE, new Animation(TEXT("Attribute_None"), 8, 10, true, 0.5f));
+	m_pPlayer->Animation()->Register(ATTRIBUTE_FIRE, new Animation(TEXT("Attribute_Fire"), 8, 10, true, 0.5f));
+	m_pPlayer->Animation()->Register(ATTRIBUTE_WATER, new Animation(TEXT("Attribute_Water"), 8, 10, true, 0.5f));
+	m_pPlayer->Animation()->Register(ATTRIBUTE_ELECTRICITY, new Animation(TEXT("Attribute_Electricity"), 8, 10, true, 0.5f));
 
+	m_pPlayer->Animation()->Register(RUNE_FIRE, new Animation(TEXT("Rune_Fire"), 7, 10, true, 0.3f));
+	m_pPlayer->Animation()->Register(RUNE_ICE, new Animation(TEXT("Rune_Ice"), 7, 10, true, 0.3f));
+	m_pPlayer->Animation()->Register(RUNE_ELECTRICITY, new Animation(TEXT("Rune_Electricity"), 7, 10, true, 0.3f));
+	m_pPlayer->Animation()->Register(RUNE_BOLT, new Animation(TEXT("Rune_Bolt"), 7, 10, true, 0.3f));
+	m_pPlayer->Animation()->Register(RUNE_SHIELD, new Animation(TEXT("Rune_Shield"), 7, 10, true, 0.3f));
+	m_pPlayer->Animation()->Register(RUNE_WALL, new Animation(TEXT("Rune_Wall"), 7, 10, true, 0.3f));
+
+	m_pPlayer->Animation()->Register(CORRECT_FIRE, new Animation(TEXT("Correct_Fire"), 1, 10, true, 0.3f));
+	m_pPlayer->Animation()->Register(CORRECT_ICE, new Animation(TEXT("Correct_Ice"), 1, 10, true, 0.3f));
+	m_pPlayer->Animation()->Register(CORRECT_ELECTRICITY, new Animation(TEXT("Correct_Electricity"), 1, 10, true, 0.3f));
+	m_pPlayer->Animation()->Register(CORRECT_BOLT, new Animation(TEXT("Correct_Bolt"), 1, 10, true, 0.3f));
+	m_pPlayer->Animation()->Register(CORRECT_SHIELD, new Animation(TEXT("Correct_Shield"), 1, 10, true, 0.3f));
+	m_pPlayer->Animation()->Register(CORRECT_WALL, new Animation(TEXT("Correct_Wall"), 1, 10, true, 0.3f));
+	
 }
 
 void ObjectManager::DestroyPlayer()
@@ -41,17 +55,35 @@ void ObjectManager::CreateMonster(int id, MONSTER_KIND kind, Vector pos, float c
 	monster->SetStandPosition();
 	monster->SetMonsterKind(kind);
 
-	monster->LoadingMonsterImage();
-	monster->Animation()->Register(MINION_IDLE_UP, new Animation(TEXT("Minion_Idle_Up"), 1, 10, true, 2.0f));
-	monster->Animation()->Register(MINION_IDLE_LEFT, new Animation(TEXT("Minion_Idle_Left"), 1, 10, true, 2.0f));
-	monster->Animation()->Register(MINION_IDLE_RIGHT, new Animation(TEXT("Minion_Idle_Right"), 1, 10, true, 2.0f));
-	monster->Animation()->Register(MINION_IDLE_DOWN, new Animation(TEXT("Minion_Idle_Down"), 1, 10, true, 2.0f));
+	TCHAR Kind[100] = {};
+	TCHAR Directory[100] = {};
+	
+	switch (kind)
+	{
+	case MONSTER_MINION_RED: wsprintf(Kind, TEXT("FireMinion")); break;
+	case MONSTER_MINION_BLUE:wsprintf(Kind, TEXT("WaterMinion")); break;
 
-	monster->Animation()->Register(MINION_RUN_UP, new Animation(TEXT("Minion_Run_Up"), 3, 5, true, 2.0f));
-	monster->Animation()->Register(MINION_RUN_LEFT, new Animation(TEXT("Minion_Run_Left"), 3, 5, true, 2.0f));
-	monster->Animation()->Register(MINION_RUN_RIGHT, new Animation(TEXT("Minion_Run_Right"), 3, 5, true, 2.0f));
-	monster->Animation()->Register(MINION_RUN_DOWN, new Animation(TEXT("Minion_Run_Down"), 3, 5, true, 2.0f));
+	}
+	wsprintf(Directory, TEXT("%s/Minion_Idle_Up"), Kind);
+	monster->Animation()->Register(MINION_IDLE_UP +kind, new Animation(Directory, 1, 10, true, 2.0f));
+	wsprintf(Directory, TEXT("%s/Minion_Idle_Left"), Kind);
+	monster->Animation()->Register(MINION_IDLE_LEFT + kind, new Animation(Directory, 1, 10, true, 2.0f));
+	wsprintf(Directory, TEXT("%s/Minion_Idle_Right"), Kind);
+	monster->Animation()->Register(MINION_IDLE_RIGHT + kind, new Animation(Directory, 1, 10, true, 2.0f));
+	wsprintf(Directory, TEXT("%s/Minion_Idle_Down"), Kind);
+	monster->Animation()->Register(MINION_IDLE_DOWN + kind, new Animation(Directory, 1, 10, true, 2.0f));
 
+	wsprintf(Directory, TEXT("%s/Minion_Run_Up"), Kind);
+	monster->Animation()->Register(MINION_RUN_UP + kind, new Animation(Directory, 3, 5, true, 2.0f));
+	wsprintf(Directory, TEXT("%s/Minion_Run_Left"), Kind);
+	monster->Animation()->Register(MINION_RUN_LEFT + kind, new Animation(Directory, 3, 5, true, 2.0f));
+	wsprintf(Directory, TEXT("%s/Minion_Run_Right"), Kind);
+	monster->Animation()->Register(MINION_RUN_RIGHT + kind, new Animation(Directory, 3, 5, true, 2.0f));
+	wsprintf(Directory, TEXT("%s/Minion_Run_Down"), Kind);
+	monster->Animation()->Register(MINION_RUN_DOWN + kind, new Animation(Directory, 3, 5, true, 2.0f));
+
+	
+	
 	m_monsterList.push_back(monster);
 }
 
@@ -126,13 +158,13 @@ void ObjectManager::Draw(Camera* pCamera)
 	{
 		(*it)->Draw(pCamera);
 	}
-
+	m_pPlayer->Draw(pCamera);
 	FOR_LIST(Object*, m_skillList)
 	{
 		(*it)->Draw(pCamera);
 	}
 
-	m_pPlayer->Draw(pCamera);	
+
 }
 
 void ObjectManager::CreateSkill(Object* pCharacter, SKILL_USER id, SKILL_LIST name)
@@ -141,8 +173,21 @@ void ObjectManager::CreateSkill(Object* pCharacter, SKILL_USER id, SKILL_LIST na
 	skill->SetPosition(pCharacter->Position());
 
 	skill->Animation()->Register(FIRE_BOLT, new Animation(TEXT("Fire_Bolt"), 11, 60, true, 0.5f));
+	skill->Animation()->Register(FIRE_SHIELD, new Animation(TEXT("Fire_Shield"), 8, 20, true, 1.0f));
+	skill->Animation()->Register(FIRE_WALL, new Animation(TEXT("Fire_Wall"), 4, 20, true, 0.7f));
+	skill->Animation()->Register(FIRE_EXPLOSION, new Animation(TEXT("Fire_Explosion"), 23, 30, false, 1.5f));
 	
+	skill->Animation()->Register(WATER_BOLT, new Animation(TEXT("Ice_Bolt"), 7, 30, true, 1.0f));
+	skill->Animation()->Register(WATER_SHIELD, new Animation(TEXT("Ice_Shield"), 8, 20, true, 1.0f));
+	skill->Animation()->Register(WATER_WALL, new Animation(TEXT("Ice_Wall"), 30, 30, true, 0.8f));
+	skill->Animation()->Register(WATER_EXPLOSION, new Animation(TEXT("Ice_Explosion"), 11, 10, false, 0.7f));
 
+	skill->Animation()->Register(ELECTRICITY_BOLT, new Animation(TEXT("Electricity_Bolt"), 4, 30, true, 0.6f));
+	skill->Animation()->Register(ELECTRICITY_SHIELD, new Animation(TEXT("Electricity_Shield"), 8, 20, true, 1.0f));
+	skill->Animation()->Register(ELECTRICITY_WALL, new Animation(TEXT("Electricity_Wall"), 4, 30, true,1.5f));
+	skill->Animation()->Register(ELECTRICITY_EXPLOSION, new Animation(TEXT("Electricity_Explosion"), 6, 10, false, 1.0f));
+
+	skill->Animation()->Register(100, new Animation(TEXT("Danger"), 1, 10, true, 10.0f));
 	m_skillList.push_back(skill);
 
 }
@@ -174,4 +219,46 @@ void ObjectManager::DestroyAllSkill()
 		DELETE_OBJECT((*it));
 	}
 	m_skillList.clear();
+}
+
+void ObjectManager::LoadingMonsterImage()
+{
+	TCHAR Address[200] = {};
+	TCHAR Kind[100] = {};
+	TCHAR Directory[100] = {};
+	for (int i = 1; i < 3; i++)
+	{
+		if (i == 1)wsprintf(Kind, TEXT("FireMinion")); 
+		if (i == 2)wsprintf(Kind, TEXT("WaterMinion")); 
+
+
+
+		wsprintf(Address, TEXT("Image/Monster/%s/Idle/Up/Up"), Kind);
+		wsprintf(Directory, TEXT("%s/Minion_Idle_Up"), Kind);
+		RENDER->LoadImageFiles(Directory, Address, TEXT("png"), 1);
+		wsprintf(Address, TEXT("Image/Monster/%s/Idle/Down/Down"), Kind);
+		wsprintf(Directory, TEXT("%s/Minion_Idle_Down"), Kind);
+		RENDER->LoadImageFiles(Directory, Address, TEXT("png"), 1);
+		wsprintf(Address, TEXT("Image/Monster/%s/Idle/Left/Left"), Kind);
+		wsprintf(Directory, TEXT("%s/Minion_Idle_Left"), Kind);
+		RENDER->LoadImageFiles(Directory, Address, TEXT("png"), 1);
+		wsprintf(Address, TEXT("Image/Monster/%s/Idle/Right/Right"), Kind);
+		wsprintf(Directory, TEXT("%s/Minion_Idle_Right"), Kind);
+		RENDER->LoadImageFiles(Directory, Address, TEXT("png"), 1);
+
+
+		wsprintf(Address, TEXT("Image/Monster/%s/Run/Up/Up"), Kind);
+		wsprintf(Directory, TEXT("%s/Minion_Run_Up"), Kind);
+		RENDER->LoadImageFiles(Directory, Address, TEXT("png"), 3);
+		wsprintf(Address, TEXT("Image/Monster/%s/Run/Down/Down"), Kind);
+		wsprintf(Directory, TEXT("%s/Minion_Run_Down"), Kind);
+		RENDER->LoadImageFiles(Directory, Address, TEXT("png"), 3);
+		wsprintf(Address, TEXT("Image/Monster/%s/Run/Left/Left"), Kind);
+		wsprintf(Directory, TEXT("%s/Minion_Run_Left"), Kind);
+		RENDER->LoadImageFiles(Directory, Address, TEXT("png"), 3);
+		wsprintf(Address, TEXT("Image/Monster/%s/Run/Right/Right"), Kind);
+		wsprintf(Directory, TEXT("%s/Minion_Run_Right"), Kind);
+		RENDER->LoadImageFiles(Directory, Address, TEXT("png"), 3);
+
+	}
 }
