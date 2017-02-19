@@ -18,7 +18,6 @@ class Player : public Character
 	CORRECT_STATE   m_correct;
 
 	Vector          m_targetPos;
-
 	int             m_circleGage;
 	float             m_checkGage;
 public:
@@ -78,7 +77,7 @@ public:
 		RENDER->LoadImageFiles(TEXT("Correct_Bolt"), TEXT("Image/Magic/CorrectType/Bolt"), TEXT("png"), 1);
 		RENDER->LoadImageFiles(TEXT("Correct_Shield"), TEXT("Image/Magic/CorrectType/Shield"), TEXT("png"), 1);
 		RENDER->LoadImageFiles(TEXT("Correct_Wall"), TEXT("Image/Magic/CorrectType/Wall"), TEXT("png"), 1);
-		SOUND->LoadFile("Death", "Sound/Effect/Death.wav", false);
+		SOUND->LoadFile("Death", "Sound/Effect/Death.wav", false); SOUND->LoadFile("Death", "Sound/Effect/Death.wav", false);
 
 		SOUND->LoadFile("FireCast", "Sound/Cast/FireCast.wav", false);
 		SOUND->LoadFile("IceCast", "Sound/Cast/IceCast.wav", false);
@@ -316,7 +315,7 @@ public:
 	void  DeathState(float deltaTime)
 	{
 		RENDER->GetCamera(CAM_MAIN)->DrawFilledRect(RENDER->GetCamera(CAM_MAIN)->GetLeftTop(), Vector(800, 600));
-		if (SOUND->FindChannel("Death") == NULL)SOUND->Play("Death", 2.0f);
+		//if (SOUND->FindChannel("Death") == NULL)SOUND->Play("Death", 2.0f);
 	}
 
 	void Move(float deltaTime)
