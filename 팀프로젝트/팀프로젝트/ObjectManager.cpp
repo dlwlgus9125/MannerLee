@@ -95,7 +95,6 @@ void ObjectManager::CreateMonster(int id, MONSTER_KIND kind, Vector pos, float c
 
 void ObjectManager::CreateBoss(int id, Vector pos, float colRadius)
 {
-	cout << "TESt1" << endl;
 	NEW_OBJECT(Object* m_pBoss, Boss(id));
 	m_pBoss->SetPosition(pos);
 	m_pBoss->SetCharacterCollider(colRadius);
@@ -107,9 +106,14 @@ void ObjectManager::CreateBoss(int id, Vector pos, float colRadius)
 	m_pBoss->Animation()->Register(EYE_RED, new Animation(TEXT("Eye_Red"), 7, 6, true, 0.5f));
 	m_pBoss->Animation()->Register(EYE_YELLOW, new Animation(TEXT("Eye_Yellow"), 7, 6, true, 0.5f));
 
-	m_monsterList.push_back(m_pBoss);
+	/*m_pBoss->Animation()->Register(EYE_BLUE+100, new Animation(TEXT("Eye_Blue"), 7, 6, true, 0.5f));
+	m_pBoss->Animation()->Register(EYE_RED+100, new Animation(TEXT("Eye_Red"), 7, 6, true, 0.5f));
+	m_pBoss->Animation()->Register(EYE_YELLOW+100, new Animation(TEXT("Eye_Yellow"), 7, 6, true, 0.5f));
 
+*/
+	m_monsterList.push_back(m_pBoss);
 }
+
 
 void ObjectManager::DestroyAllMonster()
 {

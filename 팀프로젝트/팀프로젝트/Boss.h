@@ -8,6 +8,7 @@ class Boss : public Character
 	EYE_STATE m_eyeState;
 	Circle m_sightRange;
 	Timer*  m_timer;
+	list<Object*> m_BossCircle;
 
 public:
 	Boss(int id) : Character(id)
@@ -23,6 +24,16 @@ public:
 		RENDER->LoadImageFiles(TEXT("Eye_Yellow"), TEXT("Image/Monster/Boss/BossYellowEyes/YellowEye"), TEXT("png"), 7);
 		m_dir = Vector::Down();
 		m_maxLife = 10000;
+
+		/*for (int i = 0; i < 5; i++)
+		{
+			NEW_OBJECT(Object* m_pBossCircle, Boss(id));
+			m_pBossCircle->SetPosition(pos);
+
+
+		}*/
+
+
 	}
 
 	void Update(float deltaTime)
@@ -34,14 +45,23 @@ public:
 		Animation()->Update(deltaTime);
 		Animation()->Get(m_eyeState)->Update(deltaTime);
 		m_timer->Update(deltaTime);
-
 	}
 
 	void IdleState()
 	{
-		Animation()->Play(BOSS_ATTACK);
+		Animation()->Play(BOSS_IDLE);
+
+
+
 	}
 
+	void AttackState()
+	{
+
+
+
+
+	}
 
 
 
