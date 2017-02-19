@@ -310,8 +310,9 @@ public:
 			{
 				if (MATH->IsCollided(this->getCircle(), (*it)->getCircle()))
 				{
-					SOUND->Play("MonsterHit", 2.0f);
-					OBJECT->DestroyMonster((*it));
+					if((*it)->ID()==OBJ_MONSTER)SOUND->Play("MonsterHit", 2.0f);
+					if ((*it)->ID()== OBJ_BOSS)SOUND->Play("BossHit", 2.0f);
+					if((*it)->GetLife()<=0&&(*it)->ID()!=OBJ_BOSS)OBJECT->DestroyMonster((*it));
 					return true;
 				}
 			}
