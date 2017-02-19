@@ -21,7 +21,7 @@ public:
 		RENDER->CreateCamera(CAM_MAIN, 860 * 2.0f, 1100 * 2.0f, VIEW_WIDTH, VIEW_HEIGHT);
 
 		RENDER->LoadImageFile(TEXT("Dungeon"), TEXT("Image/Map/Castle.png"));
-
+		SOUND->LoadFile("DungeonBgm", "Sound/Field.wav", true);
 
 		
 		//OBJECT->CreateSkill(OBJECT->GetPlayer(), USER_PLAYER, Vector());
@@ -32,10 +32,16 @@ public:
 	void OnEnter()
 	{
 		OBJECT->CreatePlayer(Vector(620, 2000), 30);
-		//OBJECT->CreateMonster(OBJ_MONSTER, MONSTER_MINION_RED, Vector(620, 2000), 30);
+		OBJECT->CreateMonster(OBJ_MONSTER, MONSTER_MINION_RED, Vector(500, 1500), 30);
+		OBJECT->CreateMonster(OBJ_MONSTER, MONSTER_MINION_RED, Vector(730, 1500), 30);
+		OBJECT->CreateMonster(OBJ_MONSTER, MONSTER_MINION_YELLOW, Vector(500, 1250), 30);
+		OBJECT->CreateMonster(OBJ_MONSTER, MONSTER_MINION_YELLOW, Vector(730, 1250), 30);
+		OBJECT->CreateMonster(OBJ_MONSTER, MONSTER_MINION_BLUE, Vector(750, 800), 30);
+		OBJECT->CreateMonster(OBJ_MONSTER, MONSTER_MINION_BLUE, Vector(500, 800), 30);
 		NEW_OBJECT(m_DungeonBg, Sprite(RENDER->GetImage(TEXT("Dungeon")), 1.0f, 0, 0));
 		m_DungeonBg->SetSize(1200, 3129);
-		if(SOUND->FindChannel("IntroBgm")==NULL)SOUND->Play("IntroBgm", 0.5f);
+		if (SOUND->FindChannel("IntroBgm") != NULL)SOUND->Stop("IntroBgm");
+		if(SOUND->FindChannel("DungeonBgm")==NULL)SOUND->Play("DungeonBgm", 0.5f);
 
 		OBJECT->CreateProps(OBJ_GROUND, Vector(898, 46), Vector(-339, -63));
 		OBJECT->CreateProps(OBJ_GROUND, Vector(1055, 240), Vector(-45, -318));
@@ -84,7 +90,7 @@ public:
 		OBJECT->CreateProps(OBJ_HIDE, Vector(880, 658), Vector(-42, -301));
 		OBJECT->CreateProps(OBJ_HIDE, Vector(628, 2119), Vector(-133, -117));
 		OBJECT->CreateProps(OBJ_HIDE, Vector(623, 2115), Vector(-64, -57));
-
+		OBJECT->CreateProps(OBJ_GROUND, Vector(628, 2300), Vector(-133, -117));
 
 		OBJECT->GetPlayer()->SetPosition(Vector(620, 2000));
 
@@ -93,7 +99,7 @@ public:
 
 	void OnUpdate(float deltaTime)
 	{
-		
+		cout << RENDER->GetCamera(CAM_MAIN)->ScreenToWorldPos(INPUT->GetMousePos()).x<<", "<< RENDER->GetCamera(CAM_MAIN)->ScreenToWorldPos(INPUT->GetMousePos()).y << endl;
 		m_cursor = INPUT->GetMousePos();
 		OBJECT->Update(deltaTime);
 		RENDER->GetCamera(CAM_MAIN)->SetCenterPos(OBJECT->GetPlayer()->Position());

@@ -1,7 +1,7 @@
 #pragma once
 #pragma once
 #include "Character.h"
-
+#include "SceneManager.h"
 
 class Boss : public Character
 {
@@ -86,7 +86,6 @@ public:
 		{
 			m_state = CHARACTER_DEATH;
 		}
-		cout << m_life << endl;
 	}
 
 	void IdleState()
@@ -153,14 +152,17 @@ public:
 		}
 
 		exitchecker += deltaTime;
-		fadeOut += deltaTime;
-		if (exitchecker >= 0.5f)
+		fadeOut += deltaTime*0.2f;
+		if (exitchecker >= 10.0f)
 		{
 			exitTime++;
-			
+			cout << exitTime << endl;
+		}
+		if (exitTime >= 10)
+		{
+			SCENE->ChangeScene(SCENE_TITLE);
 
 		}
-
 
 
 	}

@@ -18,8 +18,8 @@ void GameManager::Init()
 	SCENE->Register(SCENE_DUNGEON, new DungeonScene());
 	SCENE->Register(SCENE_FEILD, new FieldScene());
 	SCENE->Register(SCENE_TEST, new TestScene());
-	SCENE->Register(SCENE_DEAD, new DeadScene());
-	SCENE->ChangeScene(SCENE_FEILD);
+	SCENE->Register(SCENE_DEATH, new DeadScene());
+	SCENE->ChangeScene(SCENE_TITLE);
 
 	RENDER->LoadImageFiles(TEXT("Danger"), TEXT("Image/Danger"), TEXT("png"), 1);
 	RENDER->LoadImageFiles(TEXT("Fire_Bolt"), TEXT("Image/Magic/Fire/Bolt/Bolt"), TEXT("png"), 11);
@@ -56,6 +56,13 @@ void GameManager::Init()
 	SOUND->LoadFile("FireBoltShot", "Sound/Effect/FireBoltShot.mp3", false);
 	SOUND->LoadFile("WaterBoltShot", "Sound/Effect/WaterBoltShot.mp3", false);
 	SOUND->LoadFile("ElectBoltShot", "Sound/Effect/ElectBoltShot.mp3", false);
+
+	
+	
+
+	SOUND->LoadFile("WarBgm", "Sound/WarBgm.wav", true);
+	SOUND->LoadFile("PotionEffect", "Sound/Effect/PotionSound.wav", false);
+	SOUND->LoadFile("BossVoice", "Sound/Effect/BossVoice.wav", false);
 }
 
 void GameManager::Release()

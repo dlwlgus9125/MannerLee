@@ -16,6 +16,7 @@ class TitleScene : public IScene
 public:
 	TitleScene()
 	{
+		SOUND->LoadFile("IntroBgm", "Sound/Intro.wav", true);
 		RENDER->LoadImageFile(TEXT("EIXT"), TEXT("Image/Title/EXIT.png"));
 		RENDER->LoadImageFile(TEXT("NOMAL"), TEXT("Image/Title/NOMAL.png"));
 		RENDER->LoadImageFile(TEXT("PLAY"), TEXT("Image/Title/PLAY.png"));
@@ -26,6 +27,7 @@ public:
 	{
 		NEW_OBJECT(m_pBg, Sprite(RENDER->GetImage(TEXT("Title")), 1.0f, 0, 0));
 		NEW_OBJECT(m_Button, Sprite(RENDER->GetImage(TEXT("NOMAL")), 1.0f, 0, 0));
+		if(SOUND->FindChannel("IntroBgm")==NULL)SOUND->Play("IntroBgm", 2.0f);
 	}
 
 	void OnUpdate(float deltaTime)

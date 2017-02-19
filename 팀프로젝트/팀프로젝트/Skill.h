@@ -130,12 +130,13 @@ public:
 		Vector rotateDir = m_rotateDir->GetRotateDir();
 
 		//cout << "스킬이름::"<<m_skillname << endl;
-
+		float opacity = 1.0f;
+		if (OBJECT->GetMonster(OBJ_BOSS) != NULL)opacity = 1.0f - OBJECT->GetMonster(OBJ_BOSS)->getFadeOut();
 		switch (m_Magic->GetSkillType())
 		{
-		case TYPE_BOLT:               pCamera->Draw(Animation()->Current()->GetSprite(), m_pos, m_dir, 1.0f-OBJECT->GetMonster(OBJ_BOSS)->getFadeOut());
+		case TYPE_BOLT:               pCamera->Draw(Animation()->Current()->GetSprite(), m_pos, m_dir, opacity);
 			                          pCamera->DrawCircle(m_Circle.center, m_Circle.radius, ColorF::Red, 2.0f); break;
-		default:pCamera->Draw(Animation()->Current()->GetSprite(), Position(), Vector::Right(), 1.0f-OBJECT->GetMonster(OBJ_BOSS)->getFadeOut()); break;
+		default:pCamera->Draw(Animation()->Current()->GetSprite(), Position(), Vector::Right(), opacity); break;
 		}
 
 

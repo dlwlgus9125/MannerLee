@@ -120,7 +120,8 @@ public:
 
 		float opacity = 1.0f;
 		if (IsHideToWall())opacity = 0.5f;
-		pCamera->Draw(Animation()->Current()->GetSprite(), Position(), Vector::Right(), opacity - OBJECT->GetMonster(OBJ_BOSS)->getFadeOut());
+		if (OBJECT->GetMonster(OBJ_BOSS) != NULL)opacity = 1.0f - OBJECT->GetMonster(OBJ_BOSS)->getFadeOut();
+		pCamera->Draw(Animation()->Current()->GetSprite(), Position(), Vector::Right(), opacity);
 		//pCamera->DrawCircle(getCircle().center, getCircle().radius, ColorF::Red, 2.0f);
 		//pCamera->DrawFillCircle(Position(), 30, ColorF::Red);
 		pCamera->DrawLine(Position() + 15.0f, Position() + 15.0f + m_dir * 30, ColorF::Blue, 3);

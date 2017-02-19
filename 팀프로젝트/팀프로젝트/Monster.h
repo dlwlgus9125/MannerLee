@@ -67,7 +67,7 @@ public:
 		if (MATH->IsCollided(OBJECT->GetPlayer()->getCircle(), m_sightRange))
 		{
 
-			if (SOUND->FindChannel("IntroBgm") != NULL)SOUND->Pause("IntroBgm");
+			if (SOUND->FindChannel("DungeonBgm") != NULL)SOUND->Pause("DungeonBgm");
 			if (SOUND->FindChannel("WarBgm") == NULL) { SOUND->Play("WarBgm", 1.0f); }
 
 
@@ -104,7 +104,7 @@ public:
 				m_state = CHARACTER_IDLE;
 			}
 
-					if (SOUND->FindChannel("IntroBgm") != NULL)SOUND->Resume("IntroBgm");
+					if (SOUND->FindChannel("DungeonBgm") != NULL)SOUND->Resume("DungeonBgm");
 					if (SOUND->FindChannel("WarBgm") != NULL)SOUND->Stop("WarBgm");
 
 		}

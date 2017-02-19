@@ -20,10 +20,7 @@ public:
 		//RENDER->CreateCamera(CAM_MAP, 2000, 3000, 3000, 1000);
 
 		RENDER->LoadImageFile(TEXT("BossCastle"), TEXT("Image/Boss.png"));
-		SOUND->LoadFile("IntroBgm", "Sound/Intro.wav", true);
-		SOUND->LoadFile("WarBgm", "Sound/WarBgm.wav", true);
-		SOUND->LoadFile("PotionEffect", "Sound/Effect/PotionSound.wav", false);
-		SOUND->LoadFile("BossVoice", "Sound/Effect/BossVoice.wav", false);
+		
 		
 		
 		OBJECT->CreatePlayer(Vector(600, 1000), 30);

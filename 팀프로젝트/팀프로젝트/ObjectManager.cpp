@@ -68,6 +68,7 @@ void ObjectManager::CreateMonster(int id, MONSTER_KIND kind, Vector pos, float c
 	{
 	case MONSTER_MINION_RED: wsprintf(Kind, TEXT("FireMinion")); break;
 	case MONSTER_MINION_BLUE:wsprintf(Kind, TEXT("WaterMinion")); break;
+	case MONSTER_MINION_YELLOW:wsprintf(Kind, TEXT("ElectricityMinion")); break;
 
 	}
 	wsprintf(Directory, TEXT("%s/Minion_Idle_Up"), Kind);
@@ -274,11 +275,11 @@ void ObjectManager::LoadingMonsterImage()
 	TCHAR Address[200] = {};
 	TCHAR Kind[100] = {};
 	TCHAR Directory[100] = {};
-	for (int i = 1; i < 3; i++)
+	for (int i = 1; i < 4; i++)
 	{
 		if (i == 1)wsprintf(Kind, TEXT("FireMinion")); 
 		if (i == 2)wsprintf(Kind, TEXT("WaterMinion")); 
-
+		if(i==3)wsprintf(Kind, TEXT("ElectricityMinion"));
 
 
 		wsprintf(Address, TEXT("Image/Monster/%s/Idle/Up/Up"), Kind);
