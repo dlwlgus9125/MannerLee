@@ -6,7 +6,7 @@
 
 #define UI UIManager::Instance()
 #define HP_CT_LENGTH 127
-#define POTION 200
+#define POTION 1000
 
 enum KEYSETTING
 {
@@ -32,7 +32,7 @@ public:
 	~UIManager();
 
 	void Draw(float MaxHp, float CurrentHP);
-	float EatPotion() {	return POTION; }
+	float EatPotion() { SOUND->Play("PotionSound", 2.0f);	return POTION; }
 	void DrawSetting();
 
 	bool NotRun() { return m_NotRun; }

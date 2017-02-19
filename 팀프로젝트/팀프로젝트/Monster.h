@@ -13,6 +13,8 @@ class Monster : public Character
 public:
 	Monster(int id) : Character(id)
 	{
+		m_maxLife = 300.0f;
+		m_life = m_maxLife;
 		m_sightRange.radius = 300;
 		m_speed = 100;
 		m_dirState = DIR_DOWN;
@@ -78,7 +80,7 @@ public:
 				//m_state = CHARACTER_CAST_END;
 
 				
-				if (MATH->Distance(OBJECT->GetPlayer()->Position(), m_pos) <= 300.0f&&m_timer->CheckTime(2))
+				if (MATH->Distance(OBJECT->GetPlayer()->Position(), m_pos) <= 300.0f&&m_timer->CheckTime(2)&&OBJECT->GetPlayer()->GetLife()>0.0f)
 				{
 					SKILL_LIST name;
 					switch (m_kind)

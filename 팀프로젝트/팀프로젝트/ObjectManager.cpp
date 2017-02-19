@@ -45,7 +45,8 @@ void ObjectManager::CreatePlayer(Vector pos, float colRadius)
 	m_pPlayer->Animation()->Register(CORRECT_BOLT, new Animation(TEXT("Correct_Bolt"), 1, 10, true, 0.3f));
 	m_pPlayer->Animation()->Register(CORRECT_SHIELD, new Animation(TEXT("Correct_Shield"), 1, 10, true, 0.3f));
 	m_pPlayer->Animation()->Register(CORRECT_WALL, new Animation(TEXT("Correct_Wall"), 1, 10, true, 0.3f));
-	
+
+	m_pPlayer->Animation()->Register(3333, new Animation(TEXT("Fade_Out"), 1, 6, true, 10.0f));
 }
 
 void ObjectManager::DestroyPlayer()
@@ -113,7 +114,6 @@ void ObjectManager::CreateBoss(int id, Vector pos, float colRadius)
 
 	m_pBoss->Animation()->Register(BOSS_DEATH, new Animation(TEXT("Boss_Death"), 1, 10, true, 0.5f));
 	m_pBoss->Animation()->Register(EYE_DEATH, new Animation(TEXT("Eye_Death"), 1, 6, true, 0.5f));
-	m_pBoss->Animation()->Register(3333, new Animation(TEXT("Fade_Out"), 1, 6, true, 10.0f));
 
 	m_monsterList.push_back(m_pBoss);
 }

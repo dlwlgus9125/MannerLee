@@ -100,6 +100,7 @@ public:
 
 	void OnUpdate(float deltaTime)
 	{
+		
 		//cout << RENDER->GetCamera(CAM_MAIN)->ScreenToWorldPos(INPUT->GetMousePos()).x<<", " << RENDER->GetCamera(CAM_MAIN)->ScreenToWorldPos(INPUT->GetMousePos()).y<< endl;
 		m_cursor = INPUT->GetMousePos();
 		OBJECT->Update(deltaTime);
@@ -111,16 +112,20 @@ public:
 
 		if (MATH->IsCollided(OBJECT->GetPlayer()->getCircle(), OBJECT->GetProps(OBJ_GATE)->Collider()) )
 		{
+			SOUND->Pause("DungeonBgm");
 			if (SOUND->FindChannel("Stair") == NULL)SOUND->Play("Stair", 1.0f);
-			SCENE->ChangeScene(SCENE_FEILD);
+			OBJECT->GetPlayer()->setFadeOut(true);
+			if (OBJECT->GetPlayer()->getFadeOut() >= 1.0f)SCENE->ChangeScene(SCENE_FEILD);
+			
 		}
 
 		if (INPUT->IsMouseDown(MOUSE_LEFT))
 		{
 			if (MATH->IsCollided(m_cursor, Vector(634, 10), Vector(690, 63))) //Æ÷¼Ç
-			{
-
+			{				
 				OBJECT->GetPlayer()->SetLife(-UI->EatPotion());
+				
+
 				UI->SetNotRun(true);
 			}
 
@@ -153,7 +158,7 @@ public:
 				}
 
 			}
-
+			
 		}
 
 		if (UI->SettingDraw() == false)
@@ -165,6 +170,11 @@ public:
 
 
 
+		if (OBJECT->GetPlayer()->GetLife() <= 0.0f)
+		{
+			OBJECT->GetPlayer()->setFadeOut(true);
+			if (OBJECT->GetPlayer()->getFadeOut() >= 1.0f)SCENE->ChangeScene(SCENE_DEATH);
+		}
 
 
 	}
@@ -173,7 +183,7 @@ public:
 	{
 		/*SOUND->Stop("IntroBgm");*/
 		OBJECT->DestroyAllProps();
-		DELETE_OBJECT(m_DungeonBg);
+		//DELETE_OBJECT(m_DungeonBg);
 	}
 
 	void OnDraw()

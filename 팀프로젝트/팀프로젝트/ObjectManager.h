@@ -62,6 +62,7 @@ public:
 	virtual float getFadeOut() { return 0.0f; }
 	virtual void SetHavePotion(int have) {  }
 	virtual int  getHavePotion() { return 0; }
+	virtual void setFadeOut(bool check) { }
 
 	virtual int GetGage() { return NULL; }
 	virtual void Setgage(int num){}

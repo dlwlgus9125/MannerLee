@@ -41,10 +41,10 @@ public:
 	{
 		if (m_id == OBJ_MONSTER)SOUND->Play("MonsterHit", 2.0f);
 		if (m_id == OBJ_BOSS && this->GetEyeState() != EYE_DEATH)SOUND->Play("BossHit", 2.0f);
-		if (m_id == OBJ_PLAYER)SOUND->Play("Hit", 2.0f);
+		if (m_id == OBJ_PLAYER&&damage>=0)SOUND->Play("Hit", 2.0f);
 		cout << "test" << endl;
 		m_life -= damage;
-		MATH->Clamp(m_life, 0.0f, m_maxLife);
+		m_life= MATH->Clamp(m_life, 0.0f, m_maxLife);
 	}
 
 	void SetCharacterCollider(float radius)
@@ -78,6 +78,7 @@ public:
 	virtual float getFadeOut() { return 0.0f; }
 	virtual void SetHavePotion(int have) { }
 	virtual int  getHavePotion() { return 0; }
+	virtual void setFadeOut(bool check) { }
 	bool IsGroundCollided()
 	{
 		list<Object*> groundList = OBJECT->GetPropsList(OBJ_GROUND);

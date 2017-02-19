@@ -54,18 +54,17 @@ void UIManager::Draw(float MaxHp, float CurrentHP)
 	float percent_Hp = MaxHp / (float)HP_CT_LENGTH;
 
 	CurrentHP = MATH->Clamp(CurrentHP, 0.0f, MaxHp);
-	float opacity = 1.0f;
-	if (OBJECT->GetMonster(OBJ_BOSS) != NULL)opacity = 1.0f - OBJECT->GetMonster(OBJ_BOSS)->getFadeOut();
 	
-	RENDER->Draw(m_UI, 0, 0, opacity);
+	
+	RENDER->Draw(m_UI, 0, 0, 1.0f - OBJECT->GetPlayer()->getFadeOut());
 	for (int i = 0; i < ((int)(CurrentHP / percent_Hp)); i++)
 	{
-		RENDER->Draw(m_Hp[i], 94+i, 10, opacity);
+		RENDER->Draw(m_Hp[i], 94+i, 10, 1.0f - OBJECT->GetPlayer()->getFadeOut());
 	}
 
 	for (int i = 0; i < HP_CT_LENGTH; i++)
 	{
-		RENDER->Draw(m_CoolTime[i], 94 + i, 34, opacity);
+		RENDER->Draw(m_CoolTime[i], 94 + i, 34, 1.0f - OBJECT->GetPlayer()->getFadeOut());
 	}//test
 }
 

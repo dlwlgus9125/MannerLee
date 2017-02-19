@@ -96,7 +96,7 @@ public:
 			break;
 
 		case FIRE_SHIELD:   case WATER_SHIELD:   case ELECTRICITY_SHIELD:   m_skillState = STATE_SHIELD;   break;
-		case ETERNAL_FIRE_WALL://m_pos = ; m_skillState=STATE_WALL;
+		case ETERNAL_FIRE_WALL:m_pos = Vector(885, 950); m_skillState=STATE_WALL;
 			break;
 		}
 
@@ -133,11 +133,21 @@ public:
 
 		switch (m_Magic->GetSkillType())
 		{
-		case TYPE_BOLT:               pCamera->Draw(Animation()->Current()->GetSprite(), m_pos, m_dir);
+		case TYPE_BOLT:               pCamera->Draw(Animation()->Current()->GetSprite(), m_pos, m_dir, 1.0f-OBJECT->GetPlayer()->getFadeOut());
 			pCamera->DrawCircle(m_Circle.center, m_Circle.radius, ColorF::Red, 2.0f); break;
-		default:pCamera->Draw(Animation()->Current()->GetSprite(), Position()); break;
+		default:pCamera->Draw(Animation()->Current()->GetSprite(), Position(), Vector::Right(), 1.0f - OBJECT->GetPlayer()->getFadeOut()); break;
 		}
-
+		if (m_Magic->GetSkillName() == ETERNAL_FIRE_WALL)
+		{
+			pCamera->Draw(Animation()->Current()->GetSprite(), Position() + Vector(100, 0), Vector::Right(), 1.0f - OBJECT->GetPlayer()->getFadeOut());
+			pCamera->Draw(Animation()->Current()->GetSprite(), Position() + Vector(200, 0), Vector::Right(), 1.0f - OBJECT->GetPlayer()->getFadeOut());
+			pCamera->Draw(Animation()->Current()->GetSprite(), Position() + Vector(300, 0), Vector::Right(), 1.0f - OBJECT->GetPlayer()->getFadeOut());
+			pCamera->Draw(Animation()->Current()->GetSprite(), Position() + Vector(400, 0), Vector::Right(), 1.0f - OBJECT->GetPlayer()->getFadeOut());
+			pCamera->Draw(Animation()->Current()->GetSprite(), Position() + Vector(-100, 0), Vector::Right(), 1.0f - OBJECT->GetPlayer()->getFadeOut());
+			pCamera->Draw(Animation()->Current()->GetSprite(), Position() + Vector(-200, 0), Vector::Right(), 1.0f - OBJECT->GetPlayer()->getFadeOut());
+			pCamera->Draw(Animation()->Current()->GetSprite(), Position() + Vector(-300, 0), Vector::Right(), 1.0f - OBJECT->GetPlayer()->getFadeOut());
+			pCamera->Draw(Animation()->Current()->GetSprite(), Position() + Vector(-400, 0), Vector::Right(), 1.0f - OBJECT->GetPlayer()->getFadeOut());
+		}
 
 	}
 
@@ -257,43 +267,46 @@ public:
 		if (m_skillUser == USER_PLAYER)
 		{
 			list<Object*> monsterList = OBJECT->GetMonsterList();
+			
 			FOR_LIST(Object*, monsterList)
 			{
+				
 				if (MATH->IsCollided(this->getCircle(), (*it)->getCircle()))
 				{
+					cout << (*it)->GetLife() << endl;
 					if (this->GetMagic()->GetSkillType() == TYPE_WALL)
 					{
 						if (m_Timer == 240)
 						{ 
-							(*it)->SetLife(-this->m_Magic->GetDamage());
+							(*it)->SetLife(this->m_Magic->GetDamage());
 							if ((*it)->GetLife() <= 0 && (*it)->ID() != OBJ_BOSS)OBJECT->DestroyMonster((*it));
 						}
 						if (m_Timer == 180)	
 						{ 
-							(*it)->SetLife(-this->m_Magic->GetDamage());
+							(*it)->SetLife(this->m_Magic->GetDamage());
 							if ((*it)->GetLife() <= 0 && (*it)->ID() != OBJ_BOSS)OBJECT->DestroyMonster((*it));
 						}
 						if (m_Timer == 120)
 						{
-							(*it)->SetLife(-this->m_Magic->GetDamage());
+							(*it)->SetLife(this->m_Magic->GetDamage());
 							if ((*it)->GetLife() <= 0 && (*it)->ID() != OBJ_BOSS)OBJECT->DestroyMonster((*it));
 						}
 						if (m_Timer == 60)	
 						{
 							
 							if ((*it)->GetLife() <= 0 && (*it)->ID() != OBJ_BOSS)OBJECT->DestroyMonster((*it));
-							(*it)->SetLife(-this->m_Magic->GetDamage());
+							(*it)->SetLife(this->m_Magic->GetDamage());
 						}
 						if (m_Timer == 1)
 						{ 
 							if ((*it)->GetLife() <= 0 && (*it)->ID() != OBJ_BOSS)OBJECT->DestroyMonster((*it));
-							(*it)->SetLife(-this->m_Magic->GetDamage());
+							(*it)->SetLife(this->m_Magic->GetDamage());
 						}
 					}
 					if (this->GetMagic()->GetSkillType() == TYPE_BOLT) 
 					{
 						if ((*it)->GetLife() <= 0 && (*it)->ID() != OBJ_BOSS)OBJECT->DestroyMonster((*it));
-						(*it)->SetLife(-this->m_Magic->GetDamage());
+						(*it)->SetLife(this->m_Magic->GetDamage());
 					}
 				}
 			}
@@ -331,7 +344,12 @@ public:
 			list<Object*> monsterList = OBJECT->GetMonsterList();
 			FOR_LIST(Object*, monsterList)
 			{
-				if (MATH->IsCollided(this->getCircle(), (*it)->getCircle()))
+				bool checker = true;
+				if (m_Magic->GetAttribute() == ATTRIBUTE_FIRE && (*it)->GetMonsterKind() == MONSTER_MINION_RED || (*it)->GetEyeState() == EYE_RED)checker = false;
+				if (m_Magic->GetAttribute() == ATTRIBUTE_WATER && (*it)->GetMonsterKind() == MONSTER_MINION_BLUE || (*it)->GetEyeState() == EYE_BLUE)checker = false;
+				if (m_Magic->GetAttribute() == ATTRIBUTE_ELECTRICITY && (*it)->GetMonsterKind() == MONSTER_MINION_YELLOW || (*it)->GetEyeState() == EYE_YELLOW)checker = false;
+
+				if (MATH->IsCollided(this->getCircle(), (*it)->getCircle())&&checker ==true)
 				{
 					/*if ((*it)->ID() == OBJ_MONSTER)SOUND->Play("MonsterHit", 2.0f);
 					if ((*it)->ID() == OBJ_BOSS)SOUND->Play("BossHit", 2.0f);*/

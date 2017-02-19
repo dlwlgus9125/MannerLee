@@ -22,8 +22,9 @@ class Player : public Character
 	float           m_checkGage;
 	int             m_havePotion;
 
+	float fadeOut;
 	bool m_isComeBossMap;
-
+	bool m_isFadeOut;
 public:
 	
 public:
@@ -40,7 +41,6 @@ public:
 		m_prevSkillType = TYPE_NONE;
 		m_rotateDir = new RotateDir();
 		m_timer = new Timer();
-		m_life = 500;
 		m_targetPos = m_pos;
 		m_circleGage = 1;
 		m_checkGage = 1.0f;
@@ -49,6 +49,8 @@ public:
 		m_RuneType = RUNE_NONE;
 		m_correct = CORRECT_NONE;
 		m_isComeBossMap = false;
+		fadeOut = 0.0f;
+		m_isFadeOut = false;
 		OBJECT->LoadingMonsterImage();
 
 		RENDER->LoadImageFiles(TEXT("Idle_Up"), TEXT("Image/Monster/Player/Idle/Up/Up"), TEXT("png"), 1);
@@ -84,7 +86,9 @@ public:
 		RENDER->LoadImageFiles(TEXT("Correct_Bolt"), TEXT("Image/Magic/CorrectType/Bolt"), TEXT("png"), 1);
 		RENDER->LoadImageFiles(TEXT("Correct_Shield"), TEXT("Image/Magic/CorrectType/Shield"), TEXT("png"), 1);
 		RENDER->LoadImageFiles(TEXT("Correct_Wall"), TEXT("Image/Magic/CorrectType/Wall"), TEXT("png"), 1);
-		SOUND->LoadFile("Death", "Sound/Effect/Death.wav", false); SOUND->LoadFile("Death", "Sound/Effect/Death.wav", false);
+		RENDER->LoadImageFiles(TEXT("Fade_Out"), TEXT("Image/FadeOut"), TEXT("png"), 1);
+		
+		SOUND->LoadFile("Death", "Sound/Effect/Death.wav", false); 
 
 		SOUND->LoadFile("FireCast", "Sound/Cast/FireCast.wav", false);
 		SOUND->LoadFile("IceCast", "Sound/Cast/IceCast.wav", false);
@@ -113,15 +117,29 @@ public:
 		Animation()->Get(m_Rune)->Update(deltaTime);
 		m_timer->Update(deltaTime);
 		//if (OBJECT->GetPlayer()->GetLife() <= 0.0f)m_state = CHARACTER_DEATH;
+		if (m_isFadeOut == true)
+		{
+			fadeOut += deltaTime*0.5f;
+			cout << fadeOut << endl;
+			fadeOut = MATH->Clamp(fadeOut, 0.0f, 10.0f);
+		}
+		else
+		{
+			fadeOut -= deltaTime*0.5f;
+			fadeOut = MATH->Clamp(fadeOut, 0.0f, 10.0f);
+		}
 	}
 
 	void Draw(Camera* pCamera)
 	{
-
+		
 		float opacity = 1.0f;
+		
+		pCamera->Draw(Animation()->Get(3333)->GetSprite(), pCamera->GetLeftTop(), Vector::Right(), fadeOut);
+		if (OBJECT->GetMonster(OBJ_BOSS) != NULL)opacity = 1.0f - fadeOut;
 		if (IsHideToWall())opacity = 0.5f;
-		if (OBJECT->GetMonster(OBJ_BOSS) != NULL)opacity = 1.0f - OBJECT->GetMonster(OBJ_BOSS)->getFadeOut();
-		pCamera->Draw(Animation()->Current()->GetSprite(), Position(), Vector::Right(), opacity);
+		cout << opacity - fadeOut << endl;
+		pCamera->Draw(Animation()->Current()->GetSprite(), Position(), Vector::Right(), opacity-fadeOut);
 		//pCamera->DrawCircle(getCircle().center, getCircle().radius, ColorF::Red, 2.0f);
 		//pCamera->DrawFillCircle(Position(), 30, ColorF::Red);
 		pCamera->DrawLine(Position() + 15.0f, Position() + 15.0f + m_dir * 30, ColorF::Blue, 3);
@@ -407,4 +425,6 @@ public:
 
 	void SetHavePotion(int have) { m_havePotion += have; m_havePotion=MATH->Clamp(m_havePotion, 0, 9); }
 	int  getHavePotion() { return m_havePotion; }
+	void setFadeOut(bool check) { m_isFadeOut=check; }
+	float getFadeOut() { return fadeOut; }
 };

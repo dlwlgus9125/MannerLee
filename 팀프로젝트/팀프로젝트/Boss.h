@@ -14,11 +14,12 @@ class Boss : public Character
 	bool isBossDie;
 	int  exitTime;
 	float exitchecker;
-	float fadeOut;
 
 public:
 	Boss(int id) : Character(id)
 	{
+
+		srand((unsigned)time(NULL));
 		m_state = CHARACTER_IDLE;
 		m_eyeState = EYE_GREEN;
 		m_timer = new Timer();
@@ -26,7 +27,9 @@ public:
 		isBossDie = false;
 		exitTime = 0;
 		exitchecker = 0.0f;
-		fadeOut = 0.0f;
+		m_maxLife = 2000.0f;
+		m_life = m_maxLife;
+		
 		RENDER->LoadImageFiles(TEXT("Boss_Idle"), TEXT("Image/Monster/Boss/Idle/Boss_Idle_"), TEXT("png"), 13);
 		RENDER->LoadImageFiles(TEXT("Boss_Attack"), TEXT("Image/Monster/Boss/Attack/Boss_Attack_"), TEXT("png"), 5);
 		RENDER->LoadImageFiles(TEXT("Eye_Green"), TEXT("Image/Monster/Boss/BossGreenEyes/GreenEye"), TEXT("png"), 7);
@@ -39,15 +42,13 @@ public:
 
 		RENDER->LoadImageFiles(TEXT("Boss_Death"), TEXT("Image/Monster/Boss/BossDeath/Boss_Death_"), TEXT("png"), 1);
 		RENDER->LoadImageFiles(TEXT("Eye_Death"), TEXT("Image/Monster/Boss/BossDeath/DeathEye"), TEXT("png"), 1);
-		RENDER->LoadImageFiles(TEXT("Fade_Out"), TEXT("Image/FadeOut"), TEXT("png"), 1);
+	
 
 		SOUND->LoadFile("BossAttack", "Sound/Effect/BossAttack.wav", false);
 		SOUND->LoadFile("BossDie", "Sound/Effect/BossDeath.wav", false);
 
 		m_attackTime = 0;
 		m_dir = Vector::Down();
-		m_maxLife = 10;
-		m_life = 0.0001f;
 
 		for (int i = 0; i < 4; i++)
 		{
@@ -75,17 +76,14 @@ public:
 		switch (m_state)
 		{
 		case CHARACTER_IDLE: IdleState(); break;
-		case CHARACTER_CAST_END: AttackState(deltaTime);
-		case CHARACTER_DEATH: DeathState(deltaTime);
+		case CHARACTER_CAST_END: AttackState(deltaTime); break;
+		case CHARACTER_DEATH: DeathState(deltaTime); break;
 		}
 		Animation()->Update(deltaTime);
 		Animation()->Get(m_eyeState)->Update(deltaTime);
 		m_timer->Update(deltaTime);
 		m_rotateDir->Update(deltaTime);
-		if (m_life <= 0)
-		{
-			m_state = CHARACTER_DEATH;
-		}
+		
 	}
 
 	void IdleState()
@@ -106,7 +104,10 @@ public:
 			m_state = CHARACTER_CAST_END;
 
 		}
-
+		if (m_life <= 0.0f)
+		{
+			m_state = CHARACTER_DEATH;
+		}
 	}
 
 	void AttackState(float deltaTime)
@@ -138,7 +139,10 @@ public:
 			
 			m_state = CHARACTER_IDLE;
 		}
-
+		if (m_life <= 0.0f)
+		{
+			m_state = CHARACTER_DEATH;
+		}
 	}
 
 	void DeathState(float deltaTime)
@@ -152,7 +156,6 @@ public:
 		}
 
 		exitchecker += deltaTime;
-		fadeOut += deltaTime*0.2f;
 		if (exitchecker >= 10.0f)
 		{
 			exitTime++;
@@ -173,7 +176,7 @@ public:
 	{		
 		pCamera->Draw(Animation()->Get(m_eyeState)->GetSprite(), Position() + Vector(0, -22));
 		pCamera->Draw(Animation()->Current()->GetSprite(), Position() + Vector(0, -100));
-		pCamera->Draw(Animation()->Get(3333)->GetSprite(), pCamera->GetLeftTop(), Vector::Right(), fadeOut);
+		
 
 		FOR_LIST(Object*, m_BossCircle)
 		{
@@ -184,5 +187,5 @@ public:
 	}
 
 	EYE_STATE GetEyeState() { return m_eyeState; }
-	float getFadeOut() { return fadeOut; }
+	
 };

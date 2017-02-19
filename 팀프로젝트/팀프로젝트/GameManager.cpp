@@ -19,7 +19,7 @@ void GameManager::Init()
 	SCENE->Register(SCENE_FEILD, new FieldScene());
 	SCENE->Register(SCENE_TEST, new TestScene());
 	SCENE->Register(SCENE_DEATH, new DeadScene());
-	SCENE->ChangeScene(SCENE_DUNGEON);
+	SCENE->ChangeScene(SCENE_FEILD);
 
 	RENDER->LoadImageFiles(TEXT("Danger"), TEXT("Image/Danger"), TEXT("png"), 1);
 	RENDER->LoadImageFiles(TEXT("Fire_Bolt"), TEXT("Image/Magic/Fire/Bolt/Bolt"), TEXT("png"), 11);
@@ -57,6 +57,7 @@ void GameManager::Init()
 	SOUND->LoadFile("WaterBoltShot", "Sound/Effect/WaterBoltShot.mp3", false);
 	SOUND->LoadFile("ElectBoltShot", "Sound/Effect/ElectBoltShot.mp3", false);
 	SOUND->LoadFile("Stair", "Sound/Effect/Stair.wav", false);
+	SOUND->LoadFile("PotionSound", "Sound/Effect/PotionSound.wav", false);
 	
 	
 	SOUND->LoadFile("BossBgm", "Sound/Boss2.wav", true);

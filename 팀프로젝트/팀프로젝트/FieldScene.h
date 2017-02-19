@@ -21,20 +21,20 @@ public:
 
 		RENDER->LoadImageFile(TEXT("BossCastle"), TEXT("Image/Boss.png"));
 		
-		
-		
+		OBJECT->CreatePlayer(Vector(620, 2200), 30);
 
 		
 	}
 
 	void OnEnter()
 	{
+		SOUND->Resume("DungeonBgm");
 		OBJECT->GetPlayer()->SetPosition(Vector(500, 1650));
 		OBJECT->GetPlayer()->SetDir(Vector::Up());
 		NEW_OBJECT(m_pBg, Sprite(RENDER->GetImage(TEXT("BossCastle")), 2.0f, 0, 0));
 		//m_pBg->SetSize(860 * 2.0f, 1100 * 2.0f);
 		OBJECT->CreateBoss(OBJ_BOSS, Vector(885, 400), 50);
-
+		OBJECT->GetPlayer()->setFadeOut(false);
 		
 		//RENDER->GetCamera(CAM_MAP)->SetScreenRect(0, 0, 200, 200);
 
@@ -47,6 +47,11 @@ public:
 		OBJECT->CreateProps(OBJ_GROUND, Vector(930, 900)*1.33f, Vector(280, 100)*1.33f);
 		OBJECT->CreateProps(OBJ_GROUND, Vector(760, 1000)*1.33f, Vector(50, 360)*1.33f);
 		OBJECT->CreateProps(OBJ_GROUND, Vector(575, 1000)*1.33f, Vector(50, 360)*1.33f);
+		OBJECT->CreateProps(OBJ_GROUND, Vector(560, 1460), Vector(320, 120));
+		OBJECT->CreateProps(OBJ_GROUND, Vector(400, 1700), Vector(70, 360));
+		OBJECT->CreateProps(OBJ_GROUND, Vector(850, 1900), Vector(1000, 100));
+		OBJECT->CreateProps(OBJ_GROUND, Vector(1200, 1460), Vector(320, 120));
+		OBJECT->CreateProps(OBJ_GROUND, Vector(1370, 1700), Vector(70, 360));
 
 		OBJECT->CreateProps(OBJ_HIDE, Vector(280, 840)*1.33f, Vector(10, 10)*1.33f);
 		OBJECT->CreateProps(OBJ_HIDE, Vector(350, 840)*1.33f, Vector(10, 10)*1.33f);
@@ -58,12 +63,23 @@ public:
 		OBJECT->CreateProps(OBJ_HIDE, Vector(970, 840)*1.33f, Vector(10, 10)*1.33f);
 		OBJECT->CreateProps(OBJ_HIDE, Vector(1045, 840)*1.33f, Vector(10, 10)*1.33f);
 
+		OBJECT->CreateProps(OBJ_HIDE, Vector(530, 1810), Vector(10, 10)*1.33f);
+		OBJECT->CreateProps(OBJ_HIDE, Vector(620, 1810), Vector(10, 10)*1.33f);
+		OBJECT->CreateProps(OBJ_HIDE, Vector(720, 1810), Vector(10, 10)*1.33f);
+		OBJECT->CreateProps(OBJ_HIDE, Vector(880, 1810), Vector(100, 10)*1.33f);
+		OBJECT->CreateProps(OBJ_HIDE, Vector(1040, 1810), Vector(10, 10)*1.33f);
+		OBJECT->CreateProps(OBJ_HIDE, Vector(1135, 1810), Vector(10, 10)*1.33f);
+		OBJECT->CreateProps(OBJ_HIDE, Vector(1230, 1810), Vector(10, 10)*1.33f);
+		OBJECT->CreateProps(OBJ_HIDE, Vector(1330, 1810), Vector(10, 10)*1.33f);
+
 		OBJECT->CreateProps(OBJ_CHECKER, Vector(885, 840), Vector(800,50));
 		//OBJECT->CreateProps(OBJ_GROUND, Vector(750, 1150), Vector(190, 230));
 	}
 
 	void OnUpdate(float deltaTime)
 	{
+		
+
 		cout << RENDER->GetCamera(CAM_MAIN)->ScreenToWorldPos(INPUT->GetMousePos()).x << ", " << RENDER->GetCamera(CAM_MAIN)->ScreenToWorldPos(INPUT->GetMousePos()).y << endl;
 		if (MATH->IsCollided(OBJECT->GetPlayer()->getCircle(), OBJECT->GetProps(OBJ_CHECKER)->Collider())&&OBJECT->GetPlayer()->isComeBossMap() == false)
 		{
@@ -71,10 +87,15 @@ public:
 			if (SOUND->FindChannel("DungeonBgm") != NULL)SOUND->Stop("DungeonBgm");
 			if (SOUND->FindChannel("BossBgm") == NULL)SOUND->Play("BossBgm", 0.5f);
 			
+
+
 			OBJECT->GetPlayer()->setIscome(true);
+			OBJECT->CreateSkill(OBJECT->GetMonster(OBJ_BOSS), USER_MINION, ETERNAL_FIRE_WALL);
 			cout << OBJECT->GetPlayer()->isComeBossMap() << endl;
 			OBJECT->CreateProps(OBJ_GROUND, Vector(885, 950), Vector(800, 50));
 		}
+
+
 		
 		m_cursor = INPUT->GetMousePos();
 		OBJECT->Update(deltaTime);
@@ -92,6 +113,7 @@ public:
 			if (MATH->IsCollided(m_cursor, Vector(634, 10), Vector(690, 63))) //Æ÷¼Ç
 			{
 				cout << "test" << endl;
+
 				OBJECT->GetPlayer()->SetLife(-UI->EatPotion());
 				UI->SetNotRun(true);
 			}
@@ -139,7 +161,11 @@ public:
 
 
 
-
+		if (OBJECT->GetPlayer()->GetLife() <= 0.0f)
+		{
+			OBJECT->GetPlayer()->setFadeOut(true);
+			if (OBJECT->GetPlayer()->getFadeOut() >= 1.0f)SCENE->ChangeScene(SCENE_DEATH);
+		}
 	}
 
 	void OnExit()
