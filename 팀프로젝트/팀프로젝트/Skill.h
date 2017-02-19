@@ -211,7 +211,7 @@ public:
 			OBJECT->GetShieldList().front()->SetIsComplete();
 		}
 		Animation()->Play(m_Magic->GetSkillName());
-		SoundCorrecter();
+		SoundCorrecter();///
 	
 		m_pos = m_pcharacter->Position();
 		this->SetCollider(m_pos, 40);
@@ -219,7 +219,7 @@ public:
 		{
 			ColliedWithSkill(isSkillCollided());
 		}
-		//
+
 
 		if (m_Timer <= 0) m_isComplete = true;
 
