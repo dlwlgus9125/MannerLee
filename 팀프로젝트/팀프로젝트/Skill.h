@@ -310,6 +310,7 @@ public:
 			{
 				if (MATH->IsCollided(this->getCircle(), (*it)->getCircle()))
 				{
+					SOUND->Play("MonsterHit", 2.0f);
 					OBJECT->DestroyMonster((*it));
 					return true;
 				}
