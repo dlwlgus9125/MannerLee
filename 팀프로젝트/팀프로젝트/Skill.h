@@ -52,10 +52,12 @@ class Skill : public Object
 	RotateDir*       m_rotateDir;
 
 	Circle m_Circle;
+	Magic* m_prev;
 	Magic* m_Magic;
 	int m_Timer;
 	bool  m_isComplete;
 	bool  m_isPlayerHit;
+	
 public:
 	Skill(Object* pCharacter, SKILL_USER id, SKILL_LIST name) : Object(id)
 	{
@@ -99,7 +101,6 @@ public:
 		case STATE_WALL:      WallState(deltaTime);      break;
 		case STATE_SHIELD:    ShieldState(deltaTime);      break;
 		case STATE_EXPLOSION: ExplosionState(deltaTime);      break;
-		case STATE_VANISH:    VanishState(deltaTime);   break;
 		case MONSTER_ATTACK:  MonsterAttack(deltaTime);   break;
 		}
 		StopSoundMachine();
@@ -129,18 +130,25 @@ public:
 	{
 		Magic* B = MagicB->GetMagic();
 
-		switch (m_Magic->GetAttribute())
+		if (this->GetMagic()->GetAttribute() == B->GetAttribute())
 		{
-		case ATTRIBUTE_FIRE:
-			if (B->GetAttribute() == ATTRIBUTE_WATER)        MagicB->SetTimer(-1000);
-			else if (B->GetAttribute() == ATTRIBUTE_ELECTRICITY)this->SetTimer(-1000);   break;
-		case ATTRIBUTE_WATER:
-			if (B->GetAttribute() == ATTRIBUTE_FIRE)        MagicB->SetTimer(-1000);
-			else if (B->GetAttribute() == ATTRIBUTE_ELECTRICITY)this->SetTimer(-1000);   break;
-		case ATTRIBUTE_ELECTRICITY:
-			if (B->GetAttribute() == ATTRIBUTE_WATER)         MagicB->SetTimer(-1000);
-			else if (B->GetAttribute() == ATTRIBUTE_FIRE)this->SetTimer(-1000);   break;
+			m_isComplete = true;
+			MagicB->SetIsComplete();
 		}
+		else
+		{
+			switch (m_Magic->GetAttribute())
+			{
+			case ATTRIBUTE_FIRE:
+				 if (B->GetAttribute() == ATTRIBUTE_WATER)m_isComplete = true; break;
+			case ATTRIBUTE_WATER:
+				if (B->GetAttribute() == ATTRIBUTE_ELECTRICITY)m_isComplete = true; break;
+			case ATTRIBUTE_ELECTRICITY:
+				 if (B->GetAttribute() == ATTRIBUTE_FIRE)m_isComplete = true; break;
+		
+		}
+		}
+		
 	}
 	void BoltState(float deltaTime)
 	{
@@ -150,7 +158,7 @@ public:
 		if (IsGroundCollided())
 		{
 			SoundCorrecter();
-			m_Magic->SetTIme(20);
+			SetTimer(60);
 			m_skillState = STATE_EXPLOSION;
 		}
 		if (IsMonsterCollided()||IsPlayerCollided())
@@ -158,14 +166,14 @@ public:
 
 			SoundCorrecter();
 			ColliedWithCharacter();
-			m_Magic->SetTIme(20);
+			SetTimer(60);
 			m_skillState = STATE_EXPLOSION;
 		}
 		if (isSkillCollided() != NULL)
 		{
 			ColliedWithSkill(isSkillCollided());
 		}
-		if(m_Timer<=0) m_isComplete = true;
+		if(m_Timer<0) m_isComplete = true;
 
 	}
 
@@ -190,18 +198,23 @@ public:
 
 		if (IsGroundCollided())
 		{
-
+			GroundPush(m_pos);
 		}
 		
 
 	}
 
 	void ShieldState(float deltaTime)
-	{
+	{	
+		if (OBJECT->GetShieldList().size()>1)
+		{
+			OBJECT->GetShieldList().front()->SetIsComplete();
+		}
 		Animation()->Play(m_Magic->GetSkillName());
 		SoundCorrecter();
+	
 		m_pos = m_pcharacter->Position();
-		this->SetCollider(m_pos, 100);
+		this->SetCollider(m_pos, 40);
 		if (isSkillCollided() != NULL)
 		{
 			ColliedWithSkill(isSkillCollided());
@@ -219,13 +232,7 @@ public:
 		if (m_Magic->GetAttribute() == ATTRIBUTE_ELECTRICITY)Animation()->Play(ELECTRICITY_EXPLOSION);
 		RENDER->GetCamera(CAM_MAIN)->SetIsWaveTrue();
 		cout << m_Timer << endl;
-		SetTimer(2);
 		if (m_Timer <= 0) m_isComplete = true;
-	}
-
-	void VanishState(float deltaTime)
-	{
-		
 	}
 
 	void MonsterAttack(float delTatime)
@@ -260,32 +267,7 @@ public:
 
 	void ColliedWithSkill(Object* B)
 	{
-
 		AttributeMatch(B);
-
-
-		m_Magic->SetLife(-B->GetMagic()->GetDamage());
-		B->GetMagic()->SetLife(m_Magic->GetDamage());
-
-		if (m_Magic->GetSkillType() == TYPE_SHIELD&&B->GetMagic()->GetSkillType() == TYPE_BOLT)
-		{
-			B->GetMagic()->SetLife(-100);
-		}
-
-		if (m_Magic->GetLife() <= 0)
-		{
-			this->SetTimer(100);
-		}
-
-		if (B->GetMagic()->GetLife() <= 0)
-		{
-			B->SetTimer(100);
-		}
-	}
-
-	void SetSkllTimer(float deltatime)
-	{
-		this->m_Magic->SetTimer(deltatime);
 	}
 
 	bool IsGroundCollided()
@@ -337,7 +319,7 @@ public:
 		{
 			if (MATH->IsCollided(this->getCircle(), (*it)->getCircle()))
 			{
-				return (*it);
+				if((*it)->ID()!=this->ID())return (*it);
 			}
 		}
 		return NULL;
@@ -367,7 +349,16 @@ public:
 	}
 	void SetTimer(float num = 1)
 	{
-		m_Timer -= num;
+		m_Timer--;
+		if (num != 1) m_Timer = num;
+	}
+
+	void ChangeShield(Object* prev)
+	{
+		if (prev->GetMagic()->GetSkillType() == TYPE_SHIELD)
+		{
+			prev->SetIsComplete();
+		}
 	}
 
 	void SoundCorrecter()
@@ -401,6 +392,13 @@ public:
 			}
 		}
 	}
+	void SetIsComplete()
+	{
+		m_isComplete = true;
+	}
+	int ID() { return m_skillUser; }
+
+	
 };
 //FIRE_BOLT = 11, FIRE_SHIELD = 12, FIRE_WALL = 13, FIRE_EXPLOSION,
 //WATER_BOLT = 21, WATER_SHIELD = 22, WATER_WALL = 23, WATER_EXPLOSION,

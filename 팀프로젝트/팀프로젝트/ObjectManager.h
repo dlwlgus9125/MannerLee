@@ -53,7 +53,7 @@ public:
 	virtual float MaxLife(){return 0.0f;}
 	virtual float GetLife(){return 0.0f;}
 	virtual void SetTimer(float time){}
-	virtual void SetIsComplete(int result){}
+	virtual void SetIsComplete(){}
 	Object(){}
 };
 
@@ -157,6 +157,17 @@ public:
 		}
 		return result;
 	}
+	
+	list<Object*>GetShieldList()
+	{
+		list<Object*> result;
+		FOR_LIST(Object*, m_skillList)
+		{
+			if ((*it)->GetMagic()->GetSkillType() == TYPE_SHIELD) result.push_back(*it);
+		}
+		return result;
+	}
+
 	void DestroyCompletedSkill();
 	list<Object*> GetPropsList() { return m_propsList; }
 	list<Object*> GetSkillList() { return m_skillList; }
