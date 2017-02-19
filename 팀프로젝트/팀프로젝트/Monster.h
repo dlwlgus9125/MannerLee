@@ -21,7 +21,6 @@ public:
 
 	void Update(float deltaTime)
 	{
-		LoadingMonsterImage();
 		switch (m_state)
 		{
 		case CHARACTER_IDLE: IdleState(); break;
@@ -38,10 +37,10 @@ public:
 	{
 		switch (m_dirState)
 		{
-		case DIR_UP: m_spriteState = MINION_IDLE_UP; break;
-		case DIR_LEFT: m_spriteState = MINION_IDLE_LEFT; break;
-		case DIR_RIGHT: m_spriteState = MINION_IDLE_RIGHT; break;
-		case DIR_DOWN: m_spriteState = MINION_IDLE_DOWN; break;
+		case DIR_UP: m_spriteState = MINION_IDLE_UP + m_kind; break;
+		case DIR_LEFT: m_spriteState = MINION_IDLE_LEFT + m_kind; break;
+		case DIR_RIGHT: m_spriteState = MINION_IDLE_RIGHT + m_kind; break;
+		case DIR_DOWN: m_spriteState = MINION_IDLE_DOWN + m_kind; break;
 		}
 		Animation()->Play(m_spriteState);
 		if (MATH->IsCollided(OBJECT->GetPlayer()->getCircle(), m_sightRange))
@@ -56,10 +55,10 @@ public:
 
 		switch (m_dirState)
 		{
-		case DIR_UP: m_spriteState = MINION_RUN_UP; break;
-		case DIR_LEFT: m_spriteState = MINION_RUN_LEFT; break;
-		case DIR_RIGHT: m_spriteState = MINION_RUN_RIGHT; break;
-		case DIR_DOWN: m_spriteState = MINION_RUN_DOWN; break;
+		case DIR_UP: m_spriteState = MINION_RUN_UP + m_kind; break;
+		case DIR_LEFT: m_spriteState = MINION_RUN_LEFT + m_kind; break;
+		case DIR_RIGHT: m_spriteState = MINION_RUN_RIGHT + m_kind; break;
+		case DIR_DOWN: m_spriteState = MINION_RUN_DOWN + m_kind; break;
 		}
 
 
@@ -81,7 +80,14 @@ public:
 				
 				if (MATH->Distance(OBJECT->GetPlayer()->Position(), m_pos) <= 300.0f&&m_timer->CheckTime(2))
 				{
-					OBJECT->CreateSkill(this, USER_MINION, FIRE_BOLT);
+					SKILL_LIST name;
+					switch (m_kind)
+					{
+					case MONSTER_MINION_RED: name = FIRE_BOLT; break;
+					case MONSTER_MINION_BLUE: name = WATER_BOLT; break;
+					case MONSTER_MINION_YELLOW: name = ELECTRICITY_BOLT; break;
+					}
+					OBJECT->CreateSkill(this, USER_MINION, name);
 				}
 			}
 
@@ -149,39 +155,5 @@ public:
 		m_kind = kind;
 	}
 
-	void LoadingMonsterImage()
-	{
-		TCHAR Address[200] = {};
-		TCHAR Kind[100] = {};
-		switch (m_kind)
-		{
-		case MONSTER_MINION_RED:wsprintf(Kind, TEXT("FireMinion")); break;
 
-		}
-
-
-		wsprintf(Address, TEXT("Image/Monster/%s/Idle/Up/Up"), Kind);
-		RENDER->LoadImageFiles(TEXT("Minion_Idle_Up"), Address, TEXT("png"), 1);
-		wsprintf(Address, TEXT("Image/Monster/%s/Idle/Down/Down"), Kind);
-		RENDER->LoadImageFiles(TEXT("Minion_Idle_Down"), Address, TEXT("png"), 1);
-		wsprintf(Address, TEXT("Image/Monster/%s/Idle/Left/Left"), Kind);
-		RENDER->LoadImageFiles(TEXT("Minion_Idle_Left"), Address, TEXT("png"), 1);
-		wsprintf(Address, TEXT("Image/Monster/%s/Idle/Right/Right"), Kind);
-		RENDER->LoadImageFiles(TEXT("Minion_Idle_Right"), Address, TEXT("png"), 1);
-
-		wsprintf(Address, TEXT("Image/Monster/%s/Run/Up/Up"), Kind);
-		RENDER->LoadImageFiles(TEXT("Minion_Run_Up"), Address, TEXT("png"), 3);
-		wsprintf(Address, TEXT("Image/Monster/%s/Run/Down/Down"), Kind);
-		RENDER->LoadImageFiles(TEXT("Minion_Run_Down"), Address, TEXT("png"), 3);
-		wsprintf(Address, TEXT("Image/Monster/%s/Run/Left/Left"), Kind);
-		RENDER->LoadImageFiles(TEXT("Minion_Run_Left"), Address, TEXT("png"), 3);
-		wsprintf(Address, TEXT("Image/Monster/%s/Run/Right/Right"), Kind);
-		RENDER->LoadImageFiles(TEXT("Minion_Run_Right"), Address, TEXT("png"), 3);
-
-
-
-
-
-
-	}
 };

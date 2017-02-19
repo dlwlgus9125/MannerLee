@@ -8,7 +8,7 @@ class Character : public Object
 {
 protected:
 	CHARACTER_STATE m_state;
-	SPRITE_STATE m_spriteState;
+	int m_spriteState;
 	
 	float m_speed;
 	Circle m_circle;
@@ -22,7 +22,7 @@ public:
 		m_state = CHARACTER_IDLE;
 		m_dir = (Vector::Down()+Vector::Right()).Normalize();
 		m_speed = 300;
-		m_life = 800;
+		
 		m_maxLife = 1000;
 
 	}

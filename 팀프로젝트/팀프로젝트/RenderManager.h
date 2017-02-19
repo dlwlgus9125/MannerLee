@@ -116,7 +116,7 @@ class Sprite
 
 public:
 	Sprite(ID2D1Bitmap* pImage, float scale = 1.0f,
-		float anchorX = 0.5f, float anchorY = 0.5f, Vector dir = Vector::Right())
+		float anchorX = 0.5f, float anchorY = 0.5f, Vector dir = Vector::Right(), float opacity = 1.0f)
 	{
 		m_pImage = pImage;
 		m_width = pImage->GetSize().width;
@@ -126,7 +126,7 @@ public:
 		m_anchorY = anchorY;
 		m_dir = dir;
 		m_angle = 360-MATH->ToAngle(m_dir);
-		m_opacity = 1.0f;
+		m_opacity = opacity;
 	}
 
 	void SetPosition(float x, float y) { m_x = x; m_y = y; }
@@ -177,7 +177,7 @@ class Camera
 	bool m_isWave;
 	int  m_wavePower;
 	int m_waveTimer;
-
+	int m_sound;
 public:
 	Camera(ID2D1BitmapRenderTarget* pBitmapTarget, float sizeX, float sizeY)
 	{
@@ -191,6 +191,8 @@ public:
 		m_wavePower = 20;
 		SetCenterPos(Vector(0, 0));
 		SetScreenRect(0.0f, 0.0f, sizeX, sizeY);
+		m_waveTimer = 0;
+		m_sound = 0;
 	}
 
 	Vector GetPos() { return m_center; }
@@ -206,6 +208,21 @@ public:
 	{
 		m_screenRect = RectF(x, y, x + width, y + height);
 	}
+
+	void Init(ID2D1BitmapRenderTarget* pBitmapTarget, float sizeX, float sizeY)
+	{
+		m_pBitmapTarget = pBitmapTarget;
+		m_pBitmapTarget->BeginDraw();
+		m_pBitmapTarget->Clear(ColorF(0, 0, 0, 0));
+		m_pBitmapTarget->EndDraw();
+		m_size = Vector(sizeX, sizeY);
+		m_opacity = 1.0f;
+		m_isWave = false;
+		m_wavePower = 20;
+		SetCenterPos(Vector(0, 0));
+		SetScreenRect(0.0f, 0.0f, sizeX, sizeY);
+	}
+
 	void SetCenterPos(Vector center)
 	{
 		
@@ -218,21 +235,32 @@ public:
 
 	void ShakingCamera(int wavePower)
 	{
-		/*if (SOUND->FindChannel("Explosion1") == NULL) { SOUND->Play("Explosion1",2.0f); }*/
-		int pattern = (int)timeGetTime() / 5 % 30 % 2;
-		int waveCount1 = (int)timeGetTime() / 5 % 30 % 7;
+		TCHAR Explosion[100] = {};
+		TCHAR nextExplosion[100] = {};
+		
+		
+		string str;
+		string nextStr;
+		wstring wStr ;
+
+		
+		
+		
+		int pattern = timeGetTime() / 1000 % 60 % 2;
+		int waveCount1 = timeGetTime() / 5 % 30 % 7;
 		int waveCount2 = 7 - waveCount1;
-		cout << m_waveTimer << endl;
+		
 		
 		float wave1 = sin(waveCount1*1.0f) * powf(1.0f, waveCount1);
 		float wave2 = sin(waveCount2*1.0f) * powf(0.5f, waveCount2);
 		
 		if (pattern == 0)SetCenterPos(Vector(m_center.x + wave1 * wavePower, m_center.y + wave2 * wavePower));
 		if (pattern == 1)SetCenterPos(Vector(m_center.x + wave2 * wavePower, m_center.y + wave1 * wavePower));
-
+		
 
 		m_waveTimer += pattern;
-		if (m_waveTimer >= 10)
+		
+		if (m_waveTimer >= 4)
 		{
 			
 			m_isWave = false;
@@ -267,8 +295,18 @@ public:
 
 		sprite->SetPosition(pos.x, pos.y);
 		sprite->SetDirection(dir);
+		sprite->SetOpacity(opacity);
 		sprite->Render(m_pBitmapTarget);
+		m_pBitmapTarget->EndDraw();
+	}
 
+	void DrawOpacity(Sprite* sprite, Vector pos, Vector dir = Vector::Right(), float opacity = 1.0f)
+	{
+		m_pBitmapTarget->BeginDraw();
+
+		sprite->SetPosition(pos.x, pos.y);
+		sprite->SetDirection(dir);
+		sprite->Render(m_pBitmapTarget);
 		m_pBitmapTarget->EndDraw();
 	}
 
@@ -397,6 +435,13 @@ public:
 		m_pRenderTarget->CreateCompatibleRenderTarget(D2D1::SizeF(maxSizeX, maxSizeY), &pCameraTarget);
 		m_cameras[tag] = new Camera(pCameraTarget, sizeX, sizeY);
 		return m_cameras[tag];
+	}
+
+	void SetChange(int tag, float maxSizeX, float maxSizeY, float sizeX, float sizeY)
+	{
+		ID2D1BitmapRenderTarget* pCameraTarget = NULL;
+		m_pRenderTarget->CreateCompatibleRenderTarget(D2D1::SizeF(maxSizeX, maxSizeY), &pCameraTarget);
+		GetCamera(tag)->Init(pCameraTarget, sizeX, sizeY);
 	}
 
 	Camera* GetCamera(int tag)
