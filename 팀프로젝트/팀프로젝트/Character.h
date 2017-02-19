@@ -9,7 +9,7 @@ class Character : public Object
 protected:
 	CHARACTER_STATE m_state;
 	int m_spriteState;
-	
+
 	float m_speed;
 	Circle m_circle;
 	float m_life;
@@ -20,9 +20,9 @@ public:
 	Character(int id) : Object(id)
 	{
 		m_state = CHARACTER_IDLE;
-		m_dir = (Vector::Down()+Vector::Right()).Normalize();
+		m_dir = (Vector::Down() + Vector::Right()).Normalize();
 		m_speed = 300;
-		
+
 		m_maxLife = 1000;
 
 	}
@@ -43,18 +43,18 @@ public:
 		MATH->Clamp(m_life, 0.0f, m_maxLife);
 	}
 
-	void SetCharacterCollider(float radius) 
-	{ 
+	void SetCharacterCollider(float radius)
+	{
 		m_circle.center = this->Position();
 		m_circle.radius = radius;
 	}
 	Circle getCircle() { return m_circle; }
 
-	virtual void SetPosition(Vector pos) 
-	{ 
+	virtual void SetPosition(Vector pos)
+	{
 		this->m_pos = pos;
 		m_circle.center = pos;
-		
+
 	}
 
 	Vector GetDIr()
@@ -108,6 +108,34 @@ public:
 		return movedPos;
 	}
 
+	bool IsMinionCollided()
+	{
+		list<Object*> monsterList = OBJECT->GetMonsterList();
+
+		FOR_LIST(Object*, monsterList)
+		{
+			if (MATH->IsCollided(this->getCircle(), (*it)->getCircle()))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
+	Vector MinionPush(Vector movedPos)
+	{
+		list<Object*> monsterList = OBJECT->GetMonsterList();
+
+		FOR_LIST(Object*, monsterList)
+		{
+			if (MATH->IsCollided(this->getCircle(), (*it)->getCircle()))
+			{
+				movedPos -= MATH->GetOverlappedVector(this->getCircle(), (*it)->getCircle());
+			}
+		}
+		return movedPos;
+	}
+
 	void FowardToTargetPos(Vector targetPos, float deltaTime)
 	{
 		Vector prevPos = this->Position();
@@ -120,6 +148,7 @@ public:
 		{
 			movedPos += m_dir * m_speed * deltaTime;
 			if (IsGroundCollided())movedPos = GroundPush(movedPos);
+			if (IsMinionCollided())movedPos = MinionPush(movedPos);
 			this->SetPosition(movedPos);
 		}
 	}

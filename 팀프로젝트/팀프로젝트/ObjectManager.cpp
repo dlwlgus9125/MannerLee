@@ -2,6 +2,7 @@
 #include "Character.h"
 #include "Player.h"
 #include "Monster.h"
+#include "Boss.h"
 #include "Skill.h"
 
 
@@ -20,6 +21,11 @@ void ObjectManager::CreatePlayer(Vector pos, float colRadius)
 	m_pPlayer->Animation()->Register(RUN_LEFT, new Animation(TEXT("Run_Left"), 3, 5, true, 2.0f));
 	m_pPlayer->Animation()->Register(RUN_RIGHT, new Animation(TEXT("Run_Right"), 3, 5, true, 2.0f));
 	m_pPlayer->Animation()->Register(RUN_DOWN, new Animation(TEXT("Run_Down"), 3, 5, true, 2.0f));
+
+	m_pPlayer->Animation()->Register(ATTACK_UP, new Animation(TEXT("Attack_Up"), 2, 2, false, 2.0f));
+	m_pPlayer->Animation()->Register(ATTACK_LEFT, new Animation(TEXT("Attack_Left"), 2, 2, false, 2.0f));
+	m_pPlayer->Animation()->Register(ATTACK_RIGHT, new Animation(TEXT("Attack_Right"), 2, 2, false, 2.0f));
+	m_pPlayer->Animation()->Register(ATTACK_DOWN, new Animation(TEXT("Attack_Down"), 2, 2, false, 2.0f));
 
 	m_pPlayer->Animation()->Register(ATTRIBUTE_NONE, new Animation(TEXT("Attribute_None"), 8, 10, true, 0.5f));
 	m_pPlayer->Animation()->Register(ATTRIBUTE_FIRE, new Animation(TEXT("Attribute_Fire"), 8, 10, true, 0.5f));
@@ -86,6 +92,28 @@ void ObjectManager::CreateMonster(int id, MONSTER_KIND kind, Vector pos, float c
 	
 	m_monsterList.push_back(monster);
 }
+
+void ObjectManager::CreateBoss(int id, Vector pos, float colRadius)
+{
+	NEW_OBJECT(Object* m_pBoss, Boss(id));
+	m_pBoss->SetPosition(pos);
+	m_pBoss->SetCharacterCollider(colRadius);
+
+	m_pBoss->Animation()->Register(BOSS_IDLE, new Animation(TEXT("Boss_Idle"), 13,10 , true, 0.5f));
+	m_pBoss->Animation()->Register(BOSS_ATTACK, new Animation(TEXT("Boss_Attack"), 5, 10, true, 0.5f));
+	m_pBoss->Animation()->Register(EYE_GREEN, new Animation(TEXT("Eye_Green"), 7, 6, true, 0.5f));
+	m_pBoss->Animation()->Register(EYE_BLUE, new Animation(TEXT("Eye_Blue"), 7, 6, true, 0.5f));
+	m_pBoss->Animation()->Register(EYE_RED, new Animation(TEXT("Eye_Red"), 7, 6, true, 0.5f));
+	m_pBoss->Animation()->Register(EYE_YELLOW, new Animation(TEXT("Eye_Yellow"), 7, 6, true, 0.5f));
+
+	/*m_pBoss->Animation()->Register(EYE_BLUE+100, new Animation(TEXT("BossCircle_Blue"), 1, 6, true, 0.5f));
+	m_pBoss->Animation()->Register(EYE_RED+100, new Animation(TEXT("BossCircle_Red"), 1, 6, true, 0.5f));
+	m_pBoss->Animation()->Register(EYE_YELLOW+100, new Animation(TEXT("BossCircle_Yellow"), 1, 6, true, 0.5f));
+
+*/
+	m_monsterList.push_back(m_pBoss);
+}
+
 
 void ObjectManager::DestroyAllMonster()
 {
@@ -167,10 +195,20 @@ void ObjectManager::Draw(Camera* pCamera)
 
 }
 
-void ObjectManager::CreateSkill(Object* pCharacter, SKILL_USER id, SKILL_LIST name)
+void ObjectManager::CreateSkill(Object* pCharacter, SKILL_USER id, SKILL_LIST name, int gage)
 {
 	NEW_OBJECT(Object* skill, Skill(pCharacter, id, name));
 	skill->SetPosition(pCharacter->Position());
+
+	if (id==USER_PLAYER)
+	{
+		switch (name)
+		{
+		case FIRE_BOLT:case WATER_BOLT:case ELECTRICITY_BOLT:SOUND->Play("BoltCast", 2.0f); break;
+		case FIRE_SHIELD:case WATER_SHIELD:case ELECTRICITY_SHIELD:SOUND->Play("ShieldCast", 2.0f); break;
+		case FIRE_WALL:case WATER_WALL:case ELECTRICITY_WALL:SOUND->Play("WallCast", 2.0f); break;
+		}
+	}
 
 	skill->Animation()->Register(FIRE_BOLT, new Animation(TEXT("Fire_Bolt"), 11, 60, true, 0.5f));
 	skill->Animation()->Register(FIRE_SHIELD, new Animation(TEXT("Fire_Shield"), 8, 20, true, 1.0f));

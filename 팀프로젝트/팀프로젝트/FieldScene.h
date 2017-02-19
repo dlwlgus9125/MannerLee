@@ -21,14 +21,17 @@ public:
 
 		RENDER->LoadImageFile(TEXT("BossCastle"), TEXT("Image/Boss.png"));
 		SOUND->LoadFile("IntroBgm", "Sound/Intro.wav", true);
-		SOUND->LoadFile("Boss1Bgm", "Sound/Boss1.wav", true);
+		SOUND->LoadFile("WarBgm", "Sound/WarBgm.wav", true);
 		SOUND->LoadFile("PotionEffect", "Sound/Effect/PotionSound.wav", false);
-
-
+		
+		OBJECT->CreateBoss(OBJ_BOSS, Vector(885, 400), 50);
 		OBJECT->CreatePlayer(Vector(600, 800), 30);
 		//OBJECT->CreateSkill(OBJECT->GetPlayer(), USER_PLAYER, Vector());
 
-		OBJECT->CreateMonster(OBJ_MONSTER, MONSTER_MINION_BLUE, Vector(600, 600), 30);
+	/*	OBJECT->CreateMonster(OBJ_MONSTER, MONSTER_MINION_BLUE, Vector(600, 600), 30);
+		OBJECT->CreateMonster(OBJ_MONSTER, MONSTER_MINION_BLUE, Vector(650, 600), 30);
+		OBJECT->CreateMonster(OBJ_MONSTER, MONSTER_MINION_BLUE, Vector(700, 600), 30);*/
+
 		
 	}
 

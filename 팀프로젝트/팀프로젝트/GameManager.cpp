@@ -50,7 +50,8 @@ void GameManager::Init()
 	SOUND->LoadFile("Wall_Water", "Sound/Effect/Wall_Water.wav", false);
 	SOUND->LoadFile("Wall_Electricity", "Sound/Effect/Wall_Electricity.mp3", false);
 	SOUND->LoadFile("Hit", "Sound/Effect/Hit.wav", false);
-	SCENE->ChangeScene(SCENE_TEST);
+	SOUND->LoadFile("BossHit", "Sound/Effect/BossHit.wav", false);
+	SOUND->LoadFile("MonsterHit", "Sound/Effect/MonsterHit.wav", false);
 }
 
 void GameManager::Release()

@@ -11,12 +11,15 @@ class Player : public Character
 	SKILL_TYPE      m_prevSkillType;
 	RotateDir*      m_rotateDir;
 	Timer*          m_Timer;
-	RUNE_STATE      m_RuneLeft;
-	RUNE_STATE      m_RuneRight;
+
+	RUNE_STATE      m_Rune;
+	RUNE_STATE      m_RuneType;
 
 	CORRECT_STATE   m_correct;
 
 	Vector          m_targetPos;
+	int             m_circleGage;
+	float             m_checkGage;
 public:
 	Player(int id) : Character(id)
 	{
@@ -33,9 +36,10 @@ public:
 		m_timer = new Timer();
 		m_life = 500;
 		m_targetPos = m_pos;
-
-		m_RuneLeft = RUNE_NONE;
-		m_RuneRight = RUNE_NONE;
+		m_circleGage = 1;
+		m_checkGage = 1.0f;
+		m_Rune = RUNE_NONE;
+		m_RuneType = RUNE_NONE;
 		m_correct = CORRECT_NONE;
 
 		OBJECT->LoadingMonsterImage();
@@ -49,6 +53,11 @@ public:
 		RENDER->LoadImageFiles(TEXT("Run_Down"), TEXT("Image/Monster/Player/Run/Down/Down"), TEXT("png"), 3);
 		RENDER->LoadImageFiles(TEXT("Run_Left"), TEXT("Image/Monster/Player/Run/Left/Left"), TEXT("png"), 3);
 		RENDER->LoadImageFiles(TEXT("Run_Right"), TEXT("Image/Monster/Player/Run/Right/Right"), TEXT("png"), 3);
+
+		RENDER->LoadImageFiles(TEXT("Attack_Up"), TEXT("Image/Monster/Player/Attack/Up/Up"), TEXT("png"), 2);
+		RENDER->LoadImageFiles(TEXT("Attack_Down"), TEXT("Image/Monster/Player/Attack/Down/Down"), TEXT("png"), 2);
+		RENDER->LoadImageFiles(TEXT("Attack_Left"), TEXT("Image/Monster/Player/Attack/Left/Left"), TEXT("png"), 2);
+		RENDER->LoadImageFiles(TEXT("Attack_Right"), TEXT("Image/Monster/Player/Attack/Right/Right"), TEXT("png"), 2);
 
 		RENDER->LoadImageFiles(TEXT("Attribute_None"), TEXT("Image/Magic/Circle/Normal/Circle_Normal_"), TEXT("png"), 8);
 		RENDER->LoadImageFiles(TEXT("Attribute_Fire"), TEXT("Image/Magic/Circle/Red/Circle_Red_"), TEXT("png"), 8);
@@ -81,6 +90,7 @@ public:
 
 	void Update(float deltaTime)
 	{
+		Get_Dir_state();
 		switch (m_state)
 		{
 		case CHARACTER_IDLE: IdleState(); break;
@@ -90,39 +100,37 @@ public:
 		case CHARACTER_CAST_END: EndCastingState(deltaTime); break;
 		case CHARACTER_DEATH: DeathState(deltaTime); break;
 		}
-		Get_Dir_state();
-
 		Animation()->Update(deltaTime);
 		m_rotateDir->Update(deltaTime);
 		Animation()->Get(m_attribute)->Update(deltaTime);
-		Animation()->Get(RUNE_FIRE)->Update(deltaTime);
+		Animation()->Get(m_Rune)->Update(deltaTime);
 		m_timer->Update(deltaTime);
 		//if (OBJECT->GetPlayer()->GetLife() <= 0.0f)m_state = CHARACTER_DEATH;
 	}
 
 	void Draw(Camera* pCamera)
 	{
-		
-		
-		if (IsHideToWall())Animation()->Current()->GetSprite()->SetOpacity(0.5f);
-		pCamera->Draw(Animation()->Current()->GetSprite(), Position());
+
+		float opacity=1.0f;
+		if (IsHideToWall())opacity = 0.5f;
+		pCamera->Draw(Animation()->Current()->GetSprite(), Position(),Vector::Right(),opacity);
 		//pCamera->DrawCircle(getCircle().center, getCircle().radius, ColorF::Red, 2.0f);
 		//pCamera->DrawFillCircle(Position(), 30, ColorF::Red);
 		pCamera->DrawLine(Position() + 15.0f, Position() + 15.0f + m_dir * 30, ColorF::Blue, 3);
 		//Camera* pMapCamera = RENDER->GetCamera(CAM_MAP);
 		//pMapCamera->DrawFilledRect(Collider().LeftTop(), Collider().size);
 
-		if (m_state == CHARACTER_CAST_ATTRIBUTE || m_state == CHARACTER_CAST_TYPE || m_state == CHARACTER_CAST_END)
+		if (m_state == CHARACTER_CAST_TYPE || m_state == CHARACTER_CAST_END)pCamera->Draw(Animation()->Get(m_attribute)->GetSprite(), Position(), m_rotateDir->GetRotateDir());
+
+		if (m_state == CHARACTER_CAST_END)
 		{
-			pCamera->Draw(Animation()->Get(m_attribute)->GetSprite(), Position(), m_rotateDir->GetRotateDir());
-			pCamera->Draw(Animation()->Get(RUNE_FIRE)->GetSprite(), Position() + (m_rotateDir->GetRotateDir()*90.0f), Vector::Right(), 0.5f);
+			pCamera->Draw(Animation()->Get(m_RuneType)->GetSprite(), Position() + (m_rotateDir->GetRotateDir()*90.0f), Vector::Right(), 1.0f);
+			pCamera->Draw(Animation()->Get(m_Rune)->GetSprite(), Position() + (m_rotateDir->GetRotateDir()*-90.0f), Vector::Right(), 1.0f);
 		}
-		if (m_state == CHARACTER_CAST_TYPE || m_state == CHARACTER_CAST_END)pCamera->Draw(Animation()->Get(RUNE_BOLT)->GetSprite(), Position() + (m_rotateDir->GetRotateDir()*-90.0f), Vector::Right(), 0.5f);
+		if (m_correct != CORRECT_NONE&&m_state != CHARACTER_IDLE)pCamera->Draw(Animation()->Get(m_correct)->GetSprite(), Position() + Vector(0, -100), Vector::Right(), 0.5f);
 
-		if (m_correct != CORRECT_NONE&&m_state!=CHARACTER_IDLE)pCamera->Draw(Animation()->Get(m_correct)->GetSprite(), Position() + Vector(0, -100), Vector::Right(), 0.5f);
-
-		//pCamera->Draw(Animation()->Get(RUNE_FIRE)->GetSprite(), Position() + ((Vector(m_rotateDir->GetRotateDir().y, -m_rotateDir->GetRotateDir().x))*65.0f));
-		//pCamera->Draw(Animation()->Get(RUNE_FIRE)->GetSprite(), Position() + ((Vector(m_rotateDir->GetRotateDir().y, -m_rotateDir->GetRotateDir().x))*-65.0f));
+		if (m_circleGage >= 2)pCamera->Draw(Animation()->Get(m_Rune)->GetSprite(), Position() + ((Vector(m_rotateDir->GetRotateDir().y, -m_rotateDir->GetRotateDir().x))*90.0f));
+		if (m_circleGage >= 3)pCamera->Draw(Animation()->Get(m_Rune)->GetSprite(), Position() + ((Vector(m_rotateDir->GetRotateDir().y, -m_rotateDir->GetRotateDir().x))*-90.0f));
 	}
 
 	void IdleState()
@@ -148,14 +156,19 @@ public:
 			if (INPUT->IsMouseDown(MOUSE_RIGHT)) { m_state = CHARACTER_RUN; }
 		}
 		//if (INPUT->IsMouseDown(MOUSE_LEFT))OBJECT->CreateSkill(OBJECT->GetPlayer(), USER_PLAYER, FIRE_BOLT);
-		if (INPUT->IsKeyDown('1') || INPUT->IsKeyDown('2') || INPUT->IsKeyDown('3')) { m_state = CHARACTER_CAST_ATTRIBUTE; m_correct = CORRECT_ICE;
+		if (INPUT->IsKeyDown('1') || INPUT->IsKeyDown('2') || INPUT->IsKeyDown('3'))
+		{
+			m_state = CHARACTER_CAST_ATTRIBUTE; m_prevAttribute = ATTRIBUTE_WATER; m_correct = CORRECT_ICE;
 		}
 	}
 
 	void RunState(float deltaTime)
 	{
 		Move(deltaTime);
-		if (INPUT->IsKeyDown('1') || INPUT->IsKeyDown('2') || INPUT->IsKeyDown('3')) { m_state = CHARACTER_CAST_ATTRIBUTE;  m_correct = CORRECT_ICE; m_prevAttribute = ATTRIBUTE_WATER;	}
+		if (INPUT->IsKeyDown('1') || INPUT->IsKeyDown('2') || INPUT->IsKeyDown('3'))
+		{
+			m_state = CHARACTER_CAST_ATTRIBUTE; m_prevAttribute = ATTRIBUTE_WATER;  m_correct = CORRECT_ICE;
+		}
 	}
 
 	void CastingAttributeState(float deltaTime)
@@ -165,12 +178,20 @@ public:
 		if (INPUT->IsKeyDown('2')) { m_prevAttribute = ATTRIBUTE_FIRE; m_correct = CORRECT_FIRE; }
 		if (INPUT->IsKeyDown('3')) { m_prevAttribute = ATTRIBUTE_ELECTRICITY; m_correct = CORRECT_ELECTRICITY; }
 
-		if (INPUT->IsMouseUp(MOUSE_LEFT) && m_prevAttribute != ATTRIBUTE_NONE)
+		if (INPUT->IsMouseDown(MOUSE_LEFT) && m_prevAttribute != ATTRIBUTE_NONE)
 		{
 			m_attribute = m_prevAttribute;
+			switch (m_attribute)
+			{
+			case ATTRIBUTE_FIRE:m_Rune = RUNE_FIRE; break;
+			case ATTRIBUTE_WATER:m_Rune = RUNE_ICE; break;
+			case ATTRIBUTE_ELECTRICITY:m_Rune = RUNE_ELECTRICITY; break;
+			}
+
 			m_prevAttribute = ATTRIBUTE_NONE;
 			m_correct = CORRECT_BOLT;
 			m_prevSkillType = TYPE_BOLT;
+
 			m_state = CHARACTER_CAST_TYPE;
 		}
 
@@ -178,7 +199,12 @@ public:
 		{
 			m_attribute = ATTRIBUTE_NONE;
 			m_prevAttribute = ATTRIBUTE_NONE;
+			m_Rune = RUNE_NONE;
+			m_RuneType = RUNE_NONE;
+			m_circleGage = 1;
+			m_checkGage = 0;
 			m_state = CHARACTER_IDLE;
+
 		}
 	}
 
@@ -189,43 +215,92 @@ public:
 		if (INPUT->IsKeyDown('2')) { m_prevSkillType = TYPE_SHIELD; m_correct = CORRECT_SHIELD; }
 		if (INPUT->IsKeyDown('3')) { m_prevSkillType = TYPE_WALL; m_correct = CORRECT_WALL; }
 
-		if (INPUT->IsMouseUp(MOUSE_LEFT) && m_prevSkillType != TYPE_NONE)
+		if (INPUT->IsMouseDown(MOUSE_LEFT) && m_prevSkillType != TYPE_NONE)
 		{
+			m_correct = CORRECT_NONE;
 			m_skillType = m_prevSkillType;
 			m_prevSkillType = TYPE_NONE;
-			switch (m_attribute)
+			if (SOUND->FindChannel("FireCast") == NULL&&SOUND->FindChannel("IceCast") == NULL&SOUND->FindChannel("ElectricityCast") == NULL)
 			{
-			case ATTRIBUTE_FIRE:SOUND->Play("FireCast", 2.0f); break;
-			case ATTRIBUTE_WATER:SOUND->Play("IceCast", 2.0f); break;
-			case ATTRIBUTE_ELECTRICITY:SOUND->Play("ElectricityCast", 2.0f); break;
+				switch (m_attribute)
+				{
+				case ATTRIBUTE_FIRE:SOUND->Play("FireCast", 2.0f); break;
+				case ATTRIBUTE_WATER:SOUND->Play("IceCast", 2.0f); break;
+				case ATTRIBUTE_ELECTRICITY:SOUND->Play("ElectricityCast", 2.0f); break;
+				}
 			}
+			switch (m_skillType)
+			{
+			case TYPE_BOLT:m_RuneType = RUNE_BOLT; break;
+			case TYPE_SHIELD:m_RuneType = RUNE_SHIELD; break;
+			case TYPE_WALL:m_RuneType = RUNE_WALL; break;
+			}
+
 			m_state = CHARACTER_CAST_END;
 		}
 
 		if (INPUT->IsKeyDown(VK_TAB))
 		{
+			m_circleGage = 1;
+			m_checkGage = 0;
+			m_correct = CORRECT_NONE;
 			m_attribute = ATTRIBUTE_NONE;
 			m_prevSkillType = TYPE_NONE;
+			m_Rune = RUNE_NONE;
+			m_RuneType = RUNE_NONE;
 			m_state = CHARACTER_IDLE;
 		}
 	}
 	void EndCastingState(float deltaTime)
 	{
-		Move(deltaTime);
-		if (SOUND->FindChannel("FireCast") == NULL&&SOUND->FindChannel("IceCast") == NULL&SOUND->FindChannel("ElectricityCast") == NULL)
+		
+
+		
+		if (!INPUT->IsMouseUp(MOUSE_LEFT))
 		{
-			switch (m_skillType)
+			m_dir = (RENDER->GetCamera(CAM_MAIN)->ScreenToWorldPos(INPUT->GetMousePos()) - Position()).Normalize();
+			Get_Dir_state();
+			switch (m_dirState)
 			{
-			case TYPE_BOLT:SOUND->Play("BoltCast", 2.0f); break;
-			case TYPE_SHIELD:SOUND->Play("ShieldCast", 2.0f); break;
-			case TYPE_WALL:SOUND->Play("WallCast", 2.0f); break;
+			case DIR_UP: m_spriteState = ATTACK_UP; break;
+			case DIR_LEFT: m_spriteState = ATTACK_LEFT; break;
+			case DIR_RIGHT: m_spriteState = ATTACK_RIGHT; break;
+			case DIR_DOWN: m_spriteState = ATTACK_DOWN; break;
 			}
-			m_correct = CORRECT_NONE;
-			OBJECT->CreateSkill(OBJECT->GetPlayer(), USER_PLAYER, (SKILL_LIST)(m_attribute + m_skillType));
-			m_attribute = ATTRIBUTE_NONE;
-			m_skillType = TYPE_NONE;
-			if (MATH->SqrDistance(m_targetPos, Position()) >= 30.0f)m_state = CHARACTER_RUN;
+			Animation()->Play(m_spriteState);
+			m_checkGage += deltaTime;
+			if (m_checkGage >= 1)
+			{
+				if (SOUND->FindChannel("FireCast") == NULL&&SOUND->FindChannel("IceCast") == NULL&SOUND->FindChannel("ElectricityCast") == NULL&&m_circleGage < 3)
+				{
+					switch (m_attribute)
+					{
+					case ATTRIBUTE_FIRE:SOUND->Play("FireCast", 2.0f); break;
+					case ATTRIBUTE_WATER:SOUND->Play("IceCast", 2.0f); break;
+					case ATTRIBUTE_ELECTRICITY:SOUND->Play("ElectricityCast", 2.0f); break;
+					}
+					m_circleGage++;
+					m_circleGage = MATH->Clamp(m_circleGage, 1, 3);
+					cout << m_circleGage << endl;
+				}
+				m_checkGage = 0;
+
+
+			}
+
 		}
+		else
+		{
+			OBJECT->CreateSkill(OBJECT->GetPlayer(), USER_PLAYER, (SKILL_LIST)(m_attribute + m_skillType), m_circleGage);
+			m_circleGage = 1;
+			m_attribute = ATTRIBUTE_NONE;
+			m_correct = CORRECT_NONE;
+			m_skillType = TYPE_NONE;
+			m_Rune = RUNE_NONE;
+			m_RuneType = RUNE_NONE;
+			m_state = CHARACTER_IDLE;
+		}
+
 	}
 
 	void  DeathState(float deltaTime)
