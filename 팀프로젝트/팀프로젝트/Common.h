@@ -147,15 +147,15 @@ public:
 	{
 		switch (name)
 		{
-		case FIRE_BOLT:			SetSkillStatus(300, 100, 3, 1, ATTRIBUTE_FIRE, TYPE_BOLT);					break;
-		case FIRE_WALL:			SetSkillStatus(300, 300, 4, 1000, ATTRIBUTE_FIRE, TYPE_WALL);				break;
-		case FIRE_SHIELD:		SetSkillStatus(300, 1, 5, 500, ATTRIBUTE_FIRE, TYPE_SHIELD);				break;
-		case WATER_BOLT:		SetSkillStatus(300, 150, 2, 1, ATTRIBUTE_WATER, TYPE_BOLT);				break;
-		case WATER_WALL:		SetSkillStatus(300, 300, 4, 1000, ATTRIBUTE_WATER, TYPE_WALL);				break;
-		case WATER_SHIELD:		SetSkillStatus(300, 1, 5, 500, ATTRIBUTE_WATER, TYPE_SHIELD);				break;
-		case ELECTRICITY_BOLT:	SetSkillStatus(300, 150, 2, 1, ATTRIBUTE_ELECTRICITY, TYPE_BOLT);			break;
-		case ELECTRICITY_WALL:	SetSkillStatus(300, 300, 4, 1000, ATTRIBUTE_ELECTRICITY, TYPE_WALL);		break;
-		case ELECTRICITY_SHIELD:SetSkillStatus(300, 1, 5, 500, ATTRIBUTE_ELECTRICITY, TYPE_SHIELD);			break;
+		case FIRE_BOLT:			SetSkillStatus(0.001f, 100, 3, 1, ATTRIBUTE_FIRE, TYPE_BOLT);					break;
+		case FIRE_WALL:			SetSkillStatus(0.001f,0, 4, 1000, ATTRIBUTE_FIRE, TYPE_WALL);				break;
+		case FIRE_SHIELD:		SetSkillStatus(0.001f, 0, 5, 500, ATTRIBUTE_FIRE, TYPE_SHIELD);				break;
+		case WATER_BOLT:		SetSkillStatus(0.001f, 100, 3, 1, ATTRIBUTE_WATER, TYPE_BOLT);				break;
+		case WATER_WALL:		SetSkillStatus(0.001f, 0, 4, 1000, ATTRIBUTE_WATER, TYPE_WALL);				break;
+		case WATER_SHIELD:		SetSkillStatus(0.001f,0, 5, 500, ATTRIBUTE_WATER, TYPE_SHIELD);				break;
+		case ELECTRICITY_BOLT:	SetSkillStatus(0.001f, 100,3, 1, ATTRIBUTE_ELECTRICITY, TYPE_BOLT);			break;
+		case ELECTRICITY_WALL:	SetSkillStatus(0.001f, 0, 4, 1000, ATTRIBUTE_ELECTRICITY, TYPE_WALL);		break;
+		case ELECTRICITY_SHIELD:SetSkillStatus(0.001f,0, 5, 500, ATTRIBUTE_ELECTRICITY, TYPE_SHIELD);			break;
 		}
 	}
 	
