@@ -197,6 +197,18 @@ public:
 	list<Object*> GetPropsList() { return m_propsList; }
 	list<Object*> GetSkillList() { return m_skillList; }
 	void LoadingMonsterImage();
-	
+	void StopWarBgm()
+	{
+		int i = 0;
+		FOR_LIST(Object*, m_monsterList)
+		{
+			if ((*it)->ID() == OBJ_MONSTER)i++;
+		}
+		if (i <= 0)
+		{
+			if (SOUND->FindChannel("DungeonBgm") != NULL)SOUND->Resume("DungeonBgm");
+			if (SOUND->FindChannel("WarBgm") != NULL)SOUND->Stop("WarBgm");
+		}
+	}
 };
 

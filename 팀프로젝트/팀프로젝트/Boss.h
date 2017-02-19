@@ -27,7 +27,7 @@ public:
 		isBossDie = false;
 		exitTime = 0;
 		exitchecker = 0.0f;
-		m_maxLife = 2000.0f;
+		m_maxLife = 100.0f;
 		m_life = m_maxLife;
 		
 		RENDER->LoadImageFiles(TEXT("Boss_Idle"), TEXT("Image/Monster/Boss/Idle/Boss_Idle_"), TEXT("png"), 13);

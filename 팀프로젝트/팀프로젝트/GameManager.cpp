@@ -19,7 +19,7 @@ void GameManager::Init()
 	SCENE->Register(SCENE_FEILD, new FieldScene());
 	SCENE->Register(SCENE_TEST, new TestScene());
 	SCENE->Register(SCENE_DEATH, new DeadScene());
-	SCENE->ChangeScene(SCENE_FEILD);
+	SCENE->ChangeScene(SCENE_TITLE);
 
 	RENDER->LoadImageFiles(TEXT("Danger"), TEXT("Image/Danger"), TEXT("png"), 1);
 	RENDER->LoadImageFiles(TEXT("Fire_Bolt"), TEXT("Image/Magic/Fire/Bolt/Bolt"), TEXT("png"), 11);

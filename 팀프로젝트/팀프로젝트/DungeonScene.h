@@ -32,7 +32,7 @@ public:
 	void OnEnter()
 	{
 		OBJECT->CreatePlayer(Vector(620, 2200), 30);
-		/*OBJECT->CreateMonster(OBJ_MONSTER, MONSTER_MINION_RED, Vector(500, 1500), 30);
+		OBJECT->CreateMonster(OBJ_MONSTER, MONSTER_MINION_RED, Vector(500, 1500), 30);/*
 		OBJECT->CreateMonster(OBJ_MONSTER, MONSTER_MINION_RED, Vector(730, 1500), 30);
 		OBJECT->CreateMonster(OBJ_MONSTER, MONSTER_MINION_YELLOW, Vector(500, 1250), 30);
 		OBJECT->CreateMonster(OBJ_MONSTER, MONSTER_MINION_YELLOW, Vector(730, 1250), 30);
@@ -168,7 +168,7 @@ public:
 		//if (INPUT->IsKeyPress(VK_LEFT)) CurrentHp -= 8;
 		//if (INPUT->IsKeyPress(VK_RIGHT)) CurrentHp += 8;
 
-
+		OBJECT->StopWarBgm();
 
 		if (OBJECT->GetPlayer()->GetLife() <= 0.0f)
 		{
