@@ -376,4 +376,14 @@ public:
 
 
 	}
+
+	int GetGage()
+	{
+		return m_circleGage;
+	}
+
+	void Setgage(int num)
+	{
+		m_circleGage = num;
+	}
 };

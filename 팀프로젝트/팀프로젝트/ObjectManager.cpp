@@ -197,9 +197,16 @@ void ObjectManager::Draw(Camera* pCamera)
 
 void ObjectManager::CreateSkill(Object* pCharacter, SKILL_USER id, SKILL_LIST name, int gage)
 {
-	NEW_OBJECT(Object* skill, Skill(pCharacter, id, name));
-	skill->SetPosition(pCharacter->Position());
-
+	if (gage== 3)
+	{
+		CreateSkill(pCharacter, id, name,2); 
+	}
+	if (gage == 2)
+	{
+		CreateSkill(pCharacter, id, name,1);
+	}
+	NEW_OBJECT(Object* skill, Skill(pCharacter, id, name,gage));
+	
 	if (id==USER_PLAYER)
 	{
 		switch (name)
@@ -224,7 +231,7 @@ void ObjectManager::CreateSkill(Object* pCharacter, SKILL_USER id, SKILL_LIST na
 	skill->Animation()->Register(ELECTRICITY_SHIELD, new Animation(TEXT("Electricity_Shield"), 8, 20, true, 1.0f));
 	skill->Animation()->Register(ELECTRICITY_WALL, new Animation(TEXT("Electricity_Wall"), 4, 30, true,1.5f));
 	skill->Animation()->Register(ELECTRICITY_EXPLOSION, new Animation(TEXT("Electricity_Explosion"), 6, 10, false, 1.0f));
-
+	skill->Animation()->Register(ETERNAL_FIRE_WALL, new Animation(TEXT("Fire_Wall"), 4, 20, true, 0.7f));
 	skill->Animation()->Register(100, new Animation(TEXT("Danger"), 1, 10, true, 10.0f));
 	m_skillList.push_back(skill);
 

@@ -54,6 +54,9 @@ public:
 	virtual float GetLife(){return 0.0f;}
 	virtual void SetTimer(float time){}
 	virtual void SetIsComplete(){}
+
+	virtual int GetGage() { return NULL; }
+	virtual void Setgage(int num){}
 	Object(){}
 };
 
