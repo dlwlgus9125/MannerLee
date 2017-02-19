@@ -53,6 +53,7 @@ public:
 	virtual float MaxLife(){return 0.0f;}
 	virtual float GetLife(){return 0.0f;}
 	virtual void SetTimer(float time){}
+	virtual void SetIsComplete(int result){}
 	Object(){}
 };
 

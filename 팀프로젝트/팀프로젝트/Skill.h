@@ -54,6 +54,7 @@ class Skill : public Object
 	Magic* m_Magic;
 	int m_Timer;
 	bool m_isComplete;
+	int m_life;
 public:
 	Skill(Object* pCharacter, SKILL_USER id, SKILL_LIST name) : Object(id)
 	{
@@ -65,6 +66,7 @@ public:
 		m_pcharacter = pCharacter;
 		m_pos = pCharacter->Position();
 		m_dir = m_pcharacter->GetDir();
+		m_life = 4;
 		Vector targetPos = RENDER->GetCamera(CAM_MAIN)->ScreenToWorldPos(INPUT->GetMousePos());
 		if (id == USER_PLAYER&&UI->Setting()==MOUSE)
 		{
@@ -115,18 +117,20 @@ public:
 
 		switch (m_Magic->GetSkillName())
 		{
-		case SKILL_NONE:                                       break;
-		case FIRE_BOLT:               pCamera->Draw(Animation()->Current()->GetSprite(), m_pos, m_dir);  
-										pCamera->DrawCircle(m_Circle.center, m_Circle.radius, ColorF::Red, 2.0f); break;
-		case FIRE_WALL:               pCamera->DrawFillCircle(m_pos, 300, ColorF::Blue);   break;
-		case FIRE_SHIELD:            pCamera->DrawCircle(m_pos, 100, ColorF::Yellow, 2);   break;
-		case WATER_BOLT:                                       break;
-		case WATER_WALL:                                       break;
-		case WATER_SHIELD:                                       break;
-		case ELECTRICITY_BOLT:                                    break;
-		case ELECTRICITY_WALL:                                    break;
-		case ELECTRICITY_SHIELD:                                 break;
-		}
+		case SKILL_NONE:																									break;
+		case FIRE_BOLT:             pCamera->Draw(Animation()->Current()->GetSprite(), m_pos, m_dir);
+									pCamera->DrawCircle(m_Circle.center, m_Circle.radius, ColorF::Red, 2.0f);				break;
+		case FIRE_WALL:             pCamera->DrawFillCircle(m_pos, 100, ColorF::Red);										break;
+		case FIRE_SHIELD:           pCamera->DrawCircle(m_pos, 100, ColorF::Red, 2);										break;
+		case WATER_BOLT:            pCamera->Draw(Animation()->Current()->GetSprite(), m_pos, m_dir);   
+									pCamera->DrawCircle(m_Circle.center, m_Circle.radius, ColorF::Blue, 2.0f);              break;
+		case WATER_WALL:            pCamera->DrawFillCircle(m_pos, 100, ColorF::Blue);										break;
+		case WATER_SHIELD:          pCamera->DrawCircle(m_pos, 100, ColorF::Blue, 2);										break;
+		case ELECTRICITY_BOLT:      pCamera->Draw(Animation()->Current()->GetSprite(), m_pos, m_dir);
+									pCamera->DrawCircle(m_Circle.center, m_Circle.radius, ColorF::Purple, 2.0f);				break;
+		case ELECTRICITY_WALL:     	pCamera->DrawFillCircle(m_pos, 100, ColorF::Purple);										break;
+		case ELECTRICITY_SHIELD:   	pCamera->DrawCircle(m_pos, 100, ColorF::Purple, 2);										break;
+		}							
 
 
 	}
@@ -137,20 +141,21 @@ public:
 
 		switch (m_Magic->GetAttribute())
 		{
-		case ATTRIBUTE_FIRE:
-			if (B->GetAttribute() == ATTRIBUTE_WATER)        MagicB->SetTimer(-1000);
-			else if (B->GetAttribute() == ATTRIBUTE_ELECTRICITY)this->SetTimer(-1000);   break;
-		case ATTRIBUTE_WATER:
-			if (B->GetAttribute() == ATTRIBUTE_FIRE)        MagicB->SetTimer(-1000);
-			else if (B->GetAttribute() == ATTRIBUTE_ELECTRICITY)this->SetTimer(-1000);   break;
-		case ATTRIBUTE_ELECTRICITY:
-			if (B->GetAttribute() == ATTRIBUTE_WATER)         MagicB->SetTimer(-1000);
-			else if (B->GetAttribute() == ATTRIBUTE_FIRE)this->SetTimer(-1000);   break;
+		case ATTRIBUTE_FIRE:if (B->GetAttribute() == ATTRIBUTE_WATER)this->SetIsComplete(true); break;
+		case ATTRIBUTE_WATER:if (B->GetAttribute() == ATTRIBUTE_ELECTRICITY)this->SetIsComplete(true); break;
+		case ATTRIBUTE_ELECTRICITY:if (B->GetAttribute() == ATTRIBUTE_FIRE)this->SetIsComplete(true); break;
 		}
+
+	/*	if (m_Magic->GetAttribute() == B->GetAttribute())
+		{
+			this->SetIsComplete(true);
+			MagicB->SetIsComplete(true);
+		}*/
+	
 	}
 	void BoltState(float deltaTime)
 	{
-		Animation()->Play(m_Magic->GetSkillName());
+		
 		m_pos += m_dir*deltaTime*m_Magic->GetSpeed();
 		this->SetCollider(m_pos, 10);
 		if (IsGroundCollided())
@@ -174,11 +179,12 @@ public:
 	void WallState(float deltaTime)
 	{
 		//Animation()->Play(m_Magic->GetSkillName());
-		
+		Vector prevPos = this->Position();
+		Vector movedPos = this->Position();
 		
 		if (m_Timer <= 0) m_isComplete = true;
 
-		this->SetCollider(m_pos, 20);
+		this->SetCollider(m_pos, 100);
 
 		if (IsMonsterCollided() || IsPlayerCollided())
 		{
@@ -190,10 +196,9 @@ public:
 			ColliedWithSkill(isSkillCollided());
 		}
 
-		if (IsGroundCollided())
-		{
-
-		}
+		if (IsGroundCollided())movedPos = GroundPush(movedPos);
+		m_pos = movedPos;
+		
 		
 
 	}
@@ -202,9 +207,10 @@ public:
 	{
 		//Animation()->Play(m_Magic->GetSkillName());
 		m_pos = m_pcharacter->Position();
-		this->SetCollider(m_pos, 100);
+		this->SetCollider(m_pos, 50);
 		if (isSkillCollided() != NULL)
 		{
+			cout << isSkillCollided() << endl;
 			ColliedWithSkill(isSkillCollided());
 		}
 
@@ -251,27 +257,7 @@ public:
 
 	void ColliedWithSkill(Object* B)
 	{
-
 		AttributeMatch(B);
-
-
-		m_Magic->SetLife(-B->GetMagic()->GetDamage());
-		B->GetMagic()->SetLife(m_Magic->GetDamage());
-
-		if (m_Magic->GetSkillType() == TYPE_SHIELD&&B->GetMagic()->GetSkillType() == TYPE_BOLT)
-		{
-			B->GetMagic()->SetLife(-100);
-		}
-
-		if (m_Magic->GetLife() <= 0)
-		{
-			this->SetTimer(-100);
-		}
-
-		if (B->GetMagic()->GetLife() <= 0)
-		{
-			B->SetTimer(-100);
-		}
 	}
 
 	void SetSkllTimer(float deltatime)
@@ -360,4 +346,6 @@ public:
 	{
 		m_Timer -= num;
 	}
+
+	void SetIsComplete(int result) { m_isComplete = result; }
 };
