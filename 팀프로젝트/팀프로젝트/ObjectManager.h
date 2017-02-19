@@ -93,6 +93,7 @@ public:
 class ObjectManager : public Singleton<ObjectManager>
 {
 	Object* m_pPlayer;
+	Object* m_pBoss;
 	list<Object*> m_propsList;
 	list<Object*> m_monsterList;
 	list<Object*> m_skillList;
@@ -105,7 +106,9 @@ public:
 	void DestroyAllMonster();
 	void DestroyMonster(Object* pMonster);
 
-	void CreateSkill(Object* pCharacter, SKILL_USER id,SKILL_LIST name = SKILL_NONE);
+	void CreateBoss(int id,  Vector pos, float colRadius);
+
+	void CreateSkill(Object* pCharacter, SKILL_USER id,SKILL_LIST name = SKILL_NONE, int gage = 1);
 	void DestroySkill(Object* pSkill);
 	void DestroyAllSkill();
 	
