@@ -84,7 +84,7 @@ public:
 		SOUND->LoadFile("ElectricityCast", "Sound/Cast/ElectricityCast.wav", false);
 		SOUND->LoadFile("BoltCast", "Sound/Cast/BoltCast.wav", false);
 		SOUND->LoadFile("ShieldCast", "Sound/Cast/ShieldCast.wav", false);
-		SOUND->LoadFile("WallCast", "Sound/Cast/WallCast.wav", false);*/
+		SOUND->LoadFile("WallCast", "Sound/Cast/WallCast.wav", false);
 
 	}
 
