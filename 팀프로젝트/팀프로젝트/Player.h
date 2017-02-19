@@ -112,9 +112,9 @@ public:
 	void Draw(Camera* pCamera)
 	{
 
-		float opacity=1.0f;
+		float opacity = 1.0f;
 		if (IsHideToWall())opacity = 0.5f;
-		pCamera->Draw(Animation()->Current()->GetSprite(), Position(),Vector::Right(),opacity);
+		pCamera->Draw(Animation()->Current()->GetSprite(), Position(), Vector::Right(), opacity);
 		//pCamera->DrawCircle(getCircle().center, getCircle().radius, ColorF::Red, 2.0f);
 		//pCamera->DrawFillCircle(Position(), 30, ColorF::Red);
 		pCamera->DrawLine(Position() + 15.0f, Position() + 15.0f + m_dir * 30, ColorF::Blue, 3);
@@ -254,9 +254,9 @@ public:
 	}
 	void EndCastingState(float deltaTime)
 	{
-		
 
-		
+
+
 		if (!INPUT->IsMouseUp(MOUSE_LEFT))
 		{
 			m_dir = (RENDER->GetCamera(CAM_MAIN)->ScreenToWorldPos(INPUT->GetMousePos()) - Position()).Normalize();
@@ -293,6 +293,15 @@ public:
 		else
 		{
 			OBJECT->CreateSkill(OBJECT->GetPlayer(), USER_PLAYER, (SKILL_LIST)(m_attribute + m_skillType), m_circleGage);
+
+			switch ((SKILL_LIST)(m_attribute + m_skillType))
+			{
+			case FIRE_BOLT: SOUND->Play("FireBoltShot", 2.0f);
+			case WATER_BOLT: SOUND->Play("WaterBoltShot", 2.0f);
+			case ELECTRICITY_BOLT: SOUND->Play("ElectBoltShot", 2.0f);
+			}
+
+
 			m_circleGage = 1;
 			m_attribute = ATTRIBUTE_NONE;
 			m_correct = CORRECT_NONE;

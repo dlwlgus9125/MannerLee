@@ -50,6 +50,9 @@ void GameManager::Init()
 	SOUND->LoadFile("Hit", "Sound/Effect/Hit.wav", false);
 	SOUND->LoadFile("BossHit", "Sound/Effect/BossHit.wav", false);
 	SOUND->LoadFile("MonsterHit", "Sound/Effect/MonsterHit.wav", false);
+	SOUND->LoadFile("FireBoltShot", "Sound/Effect/FireBoltShot.mp3", false);
+	SOUND->LoadFile("WaterBoltShot", "Sound/Effect/WaterBoltShot.mp3", false);
+	SOUND->LoadFile("ElectBoltShot", "Sound/Effect/ElectBoltShot.mp3", false);
 }
 
 void GameManager::Release()

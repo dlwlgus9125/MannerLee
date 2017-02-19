@@ -67,6 +67,8 @@ public:
 	virtual void Hit(float damage) { }
 	virtual void SetMonsterKind(MONSTER_KIND kind) {}
 	virtual void LoadingMonsterImage() {}
+	virtual EYE_STATE GetEyeState() { return EYE_GREEN; }
+	virtual MONSTER_KIND GetMonsterKind() { return (MONSTER_KIND)0; }
 
 	bool IsGroundCollided()
 	{

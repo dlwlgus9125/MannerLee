@@ -33,6 +33,7 @@ public:
 	AnimationController* Animation() { return m_pAnim; }
 	int ID() { return m_id; }
 	Vector Position() { return m_pos; }
+	void SetDir(Vector dir) { m_dir = dir; }
 	virtual void SetPosition(Vector pos){}
 
 	virtual Box Collider() { Box null; return null; }
@@ -46,6 +47,7 @@ public:
 	virtual void Hit(float damage) { }
 	virtual Vector GetDir() { return m_dir; }
 	virtual void SetMonsterKind(MONSTER_KIND kind) {}
+	virtual  MONSTER_KIND GetMonsterKind() { return (MONSTER_KIND)0; }
 	virtual void LoadingMonsterImage() {}
 	virtual Magic* GetMagic() { return NULL; }
 	virtual bool GetIsComplete() { return false; }
@@ -54,6 +56,7 @@ public:
 	virtual float GetLife(){return 0.0f;}
 	virtual void SetTimer(float time){}
 	virtual void SetIsComplete(){}
+	virtual EYE_STATE GetEyeState() { return EYE_GREEN; }
 	Object(){}
 };
 

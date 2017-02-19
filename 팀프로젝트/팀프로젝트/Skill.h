@@ -290,7 +290,20 @@ public:
 			list<Object*> monsterList = OBJECT->GetMonsterList();
 			FOR_LIST(Object*, monsterList)
 			{
-				if (MATH->IsCollided(this->getCircle(), (*it)->getCircle()))
+				bool checker = true;
+				if ((*it)->ID() == OBJ_MONSTER)
+				{
+					if ((*it)->GetMonsterKind() == MONSTER_MINION_RED&&this->GetMagic()->GetAttribute() == ATTRIBUTE_FIRE)checker = false;
+					if ((*it)->GetMonsterKind() == MONSTER_MINION_BLUE&&this->GetMagic()->GetAttribute() == ATTRIBUTE_WATER)checker = false;
+					if ((*it)->GetMonsterKind() == MONSTER_MINION_YELLOW&&this->GetMagic()->GetAttribute() == ATTRIBUTE_ELECTRICITY)checker = false;
+				}
+				else if (((*it)->ID()== OBJ_BOSS))
+				{
+					if ((*it)->GetEyeState() == EYE_RED&&this->GetMagic()->GetAttribute() == ATTRIBUTE_FIRE)checker = false;
+					if ((*it)->GetEyeState() == EYE_BLUE&&this->GetMagic()->GetAttribute() == ATTRIBUTE_WATER)checker = false;
+					if ((*it)->GetEyeState() == EYE_YELLOW&&this->GetMagic()->GetAttribute() == ATTRIBUTE_ELECTRICITY)checker = false;
+				}
+				if (MATH->IsCollided(this->getCircle(), (*it)->getCircle()) && checker == true)
 				{
 					if((*it)->ID()==OBJ_MONSTER)SOUND->Play("MonsterHit", 2.0f);
 					if ((*it)->ID()== OBJ_BOSS)SOUND->Play("BossHit", 2.0f);

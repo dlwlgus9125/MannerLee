@@ -106,11 +106,11 @@ void ObjectManager::CreateBoss(int id, Vector pos, float colRadius)
 	m_pBoss->Animation()->Register(EYE_RED, new Animation(TEXT("Eye_Red"), 7, 6, true, 0.5f));
 	m_pBoss->Animation()->Register(EYE_YELLOW, new Animation(TEXT("Eye_Yellow"), 7, 6, true, 0.5f));
 
-	/*m_pBoss->Animation()->Register(EYE_BLUE+100, new Animation(TEXT("BossCircle_Blue"), 1, 6, true, 0.5f));
-	m_pBoss->Animation()->Register(EYE_RED+100, new Animation(TEXT("BossCircle_Red"), 1, 6, true, 0.5f));
-	m_pBoss->Animation()->Register(EYE_YELLOW+100, new Animation(TEXT("BossCircle_Yellow"), 1, 6, true, 0.5f));
+	m_pBoss->Animation()->Register(EYE_BLUE+100, new Animation(TEXT("BossCircle_Blue"), 1, 6, true, 0.2f));
+	m_pBoss->Animation()->Register(EYE_RED+100, new Animation(TEXT("BossCircle_Red"), 1, 6, true, 0.2f));
+	m_pBoss->Animation()->Register(EYE_YELLOW+100, new Animation(TEXT("BossCircle_Purple"), 1, 6, true, 0.2f));
 
-*/
+
 	m_monsterList.push_back(m_pBoss);
 }
 

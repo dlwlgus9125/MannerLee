@@ -155,5 +155,5 @@ public:
 		m_kind = kind;
 	}
 
-
+	MONSTER_KIND GetMonsterKind() { return m_kind; }
 };
