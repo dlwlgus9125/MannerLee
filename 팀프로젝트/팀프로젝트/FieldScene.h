@@ -20,9 +20,9 @@ public:
 		//RENDER->CreateCamera(CAM_MAP, 2000, 3000, 3000, 1000);
 
 		RENDER->LoadImageFile(TEXT("BossCastle"), TEXT("Image/Boss.png"));
-		SOUND->LoadFile("IntroBgm", "Sound/Intro.wav", true);
-		SOUND->LoadFile("Boss1Bgm", "Sound/Boss1.wav", true);
-		SOUND->LoadFile("PotionEffect", "Sound/Effect/PotionSound.wav", false);
+		//SOUND->LoadFile("IntroBgm", "Sound/Intro.wav", true);
+		//SOUND->LoadFile("Boss1Bgm", "Sound/Boss1.wav", true);
+		//SOUND->LoadFile("PotionEffect", "Sound/Effect/PotionSound.wav", false);
 
 
 		OBJECT->CreatePlayer(Vector(600, 800), 30);
@@ -80,7 +80,6 @@ public:
 			if (MATH->IsCollided(m_cursor, Vector(634, 10), Vector(690, 63))) //Æ÷¼Ç
 			{
 				cout << "test" << endl;
-				SOUND->Play("PotionEffect", 1.0f);
 				OBJECT->GetPlayer()->SetLife(-UI->EatPotion());
 				UI->SetNotRun(true);
 			}

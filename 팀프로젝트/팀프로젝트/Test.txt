@@ -1,0 +1,3 @@
+OBJECT->CreateProps(OBJ_GROUND, Vector(589, 281), Vector(-246, -70)); 
+OBJECT->CreateProps(OBJ_GROUND, Vector(590, 391), Vector(-247, -71)); 
+OBJECT->CreateProps(OBJ_GROUND, Vector(591, 393), Vector(-249, -70)); 

@@ -1,5 +1,6 @@
 #include "GameManager.h"
 
+
 void GameManager::Init()
 {
 	m_frameTime = 1.0f / (float)FPS;
@@ -12,10 +13,12 @@ void GameManager::Init()
 	INPUT->Init(WINDOW->GetHandle(WND_MAIN));
 	//SOUND->Init();
 	RENDER->Init(WINDOW->GetHandle(WND_MAIN));
+	SCENE->Register(SCENE_TITLE, new TitleScene());
 	SCENE->Register(SCENE_DUNGEON, new DungeonScene());
 	SCENE->Register(SCENE_FEILD, new FieldScene());
 	SCENE->Register(SCENE_TEST, new TestScene());
-	SCENE->ChangeScene(SCENE_TEST);
+	SCENE->Register(SCENE_DEAD, new DeadScene());
+	SCENE->ChangeScene(SCENE_DEAD);
 }
 
 void GameManager::Release()

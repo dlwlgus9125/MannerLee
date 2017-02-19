@@ -12,25 +12,21 @@
 class DungeonScene : public IScene
 {
 	Sprite* m_DungeonBg;
-	float MaxHp;
-	float CurrentHp;
 	Vector SkillSize;
 	Vector m_cursor;// 커서 위치
 
 public:
 	DungeonScene()
 	{
-		MaxHp = 1000.0f;
-		CurrentHp = 800.0f;
-		RENDER->CreateCamera(CAM_MAIN, 1200, 3129, VIEW_WIDTH, VIEW_HEIGHT);
+		RENDER->CreateCamera(CAM_MAIN, 860 * 2.0f, 1100 * 2.0f, VIEW_WIDTH, VIEW_HEIGHT);
 
 		RENDER->LoadImageFile(TEXT("Dungeon"), TEXT("Image/Map/Castle.png"));
 
 
-		OBJECT->CreatePlayer(Vector(620, 2500), 30);
+		OBJECT->CreatePlayer(Vector(620, 2000), 30);
 		//OBJECT->CreateSkill(OBJECT->GetPlayer(), USER_PLAYER, Vector());
 
-		OBJECT->CreateMonster(OBJ_MONSTER, MONSTER_MINION_RED, Vector(620, 3000), 30);
+		OBJECT->CreateMonster(OBJ_MONSTER, MONSTER_MINION_RED, Vector(620, 2000), 30);
 	}
 
 	void OnEnter()
@@ -88,7 +84,7 @@ public:
 		OBJECT->CreateProps(OBJ_HIDE, Vector(623, 2115), Vector(-64, -57));
 
 
-
+		OBJECT->GetPlayer()->SetPosition(Vector(620, 2000));
 
 		RENDER->GetCamera(CAM_MAIN)->SetScreenRect(0, 0, 800, 600);
 	}
@@ -110,7 +106,7 @@ public:
 			if (MATH->IsCollided(m_cursor, Vector(634, 10), Vector(690, 63))) //포션
 			{
 
-				CurrentHp += UI->EatPotion();
+				OBJECT->GetPlayer()->SetLife(-UI->EatPotion());
 				UI->SetNotRun(true);
 			}
 
@@ -172,7 +168,7 @@ public:
 		//	Camera* pMapCamera = RENDER->GetCamera(CAM_MAP);
 		//	pMapCamera->Draw(m_pBg, Vector(0, 0));
 
-		UI->Draw(MaxHp, CurrentHp);
+		UI->Draw(OBJECT->GetPlayer()->MaxLife(), OBJECT->GetPlayer()->GetLife());
 		UI->DrawSetting();
 		pMainCamera->Draw(m_DungeonBg, Vector(0, 0));
 		OBJECT->Draw(pMainCamera);

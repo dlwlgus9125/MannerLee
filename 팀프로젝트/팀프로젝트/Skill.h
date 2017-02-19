@@ -83,7 +83,7 @@ public:
 
 		RENDER->LoadImageFiles(TEXT("Fire_Bolt"), TEXT("Image/Magic/Fire/Bolt/Bolt"), TEXT("png"), 11);
 		RENDER->LoadImageFiles(TEXT("Attribute_Water"), TEXT("Image/Magic/Circle/Blue/Circle_Blue_"), TEXT("png"), 8);
-		SOUND->LoadFile("Explosion1", "Sound/Effect/Explosion1.wav", false);
+		//SOUND->LoadFile("Explosion1", "Sound/Effect/Explosion1.wav", false);
 	}
 
 
@@ -240,7 +240,7 @@ public:
 				if (MATH->IsCollided(this->getCircle(), (*it)->getCircle()))
 				{
 					cout << "Ãæµ¹" << endl;
-					SOUND->Play("Explosion1", 2.0f);
+					//SOUND->Play("Explosion1", 2.0f);
 					(*it)->SetLife(-this->m_Magic->GetDamage());
 				}
 			}
@@ -289,7 +289,7 @@ public:
 		{
 			if (MATH->IsCollided(this->getCircle(), (*it)->Collider()))
 			{
-				SOUND->Play("Explosion1", 2.0f);
+				//SOUND->Play("Explosion1", 2.0f);
 				return true;
 			}
 		}
@@ -305,7 +305,7 @@ public:
 			{
 				if (MATH->IsCollided(this->getCircle(), (*it)->getCircle()))
 				{
-					SOUND->Play("Explosion1", 2.0f);
+					//SOUND->Play("Explosion1", 2.0f);
 					OBJECT->DestroyMonster((*it));
 					return true;
 				}
@@ -320,7 +320,7 @@ public:
 		{
 			if (MATH->IsCollided(this->getCircle(), OBJECT->GetPlayer()->getCircle()))
 			{
-				SOUND->Play("Explosion1", 2.0f);
+				//SOUND->Play("Explosion1", 2.0f);
 				return true;
 			}
 		}

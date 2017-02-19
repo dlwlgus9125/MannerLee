@@ -162,6 +162,7 @@
     <ClInclude Include="AnimationController.h" />
     <ClInclude Include="Character.h" />
     <ClInclude Include="Common.h" />
+    <ClInclude Include="DeadScene.h" />
     <ClInclude Include="debug.h" />
     <ClInclude Include="DungeonScene.h" />
     <ClInclude Include="FieldScene.h" />
@@ -178,6 +179,7 @@
     <ClInclude Include="Skill.h" />
     <ClInclude Include="SoundManager.h" />
     <ClInclude Include="TestScene.h" />
+    <ClInclude Include="TitleScene.h" />
     <ClInclude Include="UIManager.h" />
     <ClInclude Include="WinManager.h" />
   </ItemGroup>

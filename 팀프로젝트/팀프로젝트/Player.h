@@ -12,6 +12,7 @@ class Player : public Character
 	RotateDir*      m_rotateDir;
 	Timer*          m_Timer;
 
+
 public:
 	Player(int id) : Character(id)
 	{
@@ -43,14 +44,14 @@ public:
 		RENDER->LoadImageFiles(TEXT("Attribute_Water"), TEXT("Image/Magic/Circle/Blue/Circle_Blue_"), TEXT("png"), 8);
 		RENDER->LoadImageFiles(TEXT("Attribute_Electricity"), TEXT("Image/Magic/Circle/Purple/Circle_Purple_"), TEXT("png"), 8);
 
-		SOUND->LoadFile("Death", "Sound/Effect/Death.wav", false);
+	/*	SOUND->LoadFile("Death", "Sound/Effect/Death.wav", false);
 
 		SOUND->LoadFile("FireCast", "Sound/Cast/FireCast.wav", false);
 		SOUND->LoadFile("IceCast", "Sound/Cast/IceCast.wav", false);
 		SOUND->LoadFile("ElectricityCast", "Sound/Cast/ElectricityCast.wav", false);
 		SOUND->LoadFile("BoltCast", "Sound/Cast/BoltCast.wav", false);
 		SOUND->LoadFile("ShieldCast", "Sound/Cast/ShieldCast.wav", false);
-		SOUND->LoadFile("WallCast", "Sound/Cast/WallCast.wav", false);
+		SOUND->LoadFile("WallCast", "Sound/Cast/WallCast.wav", false);*/
 
 	}
 
@@ -207,12 +208,12 @@ public:
 		{
 			m_skillType = m_prevSkillType;
 			m_prevSkillType = TYPE_NONE;
-			switch (m_attribute)
-			{
-			case ATTRIBUTE_FIRE:SOUND->Play("FireCast", 2.0f); cout << "test" << endl; break;
-			case ATTRIBUTE_WATER:SOUND->Play("IceCast", 2.0f); break;
-			case ATTRIBUTE_ELECTRICITY:SOUND->Play("ElectricityCast", 2.0f); break;
-			}
+			//switch (m_attribute)
+			//{
+			//case ATTRIBUTE_FIRE:SOUND->Play("FireCast", 2.0f); cout << "test" << endl; break;
+			//case ATTRIBUTE_WATER:SOUND->Play("IceCast", 2.0f); break;
+			//case ATTRIBUTE_ELECTRICITY:SOUND->Play("ElectricityCast", 2.0f); break;
+			//}
 			m_state = CHARACTER_CAST_END;
 		}
 
@@ -225,14 +226,14 @@ public:
 	}
 	void EndCastingState(float deltaTime)
 	{
-		if (SOUND->FindChannel("FireCast") == NULL&&SOUND->FindChannel("IceCast") == NULL&SOUND->FindChannel("ElectricityCast") == NULL)
+		/*if (SOUND->FindChannel("FireCast") == NULL&&SOUND->FindChannel("IceCast") == NULL&SOUND->FindChannel("ElectricityCast") == NULL)*/
 		{
-			switch (m_skillType)
-			{
-			case TYPE_BOLT:SOUND->Play("BoltCast", 2.0f); break;
-			case TYPE_SHIELD:SOUND->Play("ShieldCast", 2.0f); break;
-			case TYPE_WALL:SOUND->Play("WallCast", 2.0f); break;
-			}
+			//switch (m_skillType)
+			//{
+			//case TYPE_BOLT:SOUND->Play("BoltCast", 2.0f); break;
+			//case TYPE_SHIELD:SOUND->Play("ShieldCast", 2.0f); break;
+			//case TYPE_WALL:SOUND->Play("WallCast", 2.0f); break;
+			//}
 			OBJECT->CreateSkill(OBJECT->GetPlayer(), USER_PLAYER, (SKILL_LIST)(m_attribute + m_skillType));
 			m_attribute = ATTRIBUTE_NONE;
 			m_skillType = TYPE_NONE;
@@ -243,7 +244,7 @@ public:
 	void  DeathState(float deltaTime)
 	{
 		RENDER->GetCamera(CAM_MAIN)->DrawFilledRect(RENDER->GetCamera(CAM_MAIN)->GetLeftTop(), Vector(800, 600));
-		if (SOUND->FindChannel("Death") == NULL)SOUND->Play("Death", 2.0f);
+		//if (SOUND->FindChannel("Death") == NULL)SOUND->Play("Death", 2.0f);
 	}
 
 };

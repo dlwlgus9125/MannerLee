@@ -9,6 +9,8 @@
 #include "FieldScene.h"
 #include "TestScene.h"
 #include "DungeonScene.h"
+#include "DeadScene.h"
+#include "TitleScene.h"
 
 
 #define GAME GameManager::Instance()
