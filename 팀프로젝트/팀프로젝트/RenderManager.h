@@ -147,7 +147,6 @@ public:
 		Vector leftTop = Vector(GetLeftX(), GetTopY());
 		Vector size = Vector(GetWidth(), GetHeight());
 		
-		//cout << "angle : " << m_angle << endl;
 		// 스케일 적용
 	
 		pRenderTarget->SetTransform(Matrix3x2F::Rotation(360-MATH->ToAngle(m_dir), Point2F(leftTop.x + size.x * 0.5f, leftTop.y + size.y * 0.5f)));

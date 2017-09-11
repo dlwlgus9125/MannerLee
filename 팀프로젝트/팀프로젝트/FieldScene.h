@@ -80,7 +80,6 @@ public:
 	{
 		
 
-		cout << RENDER->GetCamera(CAM_MAIN)->ScreenToWorldPos(INPUT->GetMousePos()).x << ", " << RENDER->GetCamera(CAM_MAIN)->ScreenToWorldPos(INPUT->GetMousePos()).y << endl;
 		if (MATH->IsCollided(OBJECT->GetPlayer()->getCircle(), OBJECT->GetProps(OBJ_CHECKER)->Collider())&&OBJECT->GetPlayer()->isComeBossMap() == false)
 		{
 			if (SOUND->FindChannel("BossVoice") == NULL&&OBJECT->GetPlayer()->isComeBossMap() == false)SOUND->Play("BossVoice", 2.0f);
@@ -91,7 +90,6 @@ public:
 
 			OBJECT->GetPlayer()->setIscome(true);
 			OBJECT->CreateSkill(OBJECT->GetMonster(OBJ_BOSS), USER_MINION, ETERNAL_FIRE_WALL);
-			cout << OBJECT->GetPlayer()->isComeBossMap() << endl;
 			OBJECT->CreateProps(OBJ_GROUND, Vector(885, 950), Vector(800, 50));
 		}
 
@@ -112,8 +110,7 @@ public:
 		{
 			if (MATH->IsCollided(m_cursor, Vector(634, 10), Vector(690, 63))) //Æ÷¼Ç
 			{
-				cout << "test" << endl;
-
+				
 				OBJECT->GetPlayer()->SetLife(-UI->EatPotion());
 				UI->SetNotRun(true);
 			}

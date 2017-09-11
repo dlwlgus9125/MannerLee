@@ -31,9 +31,7 @@ public:
 	{
 		//dir회전
 		m_angle += m_rotateSpeed * deltaTime;
-		//cout << m_angle << endl;
 		m_dir = (m_point + MATH->ToDirection(m_angle) * m_distance).Normalize();
-		//cout << m_dir.x << ", " << m_dir.y << endl;
 	}
 
 
@@ -129,7 +127,6 @@ public:
 		ColorF color = ColorF::GhostWhite;
 		Vector rotateDir = m_rotateDir->GetRotateDir();
 
-		//cout << "스킬이름::"<<m_skillname << endl;
 
 		switch (m_Magic->GetSkillType())
 		{
@@ -273,7 +270,6 @@ public:
 				
 				if (MATH->IsCollided(this->getCircle(), (*it)->getCircle()))
 				{
-					cout << (*it)->GetLife() << endl;
 					if (this->GetMagic()->GetSkillType() == TYPE_WALL)
 					{
 						if (m_Timer == 240)
@@ -345,10 +341,12 @@ public:
 			FOR_LIST(Object*, monsterList)
 			{
 				bool checker = true;
-				if (m_Magic->GetAttribute() == ATTRIBUTE_FIRE && (*it)->GetMonsterKind() == MONSTER_MINION_RED || (*it)->GetEyeState() == EYE_RED)checker = false;
-				if (m_Magic->GetAttribute() == ATTRIBUTE_WATER && (*it)->GetMonsterKind() == MONSTER_MINION_BLUE || (*it)->GetEyeState() == EYE_BLUE)checker = false;
-				if (m_Magic->GetAttribute() == ATTRIBUTE_ELECTRICITY && (*it)->GetMonsterKind() == MONSTER_MINION_YELLOW || (*it)->GetEyeState() == EYE_YELLOW)checker = false;
-
+				if (m_Magic->GetAttribute() == ATTRIBUTE_FIRE && (*it)->GetMonsterKind() == MONSTER_MINION_RED)checker = false;
+				if (m_Magic->GetAttribute() == ATTRIBUTE_WATER && (*it)->GetMonsterKind() == MONSTER_MINION_BLUE )checker = false;
+				if (m_Magic->GetAttribute() == ATTRIBUTE_ELECTRICITY && (*it)->GetMonsterKind() == MONSTER_MINION_YELLOW )checker = false;
+				if (m_Magic->GetAttribute() == ATTRIBUTE_FIRE &&  (*it)->GetEyeState() == EYE_RED)checker = false;
+				if (m_Magic->GetAttribute() == ATTRIBUTE_WATER && (*it)->GetEyeState() == EYE_BLUE)checker = false;
+				if (m_Magic->GetAttribute() == ATTRIBUTE_ELECTRICITY && (*it)->GetEyeState() == EYE_YELLOW)checker = false;
 				if (MATH->IsCollided(this->getCircle(), (*it)->getCircle())&&checker ==true)
 				{
 					/*if ((*it)->ID() == OBJ_MONSTER)SOUND->Play("MonsterHit", 2.0f);

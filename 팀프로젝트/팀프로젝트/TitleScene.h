@@ -25,6 +25,7 @@ public:
 
 	void OnEnter()
 	{
+		if (SOUND->FindChannel("BossBgm") != NULL)SOUND->Stop("BossBgm");
 		NEW_OBJECT(m_pBg, Sprite(RENDER->GetImage(TEXT("Title")), 1.0f, 0, 0));
 		NEW_OBJECT(m_Button, Sprite(RENDER->GetImage(TEXT("NOMAL")), 1.0f, 0, 0));
 		if(SOUND->FindChannel("IntroBgm")==NULL)SOUND->Play("IntroBgm", 2.0f);

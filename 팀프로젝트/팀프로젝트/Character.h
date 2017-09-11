@@ -42,7 +42,6 @@ public:
 		if (m_id == OBJ_MONSTER)SOUND->Play("MonsterHit", 2.0f);
 		if (m_id == OBJ_BOSS && this->GetEyeState() != EYE_DEATH)SOUND->Play("BossHit", 2.0f);
 		if (m_id == OBJ_PLAYER&&damage>=0)SOUND->Play("Hit", 2.0f);
-		cout << "test" << endl;
 		m_life -= damage;
 		m_life= MATH->Clamp(m_life, 0.0f, m_maxLife);
 	}
@@ -168,14 +167,12 @@ public:
 		DIR_STATE state = DIR_DOWN;
 
 		float angle = MATH->ToAngle(m_dir);
-		//cout << angle << endl;
 
 		if (45.0f <= angle && angle <= 135.0f)m_dirState = DIR_UP;
 		if (45.0f + 90.0f <= angle && angle <= 135.0f + 90.0f)m_dirState = DIR_LEFT;
 		if (135.0f + 90.0f <= angle && angle <= 135.0f + 180.0f)m_dirState = DIR_DOWN;
 		if (135.0f + 180.0f <= angle && angle <= 360.0f)m_dirState = DIR_RIGHT;
 		if (45.0f >= angle)m_dirState = DIR_RIGHT;
-		//cout << state << endl;
 	}
 
 };

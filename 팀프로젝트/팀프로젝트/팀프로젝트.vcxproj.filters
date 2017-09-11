@@ -143,9 +143,6 @@
     <ClInclude Include="DungeonScene.h">
       <Filter>소스 파일\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="TestScene.h">
-      <Filter>소스 파일\Scene</Filter>
-    </ClInclude>
     <ClInclude Include="Boss.h">
       <Filter>소스 파일\Manager\Object\Character</Filter>
     </ClInclude>

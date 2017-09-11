@@ -34,6 +34,7 @@ public:
 		m_dir = Vector::Down();
 		m_dirState = DIR_DOWN;
 		m_speed = 150;
+		m_life = 1000.0f;
 		m_timer = new Timer();
 		m_attribute = ATTRIBUTE_NONE;
 		m_prevAttribute = ATTRIBUTE_NONE;
@@ -120,7 +121,6 @@ public:
 		if (m_isFadeOut == true)
 		{
 			fadeOut += deltaTime*0.5f;
-			cout << fadeOut << endl;
 			fadeOut = MATH->Clamp(fadeOut, 0.0f, 10.0f);
 		}
 		else
@@ -138,7 +138,6 @@ public:
 		pCamera->Draw(Animation()->Get(3333)->GetSprite(), pCamera->GetLeftTop(), Vector::Right(), fadeOut);
 		if (OBJECT->GetMonster(OBJ_BOSS) != NULL)opacity = 1.0f - fadeOut;
 		if (IsHideToWall())opacity = 0.5f;
-		cout << opacity - fadeOut << endl;
 		pCamera->Draw(Animation()->Current()->GetSprite(), Position(), Vector::Right(), opacity-fadeOut);
 		//pCamera->DrawCircle(getCircle().center, getCircle().radius, ColorF::Red, 2.0f);
 		//pCamera->DrawFillCircle(Position(), 30, ColorF::Red);
@@ -307,7 +306,6 @@ public:
 					}
 					m_circleGage++;
 					m_circleGage = MATH->Clamp(m_circleGage, 1, 3);
-					cout << m_circleGage << endl;
 				}
 				m_checkGage = 0;
 

@@ -19,7 +19,7 @@ void GameManager::Init()
 	SCENE->Register(SCENE_FEILD, new FieldScene());
 	SCENE->Register(SCENE_TEST, new TestScene());
 	SCENE->Register(SCENE_DEATH, new DeadScene());
-	SCENE->ChangeScene(SCENE_TITLE);
+	SCENE->ChangeScene(SCENE_DUNGEON);
 
 	RENDER->LoadImageFiles(TEXT("Danger"), TEXT("Image/Danger"), TEXT("png"), 1);
 	RENDER->LoadImageFiles(TEXT("Fire_Bolt"), TEXT("Image/Magic/Fire/Bolt/Bolt"), TEXT("png"), 11);
@@ -79,10 +79,10 @@ void GameManager::Update()
 	m_currentTime = timeGetTime();
 	float deltaTime = (m_currentTime - m_prevTime) * 0.001f;	// 실제 한 프레임 시간
 	
-	//cout << "Current: " << m_currentTime << ", Prev: " << m_prevTime << endl;
 
 	if (deltaTime >= m_frameTime)
 	{
+		cout << deltaTime << endl;
 		m_prevTime = m_currentTime;
 		SOUND->Update(deltaTime);
 		INPUT->Update();

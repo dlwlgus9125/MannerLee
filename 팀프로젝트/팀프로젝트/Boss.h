@@ -27,7 +27,7 @@ public:
 		isBossDie = false;
 		exitTime = 0;
 		exitchecker = 0.0f;
-		m_maxLife = 100.0f;
+		m_maxLife = 2000.0f;
 		m_life = m_maxLife;
 		
 		RENDER->LoadImageFiles(TEXT("Boss_Idle"), TEXT("Image/Monster/Boss/Idle/Boss_Idle_"), TEXT("png"), 13);
@@ -93,7 +93,6 @@ public:
 		if (m_timer->CheckTime(5)&& OBJECT->GetPlayer()->isComeBossMap()==true&&SOUND->FindChannel("BossVoice") == NULL)
 		{
 			int check = rand() % 3;
-			cout << check << endl;
 			switch (check)
 			{
 			case 0:m_eyeState = EYE_RED; break;
@@ -148,6 +147,7 @@ public:
 	void DeathState(float deltaTime)
 	{
 		Animation()->Play(BOSS_DEATH);
+		OBJECT->GetPlayer()->setFadeOut(true);
 		m_eyeState = EYE_DEATH;
 		if (isBossDie == false)SOUND->Play("BossDie", 2.0f);
 		if (isBossDie == false)
@@ -159,7 +159,6 @@ public:
 		if (exitchecker >= 10.0f)
 		{
 			exitTime++;
-			cout << exitTime << endl;
 		}
 		if (exitTime >= 10)
 		{

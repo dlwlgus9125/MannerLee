@@ -32,8 +32,10 @@ public:
 	void OnEnter()
 	{
 		OBJECT->CreatePlayer(Vector(620, 2200), 30);
-		OBJECT->CreateMonster(OBJ_MONSTER, MONSTER_MINION_RED, Vector(500, 1500), 30);/*
-		OBJECT->CreateMonster(OBJ_MONSTER, MONSTER_MINION_RED, Vector(730, 1500), 30);
+		for (int i = 0; i < 20; i++)
+		{
+			OBJECT->CreateMonster(OBJ_MONSTER, MONSTER_MINION_RED, Vector(500+i*30, 1500), 30);
+		}/*OBJECT->CreateMonster(OBJ_MONSTER, MONSTER_MINION_RED, Vector(730, 1500), 30);
 		OBJECT->CreateMonster(OBJ_MONSTER, MONSTER_MINION_YELLOW, Vector(500, 1250), 30);
 		OBJECT->CreateMonster(OBJ_MONSTER, MONSTER_MINION_YELLOW, Vector(730, 1250), 30);
 		OBJECT->CreateMonster(OBJ_MONSTER, MONSTER_MINION_BLUE, Vector(750, 800), 30);
@@ -101,7 +103,6 @@ public:
 	void OnUpdate(float deltaTime)
 	{
 		
-		//cout << RENDER->GetCamera(CAM_MAIN)->ScreenToWorldPos(INPUT->GetMousePos()).x<<", " << RENDER->GetCamera(CAM_MAIN)->ScreenToWorldPos(INPUT->GetMousePos()).y<< endl;
 		m_cursor = INPUT->GetMousePos();
 		OBJECT->Update(deltaTime);
 		RENDER->GetCamera(CAM_MAIN)->SetCenterPos(OBJECT->GetPlayer()->Position());

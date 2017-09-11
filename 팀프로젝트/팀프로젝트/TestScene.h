@@ -98,18 +98,14 @@ public:
 			m_Cursor = INPUT->GetMousePos();
 			m_Standard = GetBGPos();
 
-			cout << m_Cursor.x << ", " << m_Cursor.y << " けけけ " << m_Center.x << ", " << m_Center.y << endl;
-			cout << m_Standard.x << ", " << m_Standard.y << endl;
-			cout << m_Draw.x << ", " << m_Draw.y << endl;
+			
 		}
 
 		if (INPUT->IsMouseUp(MOUSE_RIGHT))
 		{
 			m_Cursor = INPUT->GetMousePos();
 			m_Draw = GetBGPos();
-			cout << m_Cursor.x << ", " << m_Cursor.y << " けけけ " << m_Center.x << ", " << m_Center.y << endl;
-			cout << m_Standard.x << ", " << m_Standard.y << endl;
-			cout << m_Draw.x << ", " << m_Draw.y << endl;
+			
 		}
 
 		if (INPUT->IsKeyUp(VK_BACK))
